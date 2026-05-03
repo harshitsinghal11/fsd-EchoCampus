@@ -82,11 +82,7 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center text-gray-300 text-sm">
                 <Mail className="w-4 h-4 mr-3 text-blue-400" />
-                <span>support@echocampus.com</span>
-              </div>
-              <div className="flex items-center text-gray-300 text-sm">
-                <Phone className="w-4 h-4 mr-3 text-blue-400" />
-                <span>+91-9211xxxxxx</span>
+                <span>harshitsinghal.dev@outlook.com</span>
               </div>
               <div className="flex items-start text-gray-300 text-sm">
                 <MapPin className="w-4 h-4 mr-3 mt-0.5 text-blue-400 shrink-0" />
@@ -101,7 +97,7 @@ export default function Footer() {
             <div className="flex items-center text-gray-400 text-sm mb-4 md:mb-0">
               <span>Made with</span>
               <Heart className="w-4 h-4 mx-1 text-red-500" />
-              <span>for students by students</span>
+              <span>for students by Harshit Singhal</span>
             </div>
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-gray-400 text-sm">
               <span>&copy; 2025 EchoCampus. All rights reserved.</span>

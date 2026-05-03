@@ -28,6 +28,7 @@ anonymous student chat.
 
 5. Access Control Model
 - User role source: `users.role` (`student`, `faculty`, `admin`)
+- Faculty signup/source: emails present in `directory` are treated as faculty accounts
 - Protected route prefixes:
   - `/main/student/*`
   - `/main/faculty/*`

@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { supabasePublicKey, supabaseUrl } from "@/lib/supabaseConfig";
 
 type UpvoteRequestBody = {
   complaintId?: string;
 };
+type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
 export async function POST(req: Request) {
   try {
@@ -12,12 +14,12 @@ export async function POST(req: Request) {
 
     // 1. Setup Client
     const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      supabaseUrl,
+      supabasePublicKey,
       {
         cookies: {
           getAll() { return cookieStore.getAll() },
-          setAll(cookiesToSet) {
+          setAll(cookiesToSet: CookieToSet[]) {
             try { cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); } catch { }
           },
         },

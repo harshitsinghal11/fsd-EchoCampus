@@ -1,17 +1,20 @@
 import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { supabasePublicKey, supabaseUrl } from "@/lib/supabaseConfig";
+
+type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
 // Helper to create client
 async function createClient() {
   const cookieStore = await cookies();
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabasePublicKey,
     {
       cookies: {
         getAll() { return cookieStore.getAll(); },
-        setAll(cookiesToSet) { 
+        setAll(cookiesToSet: CookieToSet[]) { 
             try { 
                 cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); 
             } catch { 
@@ -41,10 +44,7 @@ export async function GET() {
       created_at,
       is_anonymous,
       user_id,
-      complaint_upvotes(count),
-      users:user_id (
-        student_profiles ( session_code )
-      )
+      complaint_upvotes(count)
     `)
     .order("created_at", { ascending: false });
 
@@ -69,16 +69,35 @@ export async function GET() {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // 3. Transform data safely
-  const complaints = (data as ComplaintRow[]).map((c) => {
-    // Handle the array/object ambiguity for joins
-    const userData = Array.isArray(c.users) ? c.users[0] : c.users;
-    const profile = Array.isArray(userData?.student_profiles)
-      ? userData?.student_profiles[0]
-      : userData?.student_profiles;
+  const complaintsData = (data ?? []) as ComplaintRow[];
+  const visibleAuthorIds = Array.from(
+    new Set(
+      complaintsData
+        .filter((complaint) => !complaint.is_anonymous)
+        .map((complaint) => complaint.user_id)
+    )
+  );
 
-    const realSessionCode = profile?.session_code || "Unknown";
-    
+  const sessionCodeByUserId = new Map<string, string>();
+  if (visibleAuthorIds.length > 0) {
+    const { data: profileRows, error: profileError } = await supabase
+      .from("student_profiles")
+      .select("user_id, session_code")
+      .in("user_id", visibleAuthorIds);
+
+    if (profileError) {
+      return NextResponse.json({ error: profileError.message }, { status: 500 });
+    }
+
+    for (const profile of (profileRows ?? []) as StudentProfileRow[]) {
+      if (profile.user_id) {
+        sessionCodeByUserId.set(profile.user_id, profile.session_code || "Unknown");
+      }
+    }
+  }
+
+  // 3. Transform data safely
+  const complaints = complaintsData.map((c) => {
     // SAFEGUARDS:
     // 1. If anonymous, do not send session_code (optional) or user_id back to client.
     // 2. Count extraction
@@ -89,7 +108,9 @@ export async function GET() {
       complaint: c.content,
       created_at: c.created_at,
       // Logic: If anonymous, mask the Session Code AND the User ID
-      session_code: c.is_anonymous ? "Anonymous" : realSessionCode,
+      session_code: c.is_anonymous
+        ? "Anonymous"
+        : sessionCodeByUserId.get(c.user_id) || "Unknown",
       // NEVER return the author's user_id if it is anonymous
       author_id: c.is_anonymous ? null : c.user_id,
       upvotes: upvoteCount,
@@ -151,9 +172,9 @@ type ComplaintRow = {
   is_anonymous: boolean;
   user_id: string;
   complaint_upvotes?: { count: number }[] | null;
-  users?: {
-    student_profiles?: { session_code?: string } | { session_code?: string }[];
-  } | {
-    student_profiles?: { session_code?: string } | { session_code?: string }[];
-  }[];
+};
+
+type StudentProfileRow = {
+  user_id: string;
+  session_code: string | null;
 };

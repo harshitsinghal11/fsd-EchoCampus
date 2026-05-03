@@ -6,12 +6,12 @@ import ComplaintList from "@/components/complaints/ComplaintList";
 import LostFoundList from "@/components/shared/LostFound/LostFoundList";
 
 export const metadata = {
-title: "Dashboard", // Result: "Dashboard | EchoCampus"
+title: "Dashboard",
 };
 export default function StudentDashboard() {
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
-
+    <div className="p-6 mx-auto space-y-6 bg-linear-to-br from-slate-900 via-blue-950 to-black">
+      
       {/* HEADER */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-[#f8f8f8] capitalize">
