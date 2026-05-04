@@ -64,10 +64,10 @@ export default function DirectoryPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Please Wait...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mx-auto"></div>
+          <p className="mt-4 text-slate-300">Please Wait...</p>
         </div>
       </div>
     )
@@ -75,13 +75,13 @@ export default function DirectoryPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center text-red-600">
-          <p className="text-xl font-semibold">Error loading directory</p>
-          <p className="mt-2">{error}</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black flex items-center justify-center p-4">
+        <div className="text-center bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl p-8 max-w-md w-full">
+          <p className="text-xl font-semibold text-orange-400">Error loading directory</p>
+          <p className="mt-2 text-slate-300">{error}</p>
           <button 
             onClick={fetchFaculty}
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="mt-6 px-6 py-2 bg-orange-500/20 border border-orange-500/50 text-orange-400 rounded-lg hover:bg-orange-500/30 transition-all duration-200"
           >
             Retry
           </button>
@@ -91,28 +91,28 @@ export default function DirectoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Faculty Directory</h1>
-          <p className="mt-2 text-gray-600">
+          <h1 className="text-3xl font-bold text-white">Faculty Directory</h1>
+          <p className="mt-2 text-slate-300">
             Browse and search our faculty members
           </p>
         </div>
 
         {/* Search and Filter Section */}
-        <div className="bg-white p-6 rounded-lg shadow mb-6">
+        <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 p-6 rounded-xl mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Search Box */}
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
               <input
                 type="text"
                 placeholder="Search by name, email, department, or cabin..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border text-black border-gray-300 rounded-lg"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-900/50 border border-slate-700/50 rounded-lg text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all"
               />
             </div>
 
@@ -120,7 +120,7 @@ export default function DirectoryPage() {
             <select
               value={selectedDepartment}
               onChange={(e) => setSelectedDepartment(e.target.value)}
-              className="px-4 py-2 border border-gray-300 text-black rounded-lg "
+              className="px-4 py-2.5 bg-slate-900/50 border border-slate-700/50 text-slate-100 rounded-lg outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all [&>option]:bg-slate-900"
             >
               {departments.map(dept => (
                 <option key={dept} value={dept}>{dept}</option>
@@ -129,30 +129,30 @@ export default function DirectoryPage() {
           </div>
 
           {/* Results Count */}
-          <div className="mt-4 text-sm text-gray-600">
-            Showing {filteredFaculty.length} of {faculty.length} faculty members
+          <div className="mt-4 text-sm text-slate-400">
+            Showing <span className="text-white">{filteredFaculty.length}</span> of <span className="text-white">{faculty.length}</span> faculty members
           </div>
         </div>
 
         {/* Faculty Grid */}
         {filteredFaculty.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-lg shadow">
-            <User className="mx-auto h-12 w-12 text-gray-400" />
-            <p className="mt-4 text-gray-600">No faculty members found</p>
+          <div className="text-center py-12 bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl">
+            <User className="mx-auto h-12 w-12 text-slate-400" />
+            <p className="mt-4 text-slate-300">No faculty members found</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredFaculty.map((member) => (
               <div
                 key={member.id}
-                className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6"
+                className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl hover:bg-slate-700/60 transition-all duration-200 p-6"
               >
                 {/* Name and Department */}
                 <div className="mb-4">
-                  <h3 className="text-xl font-semibold text-gray-900">
+                  <h3 className="text-xl font-semibold text-white">
                     {member.name}
                   </h3>
-                  <p className="text-sm text-blue-600 font-medium mt-1">
+                  <p className="text-sm text-blue-400 font-medium mt-1">
                     {member.department}
                   </p>
                 </div>
@@ -161,10 +161,10 @@ export default function DirectoryPage() {
                 <div className="space-y-3 text-sm">
                   {/* Email */}
                   <div className="flex items-start gap-2">
-                    <Mail className="h-4 w-4 text-gray-400 mt-0.5 shrink-0" />
+                    <Mail className="h-4 w-4 text-slate-400 mt-0.5 shrink-0" />
                     <a
                       href={`mailto:${member.email}`}
-                      className="text-gray-700 hover:text-blue-600 break-all"
+                      className="text-slate-300 hover:text-blue-400 break-all transition-colors"
                     >
                       {member.email}
                     </a>
@@ -173,10 +173,10 @@ export default function DirectoryPage() {
                   {/* Phone */}
                   {member.phone_no && (
                     <div className="flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-gray-400 shrink-0" />
+                      <Phone className="h-4 w-4 text-slate-400 shrink-0" />
                       <a
                         href={`tel:${member.phone_no}`}
-                        className="text-gray-700 hover:text-blue-600"
+                        className="text-slate-300 hover:text-blue-400 transition-colors"
                       >
                         {member.phone_no}
                       </a>
@@ -186,8 +186,8 @@ export default function DirectoryPage() {
                   {/* Cabin */}
                   {member.cabin_no && (
                     <div className="flex items-center gap-2">
-                      <Building className="h-4 w-4 text-gray-400 shrink-0" />
-                      <span className="text-gray-700">
+                      <Building className="h-4 w-4 text-slate-400 shrink-0" />
+                      <span className="text-slate-300">
                         Cabin: {member.cabin_no}
                       </span>
                     </div>
@@ -196,8 +196,8 @@ export default function DirectoryPage() {
                   {/* Experience */}
                   {member.experience !== null && (
                     <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-gray-400 shrink-0" />
-                      <span className="text-gray-700">
+                      <Calendar className="h-4 w-4 text-slate-400 shrink-0" />
+                      <span className="text-slate-300">
                         {member.experience} years experience
                       </span>
                     </div>

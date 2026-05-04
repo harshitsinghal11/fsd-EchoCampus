@@ -124,26 +124,32 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black flex items-center justify-center p-4 sm:p-6 md:p-8">
+      
       <div className="relative w-full max-w-md">
-        <div className="bg-white/85 backdrop-blur-lg rounded-3xl shadow-2xl border border-white/20 p-8 md:p-10">
+        {/* Glassmorphism Card */}
+        <div className="bg-slate-800/40 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl shadow-2xl border border-slate-700/50 p-6 sm:p-8 md:p-10">
+          
+          {/* Header */}
           <div className="text-center mb-8">
-            <h3 className="text-xl md:text-3xl font-bold text-gray-900 mb-3 tracking-tight">
-              Join <span className="text-blue-600">EchoCampus</span>
+            <h3 className="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight">
+              Join <span className="text-blue-400">EchoCampus</span>
             </h3>
+            <p className="text-sm md:text-base text-slate-400 font-medium">
+              Create your account to get started.
+            </p>
           </div>
 
-          <form onSubmit={onSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label
-                htmlFor="full_name"
-                className="block text-sm font-semibold text-gray-700"
-              >
+          <form onSubmit={onSubmit} className="space-y-5 md:space-y-6">
+            
+            {/* Full Name Input */}
+            <div className="space-y-1.5 md:space-y-2">
+              <label htmlFor="full_name" className="block text-sm font-semibold text-slate-300">
                 Full Name
               </label>
-              <div className="relative">
+              <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
+                  <User className="h-5 w-5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
                 </div>
                 <input
                   id="full_name"
@@ -151,22 +157,20 @@ export default function SignUpPage() {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required
-                  className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-gray-100"
+                  className="w-full pl-11 pr-4 py-3 md:py-4 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 hover:bg-slate-900/80"
                   placeholder="Enter your full name"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label
-                htmlFor="email"
-                className="block text-sm font-semibold text-gray-700"
-              >
+            {/* Email Input */}
+            <div className="space-y-1.5 md:space-y-2">
+              <label htmlFor="email" className="block text-sm font-semibold text-slate-300">
                 Email Address
               </label>
-              <div className="relative">
+              <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
+                  <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
                 </div>
                 <input
                   id="email"
@@ -174,22 +178,20 @@ export default function SignUpPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-gray-100"
+                  className="w-full pl-11 pr-4 py-3 md:py-4 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 hover:bg-slate-900/80"
                   placeholder="Enter your email"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label
-                htmlFor="password"
-                className="block text-sm font-semibold text-gray-700"
-              >
+            {/* Password Input */}
+            <div className="space-y-1.5 md:space-y-2">
+              <label htmlFor="password" className="block text-sm font-semibold text-slate-300">
                 Password
               </label>
-              <div className="relative">
+              <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
+                  <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
                 </div>
                 <input
                   id="password"
@@ -198,13 +200,13 @@ export default function SignUpPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={8}
-                  className="w-full pl-12 pr-12 py-4 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-gray-100"
+                  className="w-full pl-11 pr-12 py-3 md:py-4 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 hover:bg-slate-900/80"
                   placeholder="Create a password"
                 />
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-500 hover:text-slate-300 transition-colors duration-200"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -213,39 +215,48 @@ export default function SignUpPage() {
                   )}
                 </button>
               </div>
-              
             </div>
-<div className="rounded-2xl border border-blue-100 bg-blue-50/70 p-4">
-              <label className="flex items-start gap-3 text-sm text-gray-700">
-                <input
-                  type="checkbox"
-                  checked={isFacultySignup}
-                  onChange={(e) => setIsFacultySignup(e.target.checked)}
-                  className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span>
-                  <span className="block font-semibold text-gray-900">
+
+            {/* Faculty Checkbox (Dark Theme Optimized) */}
+            <div className="rounded-xl border border-slate-700/50 bg-slate-900/30 p-4 transition-colors hover:bg-slate-900/50">
+              <label className="flex items-start gap-3 text-sm cursor-pointer group">
+                <div className="relative flex items-center pt-0.5">
+                  <input
+                    type="checkbox"
+                    checked={isFacultySignup}
+                    onChange={(e) => setIsFacultySignup(e.target.checked)}
+                    className="peer h-4 w-4 rounded border-slate-600 bg-slate-800 text-blue-500 focus:ring-blue-500/50 focus:ring-offset-slate-900 transition-all cursor-pointer"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <span className="block font-semibold text-slate-200 group-hover:text-white transition-colors">
                     I am a faculty member
                   </span>
-                </span>
+                  <span className="text-xs text-slate-500 mt-0.5">
+                    Select this if you are a professor or staff.
+                  </span>
+                </div>
               </label>
             </div>
-            {errorMessage ? (
-              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+
+            {/* Alert Messages (Dark Theme Optimized) */}
+            {errorMessage && (
+              <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400 flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
                 {errorMessage}
               </div>
-            ) : null}
+            )}
 
-            {successMessage ? (
-              <div className="rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
+            {successMessage && (
+              <div className="rounded-xl border border-teal-500/30 bg-teal-500/10 px-4 py-3 text-sm text-teal-400 flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
                 {successMessage}
               </div>
-            ) : null}
+            )}
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-linear-to-r from-blue-600 to-cyan-600 text-white py-4 px-6 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group"
+              className="w-full mt-2 md:mt-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 md:py-4 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-blue-900/20 hover:shadow-blue-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group"
             >
               <span className="flex items-center justify-center">
                 {isLoading ? (
@@ -263,9 +274,10 @@ export default function SignUpPage() {
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-600">
+          {/* Footer Link */}
+          <p className="mt-6 md:mt-8 text-center text-sm text-slate-400">
             Already have an account?{" "}
-            <Link href="/auth/login" className="font-semibold text-blue-600 hover:text-blue-700">
+            <Link href="/auth/login" className="font-semibold text-blue-400 hover:text-blue-300 transition-colors">
               Sign in
             </Link>
           </p>

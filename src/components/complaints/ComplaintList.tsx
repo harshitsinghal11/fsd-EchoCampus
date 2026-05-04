@@ -122,38 +122,38 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
   }
 
   return (
-    <div className={`flex-1 flex flex-col overflow-y-auto ${isWidget ? '' : 'bg-gray-50 rounded-xl p-6'}`}>
+    <div className={`flex-1 flex flex-col overflow-y-auto ${isWidget ? '' : 'bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6'}`}>
 
       {!isWidget && (
         <div className="mb-4">
-          <h1 className="text-2xl font-bold text-black flex items-center gap-3">
-            <MessageSquare className="w-5 h-5 text-blue-600" />
+          <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+            <MessageSquare className="w-5 h-5 text-orange-400" />
             Live Complaints
           </h1>
-          <p className="text-black mt-2">
+          <p className="text-slate-300 mt-2">
             {list.length} {list.length === 1 ? 'complaint' : 'complaints'} from the community
           </p>
         </div>
       )}
 
       {list.length === 0 ? (
-        <div className={`${isWidget ? 'h-full flex items-center justify-center' : 'bg-gray-50 rounded-xl p-6 text-center'}`}>
-          {!isWidget && <MessageSquare className="w-16 h-16 text-gray-300 mx-auto mb-4" />}
-          <p className="text-gray-500">No active complaints.</p>
+        <div className={`${isWidget ? 'h-full flex items-center justify-center' : 'bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6 text-center'}`}>
+          {!isWidget && <MessageSquare className="w-16 h-16 text-slate-400 mx-auto mb-4" />}
+          <p className="text-slate-400">No active complaints.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {list.map((c) => (
             <div
               key={c.id}
-              className={`bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200 hover:border-blue-200 ${isWidget ? 'p-4' : 'p-4'}`}
+              className={`bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl hover:bg-slate-700/60 transition-all duration-200 ${isWidget ? 'p-4' : 'p-4'}`}
             >
               <div className="flex items-start gap-4">
                 <div className="flex-1">
-                  <p className={`text-gray-800 font-medium leading-relaxed ${isWidget ? 'text-sm line-clamp-2' : 'text-lg'}`}>
+                  <p className={`text-slate-300 font-medium leading-relaxed ${isWidget ? 'text-sm line-clamp-2' : 'text-lg'}`}>
                     &quot;{c.complaint}&quot;
                   </p>
-                  <div className="flex items-center gap-2 mt-2 text-xs text-gray-400">
+                  <div className="flex items-center gap-2 mt-2 text-xs text-slate-400">
                     <Clock className="w-3 h-3" />
                     <span>{formatDate(c.created_at)}</span>
                   </div>
@@ -163,16 +163,16 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
                 <button
                   onClick={() => upvote(c.id)}
                   disabled={upvoting === c.id}
-                  className={`flex items-center gap-1 px-2 py-1.5 rounded-md border transition-colors disabled:opacity-50 ${
+                  className={`flex items-center gap-1 px-2 py-1.5 rounded-md border transition-colors disabled:opacity-50 group ${
                     c.current_user_has_upvoted
-                      ? "bg-orange-100 border-orange-300"
-                      : "bg-orange-50 border-orange-100 hover:bg-orange-100"
+                      ? "bg-orange-500/20 border-orange-500/30"
+                      : "bg-transparent border-slate-700/50 hover:bg-orange-500/10 hover:border-orange-500/30"
                   } ${isWidget ? '' : 'flex-col min-w-[60px]'}`}
                 >
-                  <span className={`text-sm font-bold text-orange-600 ${upvoting === c.id ? 'animate-pulse' : ''}`}>
+                  <span className={`text-sm font-bold ${c.current_user_has_upvoted ? 'text-white' : 'text-slate-300 group-hover:text-white'} ${upvoting === c.id ? 'animate-pulse' : ''}`}>
                     {c.upvotes}
                   </span>
-                  <ThumbsUp className={`w-3.5 h-3.5 ${c.current_user_has_upvoted ? "text-orange-600" : "text-orange-400"} ${upvoting === c.id ? 'text-orange-600' : ''}`} />
+                  <ThumbsUp className={`w-3.5 h-3.5 ${c.current_user_has_upvoted ? "text-orange-400" : "text-slate-400 group-hover:text-orange-400"} ${upvoting === c.id ? 'text-orange-400' : ''}`} />
                 </button>
               </div>
             </div>

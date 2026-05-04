@@ -1,5 +1,5 @@
 "use client";
-
+import { User, Phone, CheckCircle } from 'lucide-react';
 import { useCallback, useEffect, useState } from "react";
 import { MarketplaceItem } from "@/types/marketplace"; 
 
@@ -62,43 +62,71 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
   if (items.length === 0) return <p className="text-gray-500 text-center">No items found.</p>;
 
   return (
-    // 3. Adjust Grid based on Widget mode (2 cols for widget, dynamic for full page)
-    <div className={`grid gap-4 ${isWidget ? "grid-cols-1 md:grid-cols-2" : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"}`}>
+    // Grid adapts based on widget mode vs full page mode
+    <div className={`grid gap-4 md:gap-6 items-start ${
+  isWidget 
+    ? "grid-cols-1 sm:grid-cols-2"  
+    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+}`}>
       {items.map((item) => (
         <div
           key={item.id}
-          className={`border border-gray-200 p-5 rounded-lg shadow-sm transition relative overflow-hidden ${
-            item.is_sold ? "bg-gray-50 opacity-80" : "bg-white hover:shadow-md"
+          className={`relative overflow-hidden rounded-2xl p-5 md:p-6 border transition-all duration-300 ${
+            item.is_sold 
+              ? "bg-slate-900/50 border-slate-800 opacity-75 grayscale-[30%]" 
+              : "bg-slate-800/40 backdrop-blur-xl border-slate-700/50 shadow-xl hover:bg-slate-800/60 hover:-translate-y-1 hover:shadow-2xl hover:shadow-purple-900/10 group"
           }`}
         >
-          {/* Status Badge */}
-          <div className="flex justify-between items-start">
-            <h2 className="font-bold text-lg text-black truncate w-3/4">{item.product_title}</h2>
+          {/* Status Badge & Title */}
+          <div className="flex justify-between items-start gap-3">
+            <h2 className={`font-semibold text-lg md:text-xl line-clamp-1 ${item.is_sold ? 'text-slate-400' : 'text-white group-hover:text-purple-300 transition-colors'}`}>
+              {item.product_title}
+            </h2>
+            
+            {/* Themed Badges */}
             {item.is_sold ? (
-              <span className="bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide">
+              <span className="shrink-0 inline-flex items-center gap-1 bg-slate-800/80 text-slate-400 border border-slate-700 text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                <CheckCircle className="w-3 h-3" />
                 Sold
               </span>
             ) : (
-              <span className="bg-green-100 text-green-700 text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide">
+              <span className="shrink-0 bg-teal-500/10 text-teal-400 border border-teal-500/30 text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
                 Active
               </span>
             )}
           </div>
 
-          <p className="font-semibold text-2xl mt-2 text-blue-600">₹{item.price}</p>
-          <p className="text-gray-600 mt-2 text-sm line-clamp-2">{item.description}</p>
+          {/* Price - Using the Purple Accent from your Dashboard for Marketplace items */}
+          <p className={`font-bold text-2xl mt-3 ${item.is_sold ? 'text-slate-500' : 'text-purple-400'}`}>
+            ₹{item.price}
+          </p>
           
-          <div className="mt-4 pt-4 border-t border-gray-100 text-sm text-gray-500 space-y-1">
-            <p>👤 {item.owner_name}</p>
-            {/* Hide phone number on widget to save space, or keep it if you prefer */}
-            {!isWidget && <p>📞 {item.contact_info}</p>}
+          {/* Description */}
+          <p className="text-slate-400 mt-2 text-sm line-clamp-2 leading-relaxed">
+            {item.description}
+          </p>
+          
+          {/* Footer details (User & Phone) */}
+          <div className="mt-5 pt-4 border-t border-slate-700/50 text-xs md:text-sm text-slate-300 space-y-2.5 flex flex-col justify-end flex-grow">
+            <div className="flex items-center gap-2">
+              <User className="w-4 h-4 text-slate-500 shrink-0" />
+              <span className="truncate">{item.owner_name}</span>
+            </div>
+            
+            {/* Hide phone number on widget to save space */}
+            {!isWidget && item.contact_info && (
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-slate-500 shrink-0" />
+                <span>{item.contact_info}</span>
+              </div>
+            )}
           </div>
 
-          {/* Owner Actions (Only show if email matches AND we have the email) */}
+          {/* Owner Actions (Glassmorphism Yellow Button) */}
           {!item.is_sold && currentUserEmail && item.owner_email === currentUserEmail && (
             <button
-              className="mt-4 w-full bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-medium px-4 py-2 rounded-lg transition text-sm"
               onClick={() => markSold(item.id)}
+              className="mt-5 w-full bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-sm hover:shadow-lg hover:shadow-yellow-900/20 active:scale-95"
             >
               Mark as Sold
             </button>

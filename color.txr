@@ -1,0 +1,12 @@
+Category,Tailwind Classes,Usage Context
+Main Background,bg-gradient-to-br from-slate-900 via-blue-950 to-black,The absolute background of every page. Do not use plain black or white.
+Surfaces (Cards),bg-slate-800/40 backdrop-blur-xl,"Use this for all containers, cards, and sections floating above the background."
+Borders,border-slate-700/50,Apply to all glass cards to give them a defined edge without being harsh.
+Primary Text,text-white or text-slate-100,"Main headings, important numbers, and active button text."
+Secondary Text,text-slate-300,"Subtitles, standard paragraph text, and inactive tab names."
+Tertiary Text,text-slate-400,"Helper text, timestamps, placeholders, and subtle links."
+Accent: Blue,text-blue-400 / bg-blue-500/20,"Announcements, general informational actions, primary buttons."
+Accent: Purple,text-purple-400 / bg-purple-500/20,"Marketplace, commerce, shopping-related items."
+Accent: Orange,text-orange-400 / bg-orange-500/20,"Complaints, warnings, alerts, or urgent actions."
+Accent: Teal,text-teal-400 / bg-teal-500/20,"Lost & Found, safe actions, success states."
+Hover States (Cards),hover:bg-slate-700/60,Subtle background lightening when a user hovers over a clickable card.

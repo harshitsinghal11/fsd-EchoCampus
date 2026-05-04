@@ -1,5 +1,14 @@
 "use client";
-
+import { 
+  Tag, 
+  AlignLeft, 
+  IndianRupee, 
+  User, 
+  Mail, 
+  Phone, 
+  PlusCircle,
+  AlertCircle
+} from 'lucide-react';
 import React, { useState } from "react";
 import { useUserEmail } from "@/hooks/useUserEmail";
 import { useRouter } from "next/navigation";
@@ -63,78 +72,152 @@ export default function MarketCreateForm() {
       setIsSubmitting(false);
     }
   }
-
+const isPhoneInvalid = form.contact_info.length > 0 && form.contact_info.length < 10;
   return (
-    <form onSubmit={handleSubmit} className="bg-white border border-gray-200 text-black rounded-lg shadow-sm p-6 space-y-4">
-      <h2 className="text-xl font-bold mb-4">Trade Something?</h2>
+    <form 
+      onSubmit={handleSubmit} 
+      className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-[1.5rem] md:rounded-3xl shadow-2xl p-6 md:p-8 space-y-5"
+    >
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2.5 bg-purple-500/20 rounded-xl">
+          <Tag className="w-6 h-6 text-purple-400" />
+        </div>
+        <div>
+          <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">Trade Something?</h2>
+          <p className="text-sm text-slate-400 font-medium">List your item on the campus market.</p>
+        </div>
+      </div>
 
-      <input
-        placeholder="Title"
-        required
-        value={form.product_title}
-        className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-        onChange={(e) => setForm({ ...form, product_title: e.target.value })}
-      />
+      {/* Title Input */}
+      <div className="space-y-1.5">
+        <label className="block text-sm font-semibold text-slate-300">Product Title</label>
+        <div className="relative group">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Tag className="h-5 w-5 text-slate-500 group-focus-within:text-purple-400 transition-colors" />
+          </div>
+          <input
+            placeholder="e.g., Engineering Graphics Textbook"
+            required
+            value={form.product_title}
+            className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-200 hover:bg-slate-900/80"
+            onChange={(e) => setForm({ ...form, product_title: e.target.value })}
+          />
+        </div>
+      </div>
 
-      <textarea
-        placeholder="Description"
-        value={form.description}
-        className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition resize-none"
-        rows={3}
-        onChange={(e) => setForm({ ...form, description: e.target.value })}
-      />
+      {/* Description Input */}
+      <div className="space-y-1.5">
+        <label className="block text-sm font-semibold text-slate-300">Description</label>
+        <div className="relative group">
+          <div className="absolute top-3.5 left-0 pl-4 flex pointer-events-none">
+            <AlignLeft className="h-5 w-5 text-slate-500 group-focus-within:text-purple-400 transition-colors" />
+          </div>
+          <textarea
+            placeholder="Condition, edition, features..."
+            value={form.description}
+            rows={3}
+            className="w-full pl-11 pr-4 py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-200 hover:bg-slate-900/80 resize-none"
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+          />
+        </div>
+      </div>
 
-      <input
-        type="text"
-        inputMode="numeric"
-        placeholder="Price (₹)"
-        value={form.price}
-        className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-        onChange={(e) => {
-          const digitsOnly = e.target.value.replace(/\D/g, "");
-          if (digitsOnly.length <= 6) setForm({ ...form, price: digitsOnly });
-        }}
-      />
+      {/* Two Column Grid for Price & Name */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Price Input */}
+        <div className="space-y-1.5">
+          <label className="block text-sm font-semibold text-slate-300">Price</label>
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <IndianRupee className="h-5 w-5 text-slate-500 group-focus-within:text-purple-400 transition-colors" />
+            </div>
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder="Amount"
+              value={form.price}
+              className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-200 hover:bg-slate-900/80"
+              onChange={(e) => {
+                const digitsOnly = e.target.value.replace(/\D/g, "");
+                if (digitsOnly.length <= 6) setForm({ ...form, price: digitsOnly });
+              }}
+            />
+          </div>
+        </div>
 
-      <input
-        placeholder="Your Full Name"
-        value={form.owner_name} 
-        className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-        onChange={(e) => setForm({ ...form, owner_name: e.target.value })}
-      />
+        {/* Owner Name Input */}
+        <div className="space-y-1.5">
+          <label className="block text-sm font-semibold text-slate-300">Your Name</label>
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <User className="h-5 w-5 text-slate-500 group-focus-within:text-purple-400 transition-colors" />
+            </div>
+            <input
+              placeholder="Full Name"
+              value={form.owner_name} 
+              className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-200 hover:bg-slate-900/80"
+              onChange={(e) => setForm({ ...form, owner_name: e.target.value })}
+            />
+          </div>
+        </div>
+      </div>
 
-      <input
-        className="border border-gray-300 rounded-lg p-3 w-full bg-gray-50 text-gray-500 cursor-not-allowed"
-        value={userEmail || "Loading email..."}
-        disabled 
-      />
+      {/* Two Column Grid for Email & Phone */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Email Input (Disabled) */}
+        <div className="space-y-1.5">
+          <label className="block text-sm font-semibold text-slate-400">Campus Email (Locked)</label>
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Mail className="h-5 w-5 text-slate-600" />
+            </div>
+            <input
+              className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/30 border border-slate-700/30 rounded-xl text-slate-500 cursor-not-allowed select-none"
+              value={userEmail || "Loading email..."}
+              disabled 
+            />
+          </div>
+        </div>
 
-      <input
-        type="tel"
-        inputMode="numeric"
-        placeholder="Contact No (10 digits)"
-        value={form.contact_info}
-        maxLength={10}
-        className={`border rounded-lg p-3 w-full focus:outline-none focus:ring-2 transition ${
-          form.contact_info.length > 0 && form.contact_info.length < 10
-            ? "border-red-500 focus:ring-red-500"
-            : "border-gray-300 focus:ring-blue-500"
-        }`}
-        onChange={(e) => {
-          const digitsOnly = e.target.value.replace(/\D/g, "");
-          setForm({ ...form, contact_info: digitsOnly });
-        }}
-      />
+        {/* Contact No Input */}
+        <div className="space-y-1.5">
+          <label className="block text-sm font-semibold text-slate-300">Contact Number</label>
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Phone className={`h-5 w-5 transition-colors ${isPhoneInvalid ? 'text-red-400' : 'text-slate-500 group-focus-within:text-purple-400'}`} />
+            </div>
+            <input
+              type="tel"
+              inputMode="numeric"
+              placeholder="10-digit number"
+              value={form.contact_info}
+              maxLength={10}
+              className={`w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-200 hover:bg-slate-900/80 ${
+                isPhoneInvalid
+                  ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50"
+                  : "border-slate-700/50 focus:ring-purple-500/50 focus:border-purple-500/50"
+              }`}
+              onChange={(e) => {
+                const digitsOnly = e.target.value.replace(/\D/g, "");
+                setForm({ ...form, contact_info: digitsOnly });
+              }}
+            />
+          </div>
+        </div>
+      </div>
 
+      {/* Error Message */}
       {errorMsg && (
-        <div className="p-3 bg-red-100 border border-red-200 text-red-700 rounded-lg text-sm font-semibold">
-          ⚠️ {errorMsg}
+        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400 flex items-center gap-2 animate-in fade-in">
+          <AlertCircle className="w-5 h-5 shrink-0" />
+          <p>{errorMsg}</p>
         </div>
       )}
 
+      {/* Submit Button */}
       <button
         type="submit"
-        className="bg-blue-600 hover:bg-blue-700 text-white font-medium p-3 rounded-lg w-full transition shadow-sm disabled:bg-gray-400 disabled:cursor-not-allowed"
         disabled={
           !form.product_title ||
           !form.price ||
@@ -142,8 +225,19 @@ export default function MarketCreateForm() {
           form.contact_info.length !== 10 ||
           isSubmitting
         }
+        className="w-full mt-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group flex items-center justify-center gap-2"
       >
-        {isSubmitting ? "Publishing..." : "Publish Listing"}
+        {isSubmitting ? (
+          <>
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+            Publishing...
+          </>
+        ) : (
+          <>
+            <PlusCircle className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+            Publish Listing
+          </>
+        )}
       </button>
     </form>
   );

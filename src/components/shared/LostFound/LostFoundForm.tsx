@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { Loader2, X, UploadCloud } from "lucide-react";
+import { Loader2, X, UploadCloud, Search, MapPin, Phone, AlignLeft, Camera} from "lucide-react";
 import Image from "next/image";
+
 
 export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) {
   const [loading, setLoading] = useState(false);
@@ -69,14 +70,29 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
     }
   };
 
+  const isPhoneInvalid = form.contact_info?.length > 0 && form.contact_info?.length < 10;
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      {/* ... (Rest of your JSX remains exactly the same) ... */}
-      {/* Image Preview */}
-      <div className="w-full">
-        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Item Photo</label>
+    <form 
+      onSubmit={handleSubmit} 
+      className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-[1.5rem] md:rounded-3xl shadow-2xl p-6 md:p-8 space-y-5"
+    >
+      {/* Header */}
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2.5 bg-teal-500/20 rounded-xl">
+          <Camera className="w-6 h-6 text-teal-400" />
+        </div>
+        <div>
+          <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">Report an Item</h2>
+          <p className="text-sm text-slate-400 font-medium">Did you lose or find something on campus?</p>
+        </div>
+      </div>
+
+      {/* Image Upload / Preview Area */}
+      <div className="w-full space-y-1.5">
+        <label className="block text-sm font-semibold text-slate-300">Item Photo</label>
         {form.image_url ? (
-          <div className="relative w-full h-48 rounded-xl overflow-hidden border border-gray-200 group">
+          <div className="relative w-full h-48 rounded-xl overflow-hidden border border-slate-700/50 group">
             <Image
               src={form.image_url}
               alt="Preview"
@@ -88,61 +104,120 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
             <button
               type="button"
               onClick={() => setForm({ ...form, image_url: "" })}
-              className="absolute top-2 right-2 bg-white/90 text-red-600 p-1.5 rounded-full hover:bg-red-50 transition shadow-sm"
+              className="absolute top-2 right-2 bg-slate-900/80 backdrop-blur text-slate-300 p-1.5 rounded-full hover:bg-red-500/20 hover:text-red-400 transition-all shadow-sm"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </button>
           </div>
         ) : (
-          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-gray-50 hover:bg-blue-50 hover:border-blue-300 transition-all group">
+          <label className="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-slate-600 rounded-xl cursor-pointer bg-slate-900/30 hover:bg-slate-900/60 hover:border-teal-500/50 transition-all group">
             <div className="flex flex-col items-center justify-center pt-5 pb-6">
-              <UploadCloud className="w-8 h-8 text-gray-400 group-hover:text-blue-500 mb-2 transition-colors" />
-              <p className="text-sm text-gray-500 font-medium">Click to upload photo</p>
-              <p className="text-xs text-gray-400 mt-1">(Max 200KB)</p>
+              <UploadCloud className="w-8 h-8 text-slate-500 group-hover:text-teal-400 mb-2 transition-colors" />
+              <p className="text-sm text-slate-400 font-medium group-hover:text-slate-300 transition-colors">Click to upload photo</p>
+              <p className="text-xs text-slate-500 mt-1">(Max 200KB)</p>
             </div>
             <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
           </label>
         )}
       </div>
 
-      <div>
-        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">What was lost?</label>
-        <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. Realme TWS" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition text-sm font-medium" />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Location</label>
-          <input required value={form.location_found} onChange={(e) => setForm({ ...form, location_found: e.target.value })} placeholder="e.g. Library" className="w-full p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition text-sm" />
-        </div>
-        <div>
-          <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">
-            Mobile Number
-          </label>
-          <input
-            required
-            type="tel"
-            value={form.contact_info}
-            onChange={(e) => {
-              const value = e.target.value;
-              // Only update if value is empty OR (contains only numbers AND is <= 10 digits)
-              if (value === "" || (/^\d+$/.test(value) && value.length <= 10)) {
-                setForm({ ...form, contact_info: value });
-              }
-            }}
-            placeholder="e.g. 9211xx"
-            className="w-full p-3 bg-gray-50 border text-gray-900 border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition text-sm"
+      {/* Title Input */}
+      <div className="space-y-1.5">
+        <label className="block text-sm font-semibold text-slate-300">What is it?</label>
+        <div className="relative group">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Search className="h-5 w-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+          </div>
+          <input 
+            required 
+            value={form.title} 
+            onChange={(e) => setForm({ ...form, title: e.target.value })} 
+            placeholder="e.g. Realme TWS Earbuds" 
+            className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-900/80" 
           />
         </div>
       </div>
 
-      <div>
-        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1.5">Description</label>
-        <textarea required rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Provide details (color, brand, scratches)..." className="w-full p-3 bg-gray-50 border text-gray-900 border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition text-sm resize-none" />
+      {/* Two Column Grid for Location & Phone */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Location Input */}
+        <div className="space-y-1.5">
+          <label className="block text-sm font-semibold text-slate-300">Location</label>
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <MapPin className="h-5 w-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+            </div>
+            <input 
+              required 
+              value={form.location_found} 
+              onChange={(e) => setForm({ ...form, location_found: e.target.value })} 
+              placeholder="e.g. Main Library, 2nd Floor" 
+              className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-900/80" 
+            />
+          </div>
+        </div>
+
+        {/* Contact No Input */}
+        <div className="space-y-1.5">
+          <label className="block text-sm font-semibold text-slate-300">Mobile Number</label>
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <Phone className={`h-5 w-5 transition-colors ${isPhoneInvalid ? 'text-red-400' : 'text-slate-500 group-focus-within:text-teal-400'}`} />
+            </div>
+            <input
+              required
+              type="tel"
+              value={form.contact_info}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "" || (/^\d+$/.test(value) && value.length <= 10)) {
+                  setForm({ ...form, contact_info: value });
+                }
+              }}
+              placeholder="10-digit number"
+              className={`w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-200 hover:bg-slate-900/80 ${
+                isPhoneInvalid
+                  ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50"
+                  : "border-slate-700/50 focus:ring-teal-500/50 focus:border-teal-500/50"
+              }`}
+            />
+          </div>
+        </div>
       </div>
 
-      <button disabled={loading} className="w-full bg-black hover:bg-gray-800 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed">
-        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Submit Report"}
+      {/* Description Input */}
+      <div className="space-y-1.5">
+        <label className="block text-sm font-semibold text-slate-300">Description</label>
+        <div className="relative group">
+          <div className="absolute top-3.5 left-0 pl-4 flex pointer-events-none">
+            <AlignLeft className="h-5 w-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+          </div>
+          <textarea 
+            required 
+            rows={3} 
+            value={form.description} 
+            onChange={(e) => setForm({ ...form, description: e.target.value })} 
+            placeholder="Provide details (color, brand, scratches, distinguishing marks)..." 
+            className="w-full pl-11 pr-4 py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-900/80 resize-none" 
+          />
+        </div>
+      </div>
+
+      {/* Submit Button */}
+      <button 
+        disabled={loading || isPhoneInvalid} 
+        className="w-full mt-2 bg-gradient-to-r from-teal-600 to-emerald-600 text-white py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-teal-900/20 hover:shadow-teal-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 group"
+      >
+        {loading ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" />
+            Submitting...
+          </>
+        ) : (
+          <>
+            Submit Report
+          </>
+        )}
       </button>
     </form>
   );

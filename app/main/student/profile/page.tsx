@@ -82,28 +82,28 @@ export default function StudentProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-gray-500 gap-3">
-        <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-900 via-blue-950 to-black text-slate-400 gap-3">
+        <Loader2 className="w-10 h-10 animate-spin text-blue-400" />
         <p className="font-medium animate-pulse">Loading profile...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         
         {/* Main Card */}
-        <div className="bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-100">
+        <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl overflow-hidden border border-slate-700/50 shadow-2xl">
           
           {/* Header Section */}
-          <div className="bg-linear-to-r from-blue-600 to-cyan-600 px-8 py-10 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full -mr-20 -mt-20"></div>
+          <div className="bg-blue-500/10 border-b border-slate-700/50 px-8 py-10 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
             
             <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-6">
-               <div className="text-center md:text-left text-white">
-                  <h1 className="text-3xl font-bold tracking-tight">Student Profile</h1>
-                  <p className="text-blue-100 mt-2">Manage your anonymous identity</p>
+               <div className="text-center md:text-left">
+                  <h1 className="text-3xl font-bold tracking-tight text-white">Student Profile</h1>
+                  <p className="text-slate-300 mt-2">Manage your anonymous identity</p>
                </div>
             </div>
           </div>
@@ -113,54 +113,54 @@ export default function StudentProfilePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               
               {/* Email */}
-              <div className="group p-4 rounded-xl bg-gray-50 border border-gray-100 hover:border-blue-200 transition-colors">
-                 <label className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2 mb-2">
+              <div className="group p-4 rounded-xl bg-slate-900/50 border border-slate-700/50 hover:border-blue-500/50 transition-colors">
+                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2 mb-2">
                     <Mail className="w-3 h-3" /> Email Address
                  </label>
-                 <p className="text-gray-900 font-semibold">{student.email}</p>
+                 <p className="text-slate-100 font-semibold">{student.email}</p>
               </div>
 
               {/* Session Code (Anonymous ID) */}
-              <div className="group p-4 rounded-xl bg-blue-50 border border-blue-100 hover:border-blue-300 transition-colors">
+              <div className="group p-4 rounded-xl bg-blue-500/10 border border-blue-500/30 hover:border-blue-400 transition-colors">
                  <label className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-2 mb-2">
                     <Shield className="w-3 h-3" /> Anonymous Username
                  </label>
                  <div className="flex items-center justify-between">
-                    <p className="text-blue-900 font-mono text-lg font-bold tracking-wider">
+                    <p className="text-blue-100 font-mono text-lg font-bold tracking-wider">
                       {student.sessionCode}
                     </p>
-                    <span className="text-[10px] bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full font-bold">
+                    <span className="text-[10px] bg-teal-500/20 text-teal-400 border border-teal-500/30 px-2 py-0.5 rounded-full font-bold">
                       ACTIVE
                     </span>
                  </div>
-                 <p className="text-xs text-blue-400 mt-2">
+                 <p className="text-xs text-slate-400 mt-2">
                    This ID hides your real name in complaints & marketplace.
                  </p>
               </div>
 
               {/* Account Type */}
-              <div className="group p-4 rounded-xl bg-gray-50 border border-gray-100 hover:border-blue-200 transition-colors">
-                 <label className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2 mb-2">
+              <div className="group p-4 rounded-xl bg-slate-900/50 border border-slate-700/50 hover:border-blue-500/50 transition-colors">
+                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2 mb-2">
                     <User className="w-3 h-3" /> Account Type
                  </label>
-                 <p className="text-gray-900 font-semibold">Verified Student</p>
+                 <p className="text-slate-100 font-semibold">Verified Student</p>
               </div>
 
               {/* Joined Date */}
-              <div className="group p-4 rounded-xl bg-gray-50 border border-gray-100 hover:border-blue-200 transition-colors">
-                 <label className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2 mb-2">
+              <div className="group p-4 rounded-xl bg-slate-900/50 border border-slate-700/50 hover:border-blue-500/50 transition-colors">
+                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2 mb-2">
                     <Calendar className="w-3 h-3" /> Joined Date
                  </label>
-                 <p className="text-gray-900 font-semibold">{student.joinedAt}</p>
+                 <p className="text-slate-100 font-semibold">{student.joinedAt}</p>
               </div>
 
             </div>
 
             {/* Back Button */}
-            <div className="mt-10 pt-6 border-t border-gray-100 flex justify-end">
+            <div className="mt-10 pt-6 border-t border-slate-700/50 flex justify-end">
               <button
                 onClick={() => router.push('/main/student/dashboard')}
-                className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 hover:text-gray-900 transition-all shadow-sm"
+                className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-slate-300 bg-slate-800/60 border border-slate-700/50 hover:bg-slate-700/60 hover:text-white transition-all shadow-lg"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to Dashboard

@@ -8,30 +8,23 @@ export default function LostFoundPage() {
   // This key forces the list to reload when a new item is added
   const [refreshKey, setRefreshKey] = useState(0);
 
-  return (
-    <div className="max-w-7xl mx-auto p-6 space-y-8">
+ return (
+    <div className="min-h-screen p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-gradient-to-br from-slate-900 via-blue-950 to-black text-slate-100">
       
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-[#f8f8f8]">Lost & Found</h1>
-        <p className="text-gray-400 mt-1">Report items found on campus. Delete the post once claimed.</p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {/* MAIN CONTENT GRID */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
         
-        {/* LEFT COLUMN: Feed */}
-        <div className="lg:col-span-2">
-          {/* Pass the refreshKey to trigger reload */}
-          <LostFoundList refreshTrigger={refreshKey} />
+        {/* LEFT COLUMN: Feed (Bottom on Mobile, Left on Desktop) */}
+        <div className="lg:col-span-2 order-2 lg:order-1">
+          {/* Note: Ensure showSearch={true} is passed if required by your list logic! */}
+          <LostFoundList refreshTrigger={refreshKey} showSearch={true} />
         </div>
         
-        {/* RIGHT COLUMN: Report Form */}
-        <div className="lg:col-span-1">
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 sticky top-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <Camera className="w-5 h-5 text-blue-600" />
-              Report an Item
-            </h2>
+        {/* RIGHT COLUMN: Report Form (Top on Mobile, Right on Desktop) */}
+        <div className="lg:col-span-1 order-1 lg:order-2 mb-6 lg:mb-0">
+          {/* top-28 ensures it clears your frosted Navigation Bar */}
+          <div className="lg:sticky lg:top-28">
+            {/* The form is already styled as a glass card, so we just drop it in directly! */}
             <LostFoundForm onSuccess={() => setRefreshKey(prev => prev + 1)} />
           </div>
         </div> 
