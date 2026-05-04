@@ -24,10 +24,10 @@ export default function StudentDashboard() {
 
       {/* --- GRID LAYOUT --- */}
       {/* gap-4 on mobile, gap-6 on desktop */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 md:gap-3">
 
         {/* 1. LATEST ANNOUNCEMENTS (Full Width) */}
-        <section className="lg:col-span-3 bg-slate-800/40 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl p-5 md:p-6 lg:p-8 border border-slate-700/50 shadow-xl">
+        <section className="lg:col-span-3 bg-slate-800/40 backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-slate-700/50 shadow-xl">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
               <div className="p-2 md:p-2.5 bg-blue-500/20 rounded-lg md:rounded-xl">

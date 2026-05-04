@@ -13,11 +13,11 @@ export default function Navbar() {
   const navLinks = [
     { name: "Dashboard", href: "/main/student/dashboard", icon: Home },
     { name: "Announcements", href: "/main/student/announcements", icon: BellRing },
-    { name: "Directory", href: "/main/student/directory", icon: BookUser },
     { name: "Anonymous Chats", href: "/main/student/chat", icon: MessageSquare },
     { name: "Complaints", href: "/main/student/complaint", icon: Mic },
-    { name: "Marketplace", href: "/main/student/marketplace", icon: Store },
+    { name: "Directory", href: "/main/student/directory", icon: BookUser },
     { name: "Lost & Found", href: "/main/student/lost-found", icon: ShieldAlert },
+    { name: "Marketplace", href: "/main/student/marketplace", icon: Store },
     { name: "Profile", href: "/main/student/profile", icon: User },
   ];
 

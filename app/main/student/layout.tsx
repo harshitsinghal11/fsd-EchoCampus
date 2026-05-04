@@ -17,15 +17,19 @@ export default function MainLayout({
     <ProtectedRoute>
       <div className="flex min-h-dvh flex-col bg-slate-950">
         <Navbar />
-        <main
+        
+        {/* We use a ternary operator to give the chat page its strict layout, 
+            while giving normal pages a simple "flex-1" so they don't break. */}
+        <main 
           className={
-            isChatRoute
-              ? "flex min-h-0 flex-1 flex-col overflow-hidden"
+            isChatRoute 
+              ? "relative flex-1 flex flex-col min-h-0" 
               : "flex-1"
           }
         >
           {children}
         </main>
+
         {!isChatRoute && <Footer />}
       </div>
     </ProtectedRoute>

@@ -75,7 +75,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
   return (
     <form 
       onSubmit={handleSubmit} 
-      className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-[1.5rem] md:rounded-3xl shadow-2xl p-6 md:p-8 space-y-5"
+      className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-3xl md:rounded-3xl shadow-2xl p-6 md:p-8 space-y-5"
     >
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
@@ -206,7 +206,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
       {/* Submit Button */}
       <button 
         disabled={loading || isPhoneInvalid} 
-        className="w-full mt-2 bg-gradient-to-r from-teal-600 to-emerald-600 text-white py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-teal-900/20 hover:shadow-teal-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 group"
+        className="w-full mt-2 bg-linear-to-r from-teal-600 to-emerald-600 text-white py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-teal-900/20 hover:shadow-teal-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 group"
       >
         {loading ? (
           <>
