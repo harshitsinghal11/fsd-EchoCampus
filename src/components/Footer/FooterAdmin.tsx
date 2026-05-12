@@ -1,5 +1,5 @@
 "use client";
-import { Heart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Heart, Mail, MapPin, Instagram, Linkedin } from 'lucide-react';
 
 export default function Footer() {
   return (

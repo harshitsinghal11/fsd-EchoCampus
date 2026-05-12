@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { MapPin, Phone, Calendar, Search, Camera, Trash2, ArrowRight } from "lucide-react";
 import Image from "next/image";
@@ -28,6 +28,24 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [internalRefresh, setInternalRefresh] = useState(0);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const displayItems = useMemo(() => {
+    if (!showSearch) return items;
+    const q = searchTerm.trim().toLowerCase();
+    if (!q) return items;
+    return items.filter((item) => {
+      const hay = [
+        item.title,
+        item.description ?? "",
+        item.location_found,
+        item.contact_info,
+      ]
+        .join(" ")
+        .toLowerCase();
+      return hay.includes(q);
+    });
+  }, [items, searchTerm, showSearch]);
 
   useEffect(() => {
     async function fetchItems() {
@@ -68,10 +86,13 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
       {showSearch && (
         <div className="relative group">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
-          <input 
-            type="text" 
-            placeholder="Search lost items..." 
-            className="w-full pl-11 pr-4 py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 shadow-lg transition-all hover:bg-slate-900/80" 
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search lost items..."
+            aria-label="Search lost and found items"
+            className="w-full pl-11 pr-4 py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 shadow-lg transition-all hover:bg-slate-900/80"
           />
         </div>
       )}
@@ -84,23 +105,34 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
         </div>
       )}
 
-      {/* --- EMPTY STATE --- */}
+      {/* --- EMPTY STATE (no data) --- */}
       {!loading && items.length === 0 && (
-        <div className={`flex flex-col items-center justify-center text-center ${showSearch ? 'py-20' : 'py-10'} bg-slate-900/30 rounded-2xl border border-dashed border-slate-700/50 text-slate-500`}>
+        <div className={`flex flex-col items-center justify-center text-center ${showSearch ? "py-20" : "py-10"} bg-slate-900/30 rounded-2xl border border-dashed border-slate-700/50 text-slate-500`}>
           <Camera className="w-12 h-12 mb-3 opacity-30 text-teal-500" />
           <p className="font-medium text-sm text-slate-400">No items found.</p>
-          {showSearch && <p className="text-xs text-slate-500 mt-1">Try adjusting your search terms.</p>}
+          {showSearch && <p className="text-xs text-slate-500 mt-1">Be the first to report a lost or found item.</p>}
+        </div>
+      )}
+
+      {/* --- NO SEARCH MATCHES --- */}
+      {!loading && showSearch && items.length > 0 && displayItems.length === 0 && (
+        <div className="flex flex-col items-center justify-center text-center py-16 bg-slate-900/30 rounded-2xl border border-dashed border-slate-700/50 text-slate-500">
+          <Search className="w-12 h-12 mb-3 opacity-30 text-teal-500" />
+          <p className="font-medium text-sm text-slate-400">No matching items.</p>
+          <p className="text-xs text-slate-500 mt-1">Try different keywords or clear the search box.</p>
         </div>
       )}
 
       {/* --- LIST LAYOUT --- */}
-      <div className={
-        !showSearch 
-          ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5" // Widget Mode: Vertical Stack
-          : "grid grid-cols-1 xl:grid-cols-2 gap-6" // Full Page Mode: Expanded 2-column Grid
-      }>
-        
-        {items.map((item) => (
+      {displayItems.length > 0 && (
+      <div
+        className={
+          !showSearch
+            ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5"
+            : "grid grid-cols-1 xl:grid-cols-2 gap-6"
+        }
+      >
+        {displayItems.map((item) => (
           <div 
             key={item.id} 
             className={`
@@ -203,6 +235,7 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
           </div>
         ))}
       </div>
+      )}
     </div>
   );
 }

@@ -18,7 +18,7 @@ export default function StudentDashboard() {
           Hey! Welcome To EchoCampus
         </h1>
         <p className="text-sm md:text-base text-slate-400 font-medium">
-          Here's what's happening around campus today.
+          Here&apos;s what&apos;s happening around campus today.
         </p>
       </div>
 

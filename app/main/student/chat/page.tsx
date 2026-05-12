@@ -89,10 +89,7 @@ export default function AnonChat() {
   }
 
   return (
-    // 1. We add a relative wrapper that fills the <main> tag
     <div className="relative flex-1 h-full w-full min-h-0">
-      
-      // 2. We make the actual chat container absolute so it can't expand the page height
       <div className="absolute inset-0 flex flex-col overflow-hidden bg-slate-950 text-slate-100">
         
         {/* Messages Scrollable Area */}
