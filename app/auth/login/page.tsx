@@ -19,13 +19,11 @@ export default function Login() {
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-  // --- MAIN LOGIN FUNCTION ---
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      // 1. Perform Auth
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email: email.trim().toLowerCase(),
         password,
@@ -69,7 +67,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black flex items-center justify-center p-4 sm:p-6 md:p-8">
+    <div className="min-h-screen bg-linear-to-br from-slate-900 via-blue-950 to-black flex items-center justify-center p-4 sm:p-6 md:p-8">
       
       <div className="relative w-full max-w-md">
         {/* Glassmorphism Card matching the Dashboard */}
