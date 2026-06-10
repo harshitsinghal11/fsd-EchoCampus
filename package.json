@@ -32,12 +32,12 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harshitsinghal11/echo-campus.git"
+    "url": "git+https://github.com/harshitsinghal11/fsd-EchoCampus.git"
   },
   "author": "Harshit Singhal",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/harshitsinghal11/echo-campus/issues"
+    "url": "https://github.com/harshitsinghal11/fsd-EchoCampus/issues"
   },
-  "homepage": "https://github.com/harshitsinghal11/echo-campus#readme"
+  "homepage": "https://github.com/harshitsinghal11/fsd-EchoCampus#readme"
 }
