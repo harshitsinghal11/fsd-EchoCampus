@@ -127,6 +127,11 @@ No formal contributing guide is defined in the repository yet.
 ## License
 ISC
 
-## Contact (Optional)
-- Author: Harshit Singhal
-- Email: harshitsinghal.dev@outlook.com
+## Contact
+
+Built by **Harshit** — B.Tech CSE, Manav Rachna University
+
+- [GitHub](https://github.com/harshitsinghal11)
+- [LinkedIn](https://linkedin.com/in/harshitsinghal11)
+
+> _Feel free to reach out if you're building something similar or have questions about the implementation._
