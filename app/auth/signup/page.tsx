@@ -61,6 +61,12 @@ export default function SignUpPage() {
         throw new Error(error?.message || "Signup failed.");
       }
 
+      // Supabase Email Enumeration Protection:
+      // If the email already exists, Supabase returns a fake user object with an empty identities array.
+      if (data.user.identities && data.user.identities.length === 0) {
+        throw new Error("An account with this email already exists. Please log in instead.");
+      }
+
       if (data.session) {
         await ensureOwnUserRow(data.user);
         const role = await fetchUserRole(data.user.id);
@@ -97,11 +103,11 @@ export default function SignUpPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black flex items-center justify-center p-4 sm:p-6 md:p-8">
-      
+
       <div className="relative w-full max-w-md">
         {/* Glassmorphism Card */}
         <div className="bg-slate-800/40 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl shadow-2xl border border-slate-700/50 p-6 sm:p-8 md:p-10">
-          
+
           {/* Header */}
           <div className="text-center mb-8">
             <h3 className="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight">
@@ -113,7 +119,7 @@ export default function SignUpPage() {
           </div>
 
           <form onSubmit={onSubmit} className="space-y-5 md:space-y-6">
-            
+
             {/* Full Name Input */}
             <div className="space-y-1.5 md:space-y-2">
               <label htmlFor="full_name" className="block text-sm font-semibold text-slate-300">
