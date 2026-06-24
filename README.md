@@ -13,7 +13,7 @@ EchoCampus is a campus web platform that centralizes common student and faculty 
 - Student-only marketplace with owner-controlled sold status
 - Lost and found posting, browsing, and owner deletion
 - Searchable faculty directory
-- Anonymous student chat powered by Firebase
+- Anonymous student chat powered by Supabase Realtime
 - Student and faculty profile pages
 
 ## Tech Stack
@@ -23,8 +23,7 @@ EchoCampus is a campus web platform that centralizes common student and faculty 
 - Tailwind CSS 4
 - Supabase Auth
 - Supabase Postgres
-- Firebase Auth
-- Firebase Firestore
+- Supabase Realtime
 - Lucide React
 
 ## Screenshots (Optional)
@@ -78,7 +77,6 @@ README.md
 - Node.js 20 or later recommended
 - npm
 - A Supabase project with the required schema and policies
-- A Firebase project configured for anonymous chat
 
 ### Installation
 ```bash
@@ -93,14 +91,6 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 # Optional legacy fallback:
 # NEXT_PUBLIC_SUPABASE_ANON_KEY=
-
-NEXT_PUBLIC_FIREBASE_API_KEY=
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
-NEXT_PUBLIC_FIREBASE_APP_ID=
-NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 ```
 
 ### Running Locally
@@ -121,7 +111,7 @@ Open `http://localhost:3000` in your browser.
 Project not Supported. The repository does not currently include a defined deployment pipeline, CI/CD workflow, or platform-specific deployment configuration.
 
 ## Project Status
-Implemented core student and faculty flows are present in the repository. Logging, monitoring, audit strategy, formal deployment setup, and other advanced platform features are not supported yet.
+Implemented core student and faculty flows are present in the repository. The project is currently undergoing refinement (Phases 4-6) to consolidate the tech stack (migrating Chat to Supabase Realtime), add Live Feed subscriptions, and polish UI/UX with Toast notifications and Suspense loading states.
 
 ## Contributing (Optional)
 No formal contributing guide is defined in the repository yet.

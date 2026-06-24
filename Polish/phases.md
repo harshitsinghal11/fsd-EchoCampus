@@ -56,3 +56,40 @@ This document outlines the codebase issues, inconsistent logic, and UX flaws dis
 *   **Location:** `src/components/marketplace/MarketplaceForm.tsx` & API
 *   **Problem:** The phone number validation strictly demands exactly 10 digits (`/^\d{10}$/`). This breaks if users want to add country codes (e.g., `+91`) or formats.
 *   **Solution:** Update the regex to support optional country codes, or clearly document in the UI placeholder that only the local 10-digit format is accepted.
+
+---
+
+## Phase 4: Stack Consolidation & Realtime Integration (High Priority) [PENDING]
+
+### 4.1 Migrate Global Chat from Firebase to Supabase Realtime
+*   **Location:** `app/main/student/chat/page.tsx` & `lib/firebase.ts`
+*   **Problem:** The chat throws a `FirebaseError: Missing or insufficient permissions` due to unconfigured Anonymous Auth in Firebase. Additionally, using two BaaS providers (Firebase and Supabase) splits the auth context and bloats the app.
+*   **Solution:** Remove Firebase entirely. Migrate the chat implementation to use Supabase Realtime Channels so it relies on the same Postgres database and JWT auth state.
+
+### 4.2 Live Feeds (Realtime)
+*   **Location:** Marketplace and Complaints lists
+*   **Problem:** Feeds currently require manual page refreshes to see new items.
+*   **Solution:** Implement Supabase Realtime subscriptions so new items instantly appear on users' dashboards without polling.
+
+---
+
+## Phase 5: UI/UX & Feedback Mechanisms (Medium Priority) [PENDING]
+
+### 5.1 Modern Toast Notifications
+*   **Location:** Forms across the app (Login, Signup, Marketplace, Complaints)
+*   **Problem:** The app currently relies on native `alert()` popups which block the main thread and feel unpolished.
+*   **Solution:** Integrate a sleek toast notification library (like `sonner` or `react-hot-toast`) for non-blocking, animated feedback.
+
+### 5.2 Implement Loading Skeletons
+*   **Location:** Data fetching boundaries
+*   **Problem:** Navigating between pages often results in hanging screens or plain "Loading..." text.
+*   **Solution:** Leverage Next.js `loading.tsx` and React `<Suspense>` boundaries with skeleton loaders to drastically improve perceived performance.
+
+---
+
+## Phase 6: SEO & Metadata (Low Priority) [PENDING]
+
+### 6.1 SEO Metadata
+*   **Location:** Next.js Route files
+*   **Problem:** Most pages lack proper SEO meta tags.
+*   **Solution:** Add proper Next.js `export const metadata` to all main pages for better previews when shared.

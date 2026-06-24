@@ -92,6 +92,7 @@
 - Directory shows a full-page loading spinner before data is available.
 - Announcement, complaint, marketplace, and lost and found lists show inline loading text or spinners.
 - Submit buttons switch into loading states during form actions.
+- **(Phase 5 Refinement):** Next.js React `<Suspense>` boundaries with skeleton loaders will replace plain text loaders for smoother page transitions.
 
 # Empty States
 - Announcements: `No announcements yet.`
@@ -102,13 +103,14 @@
 - Chat: `No messages yet`
 
 # Error States
-- Login failures use alert popups.
+- Login failures use alert popups (To be replaced with Toast Notifications in Phase 5).
 - Signup failures use inline error cards.
 - Marketplace form uses inline error messaging.
 - Complaint form uses inline success and error messaging.
-- Lost and found and announcement actions use alert popups for failure cases.
+- Lost and found and announcement actions use alert popups for failure cases (To be replaced with Toast Notifications in Phase 5).
 - Directory fetch errors render a retry card.
 - Unauthorized route access redirects instead of rendering an error page.
+- **(Phase 6 Refinement):** Global `error.tsx` boundaries will be implemented to gracefully catch React runtime errors.
 
 # Accessibility Guidelines
 - Most form fields include visible labels.

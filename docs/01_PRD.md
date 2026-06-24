@@ -28,7 +28,7 @@ Campus communication and day-to-day utility workflows are often split across inf
 - Student-only marketplace with owner-controlled sold status
 - Lost and found feed with posting and owner deletion
 - Searchable faculty directory
-- Anonymous student chat powered by Firebase
+- Anonymous student chat powered by Supabase Realtime
 - Student and faculty profile pages
 
 # Functional Requirements
@@ -51,7 +51,7 @@ Campus communication and day-to-day utility workflows are often split across inf
 - The codebase uses TypeScript with strict mode enabled.
 - Core data integrity is enforced through database constraints, RLS policies, and triggers.
 - Major screens are responsive and switch between stacked and multi-column layouts.
-- Chat updates are delivered in real time through Firestore snapshots.
+- Chat updates are delivered in real time through Supabase Realtime subscriptions.
 - Form submissions provide visible loading or error feedback through alerts, inline messages, or loading spinners.
 
 # Business Rules
@@ -70,7 +70,7 @@ Campus communication and day-to-day utility workflows are often split across inf
 # Assumptions
 - The `directory` table is pre-populated with valid faculty records.
 - Supabase environment variables are configured correctly in the runtime environment.
-- Firebase environment variables are configured correctly for anonymous chat.
+- Realtime environment variables are configured correctly for anonymous chat.
 - Supabase Auth email/password is the active authentication method.
 - Users access the application through a modern browser with JavaScript enabled.
 
@@ -79,7 +79,11 @@ Campus communication and day-to-day utility workflows are often split across inf
 - Marketplace is unavailable to faculty and admin users because both routing and RLS restrict it to students.
 - Lost and found image data is stored directly as text in the database instead of a dedicated storage service.
 - Logging, monitoring, analytics, and deployment automation are not implemented in the repository.
-- The chat feature is available only on the student side and depends on Firebase instead of Supabase.
+- The chat feature is available only on the student side and depends on Supabase Realtime instead of Firebase.
 
 # Future Enhancements
-Project not Supported.
+- **Stack Consolidation:** Migrate Global Chat from Firebase to Supabase Realtime to unify the BaaS dependency.
+- **Live Feeds:** Implement Supabase Realtime subscriptions for Marketplace and Complaints feeds.
+- **UI/UX Polish:** Add modern Toast Notifications (replacing `alert()`) and React `<Suspense>` loading skeletons for data fetching boundaries.
+- **SEO Optimization:** Add comprehensive Next.js metadata to all route files for proper social sharing previews.
+- **Error Boundaries:** Introduce `error.tsx` pages for graceful React error handling.

@@ -5,7 +5,7 @@
 - Styling: Tailwind CSS 4
 - Auth and primary database: Supabase Auth and Supabase Postgres
 - Server-side Supabase session support: `@supabase/ssr`
-- Realtime anonymous chat: Firebase Auth with Firestore
+- Realtime anonymous chat: Supabase Realtime Channels (Phase 4)
 - Icons: `lucide-react`
 
 # Project Structure
@@ -46,7 +46,7 @@ public/
 - The app uses a hybrid client-heavy Next.js architecture.
 - Page rendering and navigation live in the Next.js App Router under `app/`.
 - Supabase handles authentication, role data, profiles, announcements, complaints, marketplace records, lost and found records, and the faculty directory.
-- Firebase handles the anonymous chat stream through a Firestore collection.
+- Supabase Realtime handles the anonymous chat stream.
 - Middleware and protected client layouts enforce route access by role.
 - Complaint and marketplace writes are routed through Next.js route handlers, while announcements, directory, lost and found, and profile reads/writes mostly use the Supabase browser client directly.
 
@@ -63,7 +63,7 @@ public/
 - Supabase RLS policies are the main authorization layer for direct client database access.
 - Supabase triggers enforce posting limits and bootstrap public profile data from `auth.users`.
 - Next.js route handlers under `app/api` wrap complaint and marketplace server-side operations that require auth-aware validation.
-- Firebase anonymous auth and Firestore power the student chat room independently of Supabase.
+- Supabase Realtime powers the student chat room, sharing the primary authentication state.
 
 # Authentication & Authorization
 - Authentication uses Supabase email/password sign-in and sign-up.
@@ -89,7 +89,7 @@ public/
 - No global store such as Redux, Zustand, Context-based app state, or React Query cache is implemented.
 
 # Caching Strategy
-Project not Supported. The repository does not implement Redis, SWR, React Query, server-side cache tags, or application-level caching. Data is fetched on demand, and chat uses Firestore realtime snapshots instead of a cache layer.
+Project not Supported. The repository does not implement Redis, SWR, React Query, server-side cache tags, or application-level caching. Data is fetched on demand, and chat uses Supabase Realtime subscriptions instead of a cache layer.
 
 # Security Considerations
 - Supabase public key validation rejects accidental service role usage in `supabaseConfig.ts`.
