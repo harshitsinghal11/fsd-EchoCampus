@@ -34,6 +34,8 @@ No screenshots are included in the repository yet.
 ```text
 app/
   api/
+    auth/
+      faculty-status/
     complaints/
     marketplace/
   auth/

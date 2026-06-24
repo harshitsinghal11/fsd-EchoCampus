@@ -12,6 +12,8 @@
 ```text
 app/
   api/
+    auth/
+      faculty-status/
     complaints/
     marketplace/
   auth/
