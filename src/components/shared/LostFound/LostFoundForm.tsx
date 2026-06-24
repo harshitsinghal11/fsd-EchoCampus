@@ -87,7 +87,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
     }
   };
 
-  const isPhoneInvalid = form.contact_info?.length > 0 && form.contact_info?.length < 10;
+  const isPhoneInvalid = form.contact_info?.length > 0 && !/^(?:\+\d{1,3}[- ]?)?\d{10}$/.test(form.contact_info);
 
   return (
     <form 
@@ -189,12 +189,15 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
               type="tel"
               value={form.contact_info}
               onChange={(e) => {
-                const value = e.target.value;
-                if (value === "" || (/^\d+$/.test(value) && value.length <= 10)) {
-                  setForm({ ...form, contact_info: value });
+                let val = e.target.value.replace(/[^\d+]/g, "");
+                if (val.indexOf("+") > 0) {
+                  val = val.replace(/\+/g, "");
+                }
+                if (val.length <= 15) {
+                  setForm({ ...form, contact_info: val });
                 }
               }}
-              placeholder="10-digit number"
+              placeholder="+91 9876543210 (10 digits)"
               className={`w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-200 hover:bg-slate-900/80 ${
                 isPhoneInvalid
                   ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50"

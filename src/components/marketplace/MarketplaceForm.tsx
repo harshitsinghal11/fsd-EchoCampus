@@ -1,11 +1,11 @@
 "use client";
-import { 
-  Tag, 
-  AlignLeft, 
-  IndianRupee, 
-  User, 
-  Mail, 
-  Phone, 
+import {
+  Tag,
+  AlignLeft,
+  IndianRupee,
+  User,
+  Mail,
+  Phone,
   PlusCircle,
   AlertCircle
 } from 'lucide-react';
@@ -16,8 +16,8 @@ import { useRouter } from "next/navigation";
 export default function MarketCreateForm() {
   const userEmail = useUserEmail();
   const router = useRouter();
-  
-  const [errorMsg, setErrorMsg] = useState(""); 
+
+  const [errorMsg, setErrorMsg] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Consolidated all fields into one state object
@@ -30,7 +30,7 @@ export default function MarketCreateForm() {
 
   // Added React.FormEvent type to fix the 'e' error
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault(); 
+    e.preventDefault();
     setErrorMsg("");
 
     if (!userEmail) return setErrorMsg("Email not loaded. Please wait.");
@@ -52,15 +52,15 @@ export default function MarketCreateForm() {
       }
 
       alert("Item Published Successfully!");
-      
+
       setForm({
         product_title: "",
         description: "",
         price: "",
         contact_info: "",
       });
-      
-      router.refresh(); 
+
+      router.refresh();
 
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Connection failed.";
@@ -69,10 +69,10 @@ export default function MarketCreateForm() {
       setIsSubmitting(false);
     }
   }
-const isPhoneInvalid = form.contact_info.length > 0 && form.contact_info.length < 10;
+  const isPhoneInvalid = form.contact_info.length > 0 && !/^(?:\+\d{1,3}[- ]?)?\d{10}$/.test(form.contact_info);
   return (
-    <form 
-      onSubmit={handleSubmit} 
+    <form
+      onSubmit={handleSubmit}
       className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-[1.5rem] md:rounded-3xl shadow-2xl p-6 md:p-8 space-y-5"
     >
       {/* Header */}
@@ -145,81 +145,84 @@ const isPhoneInvalid = form.contact_info.length > 0 && form.contact_info.length 
 
         {/* Owner Name Input Removed (Fetched from Server) */}
 
-      {/* Grid for Email & Phone */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
-        {/* Email Input (Disabled) */}
-        <div className="space-y-1.5">
-          <label className="block text-sm font-semibold text-slate-400">Campus Email (Locked)</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Mail className="h-5 w-5 text-slate-600" />
+        {/* Grid for Email & Phone */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
+          {/* Email Input (Disabled) */}
+          <div className="space-y-1.5">
+            <label className="block text-sm font-semibold text-slate-400">Campus Email (Locked)</label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Mail className="h-5 w-5 text-slate-600" />
+              </div>
+              <input
+                className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/30 border border-slate-700/30 rounded-xl text-slate-500 cursor-not-allowed select-none"
+                value={userEmail || "Loading email..."}
+                disabled
+              />
             </div>
-            <input
-              className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/30 border border-slate-700/30 rounded-xl text-slate-500 cursor-not-allowed select-none"
-              value={userEmail || "Loading email..."}
-              disabled 
-            />
           </div>
-        </div>
 
-        {/* Contact No Input */}
-        <div className="space-y-1.5">
-          <label className="block text-sm font-semibold text-slate-300">Contact Number</label>
-          <div className="relative group">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Phone className={`h-5 w-5 transition-colors ${isPhoneInvalid ? 'text-red-400' : 'text-slate-500 group-focus-within:text-purple-400'}`} />
-            </div>
-            <input
-              type="tel"
-              inputMode="numeric"
-              placeholder="10-digit number"
-              value={form.contact_info}
-              maxLength={10}
-              className={`w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-200 hover:bg-slate-900/80 ${
-                isPhoneInvalid
+          {/* Contact No Input */}
+          <div className="space-y-1.5">
+            <label className="block text-sm font-semibold text-slate-300">Contact Number</label>
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <Phone className={`h-5 w-5 transition-colors ${isPhoneInvalid ? 'text-red-400' : 'text-slate-500 group-focus-within:text-purple-400'}`} />
+              </div>
+              <input
+                type="tel"
+                inputMode="numeric"
+                placeholder="10-digit number"
+                value={form.contact_info}
+                maxLength={15}
+                className={`w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-200 hover:bg-slate-900/80 ${isPhoneInvalid
                   ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50"
                   : "border-slate-700/50 focus:ring-purple-500/50 focus:border-purple-500/50"
-              }`}
-              onChange={(e) => {
-                const digitsOnly = e.target.value.replace(/\D/g, "");
-                setForm({ ...form, contact_info: digitsOnly });
-              }}
-            />
+                  }`}
+                onChange={(e) => {
+                  let val = e.target.value.replace(/[^\d+]/g, "");
+                  if (val.indexOf("+") > 0) {
+                    val = val.replace(/\+/g, "");
+                  }
+                  setForm({ ...form, contact_info: val });
+                }}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Error Message */}
-      {errorMsg && (
-        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400 flex items-center gap-2 animate-in fade-in">
-          <AlertCircle className="w-5 h-5 shrink-0" />
-          <p>{errorMsg}</p>
-        </div>
-      )}
-
-      {/* Submit Button */}
-      <button
-        type="submit"
-        disabled={
-          !form.product_title ||
-          !form.price ||
-          form.contact_info.length !== 10 ||
-          isSubmitting
-        }
-        className="w-full mt-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group flex items-center justify-center gap-2"
-      >
-        {isSubmitting ? (
-          <>
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-            Publishing...
-          </>
-        ) : (
-          <>
-            <PlusCircle className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-            Publish Listing
-          </>
+        {/* Error Message */}
+        {errorMsg && (
+          <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400 flex items-center gap-2 animate-in fade-in">
+            <AlertCircle className="w-5 h-5 shrink-0" />
+            <p>{errorMsg}</p>
+          </div>
         )}
-      </button>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={
+            !form.product_title ||
+            !form.price ||
+            form.contact_info.length !== 10 ||
+            isSubmitting
+          }
+          className="w-full mt-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group flex items-center justify-center gap-2"
+        >
+          {isSubmitting ? (
+            <>
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              Publishing...
+            </>
+          ) : (
+            <>
+              <PlusCircle className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+              Publish Listing
+            </>
+          )}
+        </button>
+      </div>
     </form>
   );
 }

@@ -1,16 +1,8 @@
-"use client";
-import { useState } from "react";
 import AnnouncementForm from "@/components/announcements/AnnouncementForm";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
 import { Megaphone, Activity, Radio } from "lucide-react";
 
 export default function AdminAnnouncementsPage() {
-   const [refreshKey, setRefreshKey] = useState(0);
-
-   const handleSuccess = () => {
-      setRefreshKey((prev) => prev + 1);
-   };
-
    return (
       <div className="max-w-7xl mx-auto p-6 space-y-8">
 
@@ -42,7 +34,7 @@ export default function AdminAnnouncementsPage() {
 
                   {/* Feed Content */}
                   <div className="p-6 bg-gray-50/30 flex-1 rounded-b-2xl">
-                     <AnnouncementList refreshTrigger={refreshKey} />
+                     <AnnouncementList />
                   </div>
                </div>
             </div>
@@ -65,7 +57,7 @@ export default function AdminAnnouncementsPage() {
 
                      {/* The Form */}
                      <div className="p-6">
-                        <AnnouncementForm onSuccess={handleSuccess} />
+                        <AnnouncementForm />
                      </div>
                   </div>
 

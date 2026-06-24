@@ -1,34 +1,15 @@
 import { NextResponse } from "next/server";
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { cookies } from "next/headers";
-import { supabasePublicKey, supabaseUrl } from "@/lib/supabaseConfig";
-
-type UpvoteRequestBody = {
-  complaintId?: string;
-};
-type CookieToSet = { name: string; value: string; options?: CookieOptions };
+import { createSupabaseServerClient } from "@/utils/supabaseServer";
 
 export async function POST(req: Request) {
   try {
-    const cookieStore = await cookies();
-    const supabase = createServerClient(
-      supabaseUrl,
-      supabasePublicKey,
-      {
-        cookies: {
-          getAll() { return cookieStore.getAll() },
-          setAll(cookiesToSet: CookieToSet[]) {
-            try { cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); } catch { }
-          },
-        },
-      }
-    );
+    const supabase = await createSupabaseServerClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { complaintId } = (await req.json()) as UpvoteRequestBody;
+    const { complaintId } = (await req.json()) as { complaintId: string };
     if (!complaintId) {
       return NextResponse.json({ error: "Missing Complaint ID" }, { status: 400 });
     }

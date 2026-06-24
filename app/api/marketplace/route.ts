@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { cookies } from "next/headers";
-import { supabasePublicKey, supabaseUrl } from "@/lib/supabaseConfig";
+import { createSupabaseServerClient } from "@/utils/supabaseServer";
 
 type MarketplaceListingRow = {
   id: string;
@@ -23,27 +21,10 @@ type MarketplaceInsertPayload = {
   owner_name?: string;
   contact_info?: string;
 };
-type CookieToSet = { name: string; value: string; options?: CookieOptions };
-
-async function createClient() {
-  const cookieStore = await cookies();
-  return createServerClient(
-    supabaseUrl,
-    supabasePublicKey,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll(); },
-        setAll(cookiesToSet: CookieToSet[]) {
-          try { cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); } catch { }
-        },
-      },
-    }
-  );
-}
 
 // GET: Fetch Listings
 export async function GET() {
-  const supabase = await createClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data, error } = await supabase
     .from("marketplace")
@@ -65,7 +46,7 @@ export async function GET() {
 // POST: Create Listing
 export async function POST(req: Request) {
   try {
-    const supabase = await createClient();
+    const supabase = await createSupabaseServerClient();
 
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
@@ -101,8 +82,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User email unavailable" }, { status: 400 });
     }
 
-    if (!/^\d{10}$/.test(contactInfo)) {
-      return NextResponse.json({ error: "Contact info must be 10 digits" }, { status: 400 });
+    if (!/^(?:\+\d{1,3}[- ]?)?\d{10}$/.test(contactInfo)) {
+      return NextResponse.json({ error: "Contact info must be 10 digits, optionally prefixed with a country code." }, { status: 400 });
     }
 
     if (description.length < 3) {

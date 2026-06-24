@@ -1,36 +1,9 @@
 import { NextResponse } from "next/server";
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { cookies } from "next/headers";
-import { supabasePublicKey, supabaseUrl } from "@/lib/supabaseConfig";
-
-type CookieToSet = { name: string; value: string; options?: CookieOptions };
-
-// Helper to create client
-async function createClient() {
-  const cookieStore = await cookies();
-  return createServerClient(
-    supabaseUrl,
-    supabasePublicKey,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll(); },
-        setAll(cookiesToSet: CookieToSet[]) { 
-            try { 
-                cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); 
-            } catch { 
-                // Ignored in server components/GET requests
-            } 
-        },
-      },
-    }
-  );
-}
+import { createSupabaseServerClient } from "@/utils/supabaseServer";
 
 // GET: Fetch Complaints
 export async function GET() {
-  const supabase = await createClient();
-
-  // 1. Get Current User (needed to check if *they* upvoted)
+  const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   const currentUserId = user?.id || null;
 
@@ -52,16 +25,16 @@ export async function GET() {
   // We do this by a separate query or by fetching their specific vote id in the main query.
   // Limitation: Supabase complex filters in deep selects can be tricky.
   // Efficient workaround: Fetch user's upvotes ID list in parallel if logged in.
-  
+
   const myUpvotedIds = new Set<string>();
   if (currentUserId) {
     const { data: myVotes } = await supabase
-        .from("complaint_upvotes")
-        .select("complaint_id")
-        .eq("user_id", currentUserId);
-    
+      .from("complaint_upvotes")
+      .select("complaint_id")
+      .eq("user_id", currentUserId);
+
     if (myVotes) {
-        myVotes.forEach(v => myUpvotedIds.add(v.complaint_id));
+      myVotes.forEach(v => myUpvotedIds.add(v.complaint_id));
     }
   }
 
@@ -124,8 +97,8 @@ export async function GET() {
 // POST: Create Complaint
 export async function POST(req: Request) {
   try {
-    const supabase = await createClient();
-    
+    const supabase = await createSupabaseServerClient();
+
     // 1. Authenticate
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
@@ -133,31 +106,26 @@ export async function POST(req: Request) {
     }
 
     const body = (await req.json()) as { complaint?: unknown; isAnonymous?: unknown };
-    const { complaint, isAnonymous } = body; 
+    const { complaint, isAnonymous } = body;
 
     if (!complaint || typeof complaint !== 'string') {
       return NextResponse.json({ error: "Invalid complaint content" }, { status: 400 });
     }
-    
+
     // 2. Insert
     const { error: insertError } = await supabase
       .from("complaint_box")
-    }
-    
-    // 2. Insert
-    const { error: insertError } = await supabase
-      .from("complaint_box")
-      .insert({ 
+      .insert({
         user_id: user.id,
         content: complaint,
         is_anonymous: !!isAnonymous // Ensure boolean
       });
 
     if (insertError) {
-        if (insertError.message.includes("Weekly limit reached!")) {
-            return NextResponse.json({ error: "Weekly limit reached! You can only submit 1 complaint per week." }, { status: 429 });
-        }
-        return NextResponse.json({ error: insertError.message }, { status: 500 });
+      if (insertError.message.includes("Weekly limit reached!")) {
+        return NextResponse.json({ error: "Weekly limit reached! You can only submit 1 complaint per week." }, { status: 429 });
+      }
+      return NextResponse.json({ error: insertError.message }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });

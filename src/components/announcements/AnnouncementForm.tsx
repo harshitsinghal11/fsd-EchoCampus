@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { Send, Loader2, Link as LinkIcon } from "lucide-react";
 
-export default function AnnouncementForm({ onSuccess }: { onSuccess: () => void }) {
+export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void }) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -72,7 +74,8 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess: () => void 
       setTitle("");
       setContent("");
       setLink("");
-      onSuccess();
+      if (onSuccess) onSuccess();
+      router.refresh();
 
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Failed to post.";

@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 import { Megaphone, BookUser, Camera, ArrowRight } from "lucide-react";
 

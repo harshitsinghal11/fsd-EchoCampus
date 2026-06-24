@@ -1,4 +1,3 @@
-"use client";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
 import { Megaphone, Search } from "lucide-react";
 
@@ -34,7 +33,7 @@ export default function StudentAnnouncementsPage() {
 
         {/* 3. The Feed */}
         <div>
-          <AnnouncementList refreshTrigger={0} />
+          <AnnouncementList />
         </div>
 
       </div>
