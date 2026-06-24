@@ -453,6 +453,11 @@ begin
       set faculty_id = excluded.faculty_id;
   end if;
 
+  -- Inject role into auth.users metadata for JWT read
+  update auth.users
+  set raw_user_meta_data = coalesce(raw_user_meta_data, '{}'::jsonb) || jsonb_build_object('role', case when matched_directory.id is not null then 'faculty' else 'student' end)
+  where id = new.id;
+
   return new;
 end;
 $$;

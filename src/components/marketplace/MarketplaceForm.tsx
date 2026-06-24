@@ -25,7 +25,6 @@ export default function MarketCreateForm() {
     product_title: "",
     description: "",
     price: "",
-    owner_name: "", 
     contact_info: "",
   });
 
@@ -34,7 +33,6 @@ export default function MarketCreateForm() {
     e.preventDefault(); 
     setErrorMsg("");
 
-    if (!form.owner_name) return setErrorMsg("Owner Name is required");
     if (!userEmail) return setErrorMsg("Email not loaded. Please wait.");
     if (form.contact_info.length !== 10) return setErrorMsg("Contact info must be 10 digits");
 
@@ -59,7 +57,6 @@ export default function MarketCreateForm() {
         product_title: "",
         description: "",
         price: "",
-        owner_name: "",
         contact_info: "",
       });
       
@@ -146,25 +143,10 @@ const isPhoneInvalid = form.contact_info.length > 0 && form.contact_info.length 
           </div>
         </div>
 
-        {/* Owner Name Input */}
-        <div className="space-y-1.5">
-          <label className="block text-sm font-semibold text-slate-300">Your Name</label>
-          <div className="relative group">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <User className="h-5 w-5 text-slate-500 group-focus-within:text-purple-400 transition-colors" />
-            </div>
-            <input
-              placeholder="Full Name"
-              value={form.owner_name} 
-              className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-200 hover:bg-slate-900/80"
-              onChange={(e) => setForm({ ...form, owner_name: e.target.value })}
-            />
-          </div>
-        </div>
-      </div>
+        {/* Owner Name Input Removed (Fetched from Server) */}
 
-      {/* Two Column Grid for Email & Phone */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {/* Grid for Email & Phone */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
         {/* Email Input (Disabled) */}
         <div className="space-y-1.5">
           <label className="block text-sm font-semibold text-slate-400">Campus Email (Locked)</label>
@@ -221,7 +203,6 @@ const isPhoneInvalid = form.contact_info.length > 0 && form.contact_info.length 
         disabled={
           !form.product_title ||
           !form.price ||
-          !form.owner_name ||
           form.contact_info.length !== 10 ||
           isSubmitting
         }

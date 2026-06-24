@@ -75,13 +75,21 @@ export async function POST(req: Request) {
     const body = (await req.json()) as MarketplaceInsertPayload;
     const productTitle = body.product_title?.trim();
     const description = body.description?.trim();
-    const ownerName = body.owner_name?.trim();
     const contactInfo = body.contact_info?.trim();
     const parsedPrice = Number(body.price);
     const ownerEmail = user.email?.trim();
 
+    // Fetch user full_name from public.users to prevent spoofing
+    const { data: userData } = await supabase
+      .from("users")
+      .select("full_name")
+      .eq("id", user.id)
+      .single();
+
+    const ownerName = userData?.full_name || "Unknown Seller";
+
     // Validate all required fields before insert
-    if (!productTitle || !description || !ownerName || !contactInfo) {
+    if (!productTitle || !description || !contactInfo) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 

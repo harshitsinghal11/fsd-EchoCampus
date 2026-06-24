@@ -14,6 +14,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
     contact_info: "",
     image_url: "",
   });
+  const [fileToUpload, setFileToUpload] = useState<File | null>(null);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -24,11 +25,8 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
       return;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setForm({ ...form, image_url: reader.result as string });
-    };
-    reader.readAsDataURL(file);
+    setFileToUpload(file);
+    setForm({ ...form, image_url: URL.createObjectURL(file) });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -42,13 +40,31 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
         return;
       }
 
+      let finalImageUrl = "";
+      if (fileToUpload) {
+        const fileExt = fileToUpload.name.split('.').pop();
+        const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('lost_found_images')
+          .upload(fileName, fileToUpload);
+          
+        if (uploadError) throw uploadError;
+        
+        const { data: { publicUrl } } = supabase.storage
+          .from('lost_found_images')
+          .getPublicUrl(fileName);
+          
+        finalImageUrl = publicUrl;
+      }
+
       const { error } = await supabase.from("lost_found").insert({
         user_id: user.id,
         title: form.title,
         description: form.description,
         location_found: form.location_found,
         contact_info: form.contact_info,
-        image_url: form.image_url,
+        image_url: finalImageUrl,
         is_resolved: false
       });
 
@@ -56,6 +72,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
 
       alert("Lost Item Reported Successfully!");
       setForm({ title: "", description: "", location_found: "", contact_info: "", image_url: "" });
+      setFileToUpload(null);
       onSuccess();
 
     } catch (err: unknown) {
@@ -103,7 +120,10 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
             />
             <button
               type="button"
-              onClick={() => setForm({ ...form, image_url: "" })}
+              onClick={() => {
+                setForm({ ...form, image_url: "" });
+                setFileToUpload(null);
+              }}
               className="absolute top-2 right-2 bg-slate-900/80 backdrop-blur text-slate-300 p-1.5 rounded-full hover:bg-red-500/20 hover:text-red-400 transition-all shadow-sm"
             >
               <X className="w-5 h-5" />
