@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Send, Users, ArrowLeft } from 'lucide-react';
+import { Send, Users } from 'lucide-react';
 import { useSessionCode } from '@/hooks/useSessionCode';
 import { supabase } from '@/lib/supabaseClient';
 import { toast } from 'sonner';

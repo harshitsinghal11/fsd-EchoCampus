@@ -92,7 +92,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
 
       {/* 1. Title Input */}
       <div>
-        <label className="block text-xs font-bold text-gray-900 uppercase tracking-wide mb-1.5">
+        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wide mb-1.5">
           Subject / Title
         </label>
         <input
@@ -100,32 +100,32 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g. Exam Schedule Update"
-          className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm font-medium"
+          className="w-full p-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:bg-slate-900/80 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 outline-none transition-all text-sm font-medium"
         />
       </div>
 
       {/* 2. Link Input (NEW) */}
       <div>
-        <label className="block text-xs font-bold text-gray-900 uppercase tracking-wide mb-1.5">
-          Attachment Link <span className="text-gray-400 font-normal lowercase">(optional)</span>
+        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wide mb-1.5">
+          Attachment Link <span className="text-slate-500 font-normal lowercase">(optional)</span>
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <LinkIcon className="h-4 w-4 text-gray-400" />
+            <LinkIcon className="h-4 w-4 text-slate-500" />
           </div>
           <input
             type="url"
             value={link}
             onChange={(e) => setLink(e.target.value)}
             placeholder="forms.google.com/"
-            className="w-full pl-10 p-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm font-medium"
+            className="w-full pl-10 p-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:bg-slate-900/80 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 outline-none transition-all text-sm font-medium"
           />
         </div>
       </div>
 
       {/* 3. Content Textarea */}
       <div>
-        <label className="block text-xs font-bold text-gray-900 uppercase tracking-wide mb-1.5">
+        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wide mb-1.5">
           Details
         </label>
         <textarea
@@ -134,7 +134,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
           onChange={(e) => setContent(e.target.value)}
           placeholder="Type your announcement content here..."
           rows={5}
-          className="w-full p-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all text-sm resize-none"
+          className="w-full p-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:bg-slate-900/80 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 outline-none transition-all text-sm resize-none"
         />
       </div>
 
@@ -142,9 +142,9 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
       <button
         disabled={loading}
         type="submit"
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
+        className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-900/20 hover:shadow-blue-900/40 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed group"
       >
-        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4" /> Publish Now</>}
+        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" /> Publish Now</>}
       </button>
     </form>
   );

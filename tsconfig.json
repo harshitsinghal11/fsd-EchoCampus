@@ -37,7 +37,7 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts",
     "src/lib/supabaseClient.ts"
-, "src/lib/firebase.ts"  ],
+  ],
   "exclude": [
     "node_modules"
   ]

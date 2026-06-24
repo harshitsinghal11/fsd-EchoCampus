@@ -1,5 +1,3 @@
-import { Loader2 } from "lucide-react";
-
 export default function Loading() {
   return (
     <div className="w-full h-[calc(100vh-100px)] flex flex-col items-center justify-center space-y-4">

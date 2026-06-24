@@ -3,11 +3,9 @@ import {
   Tag,
   AlignLeft,
   IndianRupee,
-  User,
   Mail,
   Phone,
-  PlusCircle,
-  AlertCircle
+  PlusCircle
 } from 'lucide-react';
 import React, { useState } from "react";
 import { useUserEmail } from "@/hooks/useUserEmail";

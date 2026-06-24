@@ -85,7 +85,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
     <div className={`grid gap-4 md:gap-6 items-start ${
   isWidget 
     ? "grid-cols-1 sm:grid-cols-2"  
-    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+    : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"
 }`}>
       {items.map((item) => (
         <div

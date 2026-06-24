@@ -14,7 +14,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed max-w-md mb-6">
-              EchoCampus is a comprehensive web platform designed to bridge the gap between students and campus resources, 
+              EchoCampus is a comprehensive web platform designed to bridge the gap between students and campus resources,
               establishing the foundation for digital campus community building through modern web technologies.
             </p>
             <div className="flex space-x-4">
@@ -67,8 +67,7 @@ export default function Footer() {
               </div>
               <div className="flex items-start text-gray-300 text-sm">
                 <MapPin className="w-4 h-4 mr-3 mt-0.5 text-blue-400 shrink-0" />
-                <span>Manav Rachna University<br /> Faridabad, 121004</span>
-              </div>
+                <span>Manav Rachna University<br /> Faridabad, 121004</span>              </div>
             </div>
           </div>
         </div>
@@ -79,7 +78,7 @@ export default function Footer() {
             <div className="flex items-center text-gray-400 text-sm mb-4 md:mb-0">
               <span>Made with</span>
               <Heart className="w-4 h-4 mx-1 text-red-500" />
-              <span>for Students by Harshit Singhal</span>
+              <span>for students by Harshit Singhal</span>
             </div>
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-gray-400 text-sm">
               <span>&copy; 2025 EchoCampus. All rights reserved.</span>

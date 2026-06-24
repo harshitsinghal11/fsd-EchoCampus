@@ -9,9 +9,9 @@ export default function MainLayout({
 }) {
   return (
     <ProtectedRoute>
-      <div className="h-screen flex flex-col">
+      <div className="flex min-h-dvh flex-col bg-slate-950">
         <Navbar />
-        <main>{children}</main>
+        <main className="flex-1">{children}</main>
         <Footer />
       </div>
     </ProtectedRoute>

@@ -38,7 +38,7 @@ export default async function AnnouncementList({ isWidget = false }: Announcemen
   return (
     <div className="space-y-3 pr-2 custom-scrollbar h-full overflow-y-auto">
       {list.length === 0 && (
-        <div className="text-center py-10 flex items-center justify-center text-gray-400">
+        <div className="text-center py-10 flex items-center justify-center text-slate-500">
           <p>No announcements yet.</p>
         </div>
       )}
@@ -48,14 +48,14 @@ export default async function AnnouncementList({ isWidget = false }: Announcemen
           key={item.id}
           className={`transition-all duration-200 border ${
             isWidget
-              ? "bg-blue-50/50 p-4 rounded-xl border-blue-100 hover:border-blue-200"
-              : "bg-white p-6 rounded-2xl border-gray-200 hover:shadow-md"
+              ? "bg-slate-800/60 p-4 rounded-xl border-slate-700/50 hover:bg-slate-700/50"
+              : "bg-slate-800/40 backdrop-blur-xl p-6 rounded-2xl border-slate-700/50 hover:bg-slate-800/60 shadow-lg"
           }`}
         >
           <div className="flex flex-col gap-1">
-            <h4 className={`font-bold text-gray-900 ${isWidget ? "text-sm" : "text-xl mb-2"}`}>{item.title}</h4>
+            <h4 className={`font-bold text-white ${isWidget ? "text-sm line-clamp-1" : "text-xl md:text-2xl mb-2"}`}>{item.title}</h4>
 
-            <p className={`text-gray-600 ${isWidget ? "text-xs line-clamp-2 mt-1" : "text-base leading-relaxed whitespace-pre-wrap"}`}>
+            <p className={`text-slate-400 ${isWidget ? "text-xs line-clamp-2 mt-1" : "text-sm md:text-base leading-relaxed whitespace-pre-wrap"}`}>
               {item.content}
             </p>
 
@@ -65,8 +65,8 @@ export default async function AnnouncementList({ isWidget = false }: Announcemen
                   href={item.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-2 font-medium text-blue-600 hover:text-blue-800 hover:underline transition-colors ${
-                    isWidget ? "text-xs" : "text-sm bg-blue-50 px-3 py-2 rounded-lg border border-blue-100 hover:bg-blue-100"
+                  className={`inline-flex items-center gap-1.5 font-medium text-blue-400 hover:text-blue-300 transition-colors ${
+                    isWidget ? "text-[10px] md:text-xs" : "text-xs md:text-sm bg-blue-500/10 px-3 py-2 rounded-lg border border-blue-500/20 hover:bg-blue-500/20"
                   }`}
                 >
                   <ExternalLink className={isWidget ? "w-3 h-3" : "w-4 h-4"} />
@@ -76,10 +76,10 @@ export default async function AnnouncementList({ isWidget = false }: Announcemen
             )}
 
             {!isWidget && (
-              <div className="flex items-center justify-between pt-4 mt-4 border-t border-gray-50 text-sm text-gray-500">
+              <div className="flex items-center justify-between pt-4 mt-4 border-t border-slate-700/50 text-xs md:text-sm text-slate-500">
                 <div className="flex items-center gap-2">
-                  <User className="w-4 h-4 text-gray-400" />
-                  <span className="font-medium text-gray-700">{item.directory?.name || "Faculty"}</span>
+                  <User className="w-4 h-4 text-slate-400" />
+                  <span className="font-semibold text-slate-300">{item.directory?.name || "Faculty"}</span>
                 </div>
               </div>
             )}
