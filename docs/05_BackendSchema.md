@@ -1,9 +1,8 @@
 # Database Overview
 - Primary relational backend: Supabase Postgres
 - Authentication source: Supabase Auth
-- Realtime chat backend: Firebase Firestore
-- Supabase stores user identity, profiles, faculty directory records, announcements, complaints, marketplace data, and lost and found data.
-- Firestore stores anonymous chat messages in the `chat_messages` collection.
+- Realtime chat backend: Supabase Realtime
+- Supabase stores user identity, profiles, faculty directory records, announcements, complaints, marketplace data, lost and found data, and anonymous chat messages.
 
 # ER Diagram
 ```text
@@ -16,6 +15,7 @@ auth.users
        -> public.marketplace
        -> public.lost_found
        -> public.faculty_users
+       -> public.chat_messages
 
 public.directory
   -> public.faculty_users
@@ -36,7 +36,7 @@ public.complaint_box
 - `public.complaint_upvotes`: one-row-per-user-per-complaint vote table
 - `public.marketplace`: student marketplace listings with owner data, price, contact info, sold state, and timestamps
 - `public.lost_found`: lost and found records with owner, title, description, location, contact info, image data, resolve flag, and timestamp
-- `firebase.chat_messages`: Firestore collection with `random_code`, `message`, `createdAt`, and `expiresAt`
+- `public.chat_messages`: Supabase table with `id`, `random_code`, `message`, and `created_at`
 
 # Relationships
 - `users.id` references `auth.users.id`
@@ -93,6 +93,7 @@ public.complaint_box
 - `complaint_upvotes`: authenticated users can read all votes; only students can insert their own votes and any authenticated user can delete only their own vote row
 - `marketplace`: only students can read and insert marketplace rows; only the owner can update a row
 - `lost_found`: authenticated users can read all rows, insert only their own rows, and delete only their own rows
+- `chat_messages`: anyone can select, but only authenticated users can insert (anonymous inserts rely on session_code instead of user_id linking)
 
 # Triggers
 - `enforce_lost_found_limit`: blocks more than 2 lost and found posts per user in 24 hours

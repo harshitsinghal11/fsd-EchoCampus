@@ -30,14 +30,14 @@ EchoCampus has a public entry flow and two protected application areas. Students
 - Marketplace: student opens marketplace page -> list loads from `GET /api/marketplace` -> student submits listing form -> `POST /api/marketplace` validates ownership and fields -> listing is saved -> owner can later call `POST /api/marketplace/sold`.
 - Lost and found: user opens lost and found page -> feed loads from `lost_found` -> user submits item details and optional image data -> row is inserted -> owner can later delete the post when the item is returned.
 - Directory: user opens directory page -> app reads `directory` records -> client applies search text and department filters.
-- Anonymous chat: student opens chat page -> Firebase anonymous auth session is ensured -> Firestore snapshot loads `chat_messages` -> student sends message with `random_code = session_code`.
+- Anonymous chat: student opens chat page -> Supabase client fetches recent `chat_messages` -> realtime subscription connects to Supabase channel -> student sends message with `random_code = session_code`.
 - Profile: user opens profile page -> app reads role-specific profile data from Supabase -> profile card renders user details.
 
 # Data Flow
 - Auth data flow: browser -> Supabase Auth -> `public.users` and profile helpers -> middleware and protected routes -> role-specific page
 - Direct Supabase feature flow: browser client -> Supabase JS -> RLS-protected tables -> UI render
 - API-backed feature flow: browser -> Next.js route handler -> Supabase server client -> Postgres -> JSON response -> UI update
-- Chat flow: browser -> Firebase anonymous auth -> Firestore `chat_messages` collection -> realtime snapshot -> UI render
+- Chat flow: browser -> Supabase client -> Postgres `chat_messages` table -> realtime channel subscription -> UI render
 
 # Error Handling Flow
 - Missing or expired authenticated session redirects the user to `/auth/login`.

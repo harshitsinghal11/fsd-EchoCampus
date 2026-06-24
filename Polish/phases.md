@@ -59,7 +59,7 @@ This document outlines the codebase issues, inconsistent logic, and UX flaws dis
 
 ---
 
-## Phase 4: Stack Consolidation & Realtime Integration (High Priority) [PENDING]
+## Phase 4: Stack Consolidation & Realtime Integration (High Priority) [COMPLETED]
 
 ### 4.1 Migrate Global Chat from Firebase to Supabase Realtime
 *   **Location:** `app/main/student/chat/page.tsx` & `lib/firebase.ts`
@@ -85,11 +85,4 @@ This document outlines the codebase issues, inconsistent logic, and UX flaws dis
 *   **Problem:** Navigating between pages often results in hanging screens or plain "Loading..." text.
 *   **Solution:** Leverage Next.js `loading.tsx` and React `<Suspense>` boundaries with skeleton loaders to drastically improve perceived performance.
 
----
 
-## Phase 6: SEO & Metadata (Low Priority) [PENDING]
-
-### 6.1 SEO Metadata
-*   **Location:** Next.js Route files
-*   **Problem:** Most pages lack proper SEO meta tags.
-*   **Solution:** Add proper Next.js `export const metadata` to all main pages for better previews when shared.

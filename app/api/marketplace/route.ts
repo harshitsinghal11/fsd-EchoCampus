@@ -59,8 +59,6 @@ export async function POST(req: Request) {
     const contactInfo = body.contact_info?.trim();
     const parsedPrice = Number(body.price);
     const ownerEmail = user.email?.trim();
-
-    // Fetch user full_name from public.users to prevent spoofing
     const { data: userData } = await supabase
       .from("users")
       .select("full_name")
@@ -69,7 +67,6 @@ export async function POST(req: Request) {
 
     const ownerName = userData?.full_name || "Unknown Seller";
 
-    // Validate all required fields before insert
     if (!productTitle || !description || !contactInfo) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
@@ -90,7 +87,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    // Never trust owner_email from client input; derive from authenticated user
     const { error: insertError } = await supabase.from("marketplace").insert({
       owner_id: user.id,
       product_title: productTitle,

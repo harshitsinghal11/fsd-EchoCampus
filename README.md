@@ -111,7 +111,7 @@ Open `http://localhost:3000` in your browser.
 Project not Supported. The repository does not currently include a defined deployment pipeline, CI/CD workflow, or platform-specific deployment configuration.
 
 ## Project Status
-Implemented core student and faculty flows are present in the repository. The project is currently undergoing refinement (Phases 4-6) to consolidate the tech stack (migrating Chat to Supabase Realtime), add Live Feed subscriptions, and polish UI/UX with Toast notifications and Suspense loading states.
+Implemented core student and faculty flows are present in the repository. The tech stack has been successfully consolidated by migrating Global Chat and Live Feeds entirely to Supabase Realtime (removing Firebase). The project is now undergoing UI/UX polish (Phases 5-6) including Toast notifications, Suspense loading states, and SEO metadata.
 
 ## Contributing (Optional)
 No formal contributing guide is defined in the repository yet.

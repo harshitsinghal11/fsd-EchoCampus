@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useState } from "react";
 import { ThumbsUp, MessageSquare, Clock } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
 
 type Complaint = {
   id: string;
@@ -115,6 +116,26 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
 
   useEffect(() => {
     load();
+  }, [load]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('public:complaints')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'complaint_box' },
+        () => load()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'complaint_upvotes' },
+        () => load()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [load]);
 
   if (loading) {

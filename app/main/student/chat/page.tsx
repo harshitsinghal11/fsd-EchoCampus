@@ -1,90 +1,107 @@
 'use client';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { addDoc, collection, DocumentData, limit, onSnapshot, orderBy, query, QuerySnapshot, serverTimestamp,Unsubscribe, } from 'firebase/firestore';
-import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
-import {Send, Users } from 'lucide-react';
-import { auth, db } from '@/lib/firebase';
+import React, { useEffect, useRef, useState } from 'react';
+import { Send, Users } from 'lucide-react';
 import { useSessionCode } from '@/hooks/useSessionCode';
+import { supabase } from '@/lib/supabaseClient';
 
 type Message = {
-  id?: string;
+  id: string;
   random_code: string;
   message: string;
-  createdAt: { seconds: number; nanoseconds: number } | null;
+  created_at: string;
 };
 
 export default function AnonChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText] = useState('');
-  const [isSignedIn, setIsSignedIn] = useState(false);
   const sessionCode = useSessionCode();
   const endRef = useRef<HTMLDivElement | null>(null);
-  const messagesRef = useMemo(() => collection(db, 'chat_messages'), []);
 
   const isOwnMessage = (code: string) => code === sessionCode;
 
   useEffect(() => {
-    const unsubAuth = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setIsSignedIn(true);
-        return;
+    // 1. Fetch initial messages
+    const fetchMessages = async () => {
+      const { data, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .order('created_at', { ascending: true })
+        .limit(500);
+
+      if (error) {
+        console.error('Error fetching messages:', error);
+      } else if (data) {
+        setMessages(data as Message[]);
       }
+    };
 
-      signInAnonymously(auth).catch((err) => {
-        console.error('anon sign-in failed', err);
-      });
-    });
+    fetchMessages();
 
-    return () => unsubAuth();
+    // 2. Subscribe to realtime updates
+    const channel = supabase
+      .channel('public:chat_messages')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'chat_messages' },
+        (payload) => {
+          const newMsg = payload.new as Message;
+          setMessages((prev) => {
+            // Deduplicate in case optimistic update already added it
+            if (prev.some(m => m.id === newMsg.id || (m.random_code === newMsg.random_code && m.message === newMsg.message && new Date(newMsg.created_at).getTime() - new Date(m.created_at).getTime() < 5000))) {
+              return prev.map(m => m.message === newMsg.message && m.random_code === newMsg.random_code ? newMsg : m);
+            }
+            return [...prev, newMsg];
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
-
-  useEffect(() => {
-    const q = query(messagesRef, orderBy('createdAt', 'asc'), limit(500));
-    const unsub: Unsubscribe = onSnapshot(
-      q,
-      (snapshot: QuerySnapshot<DocumentData>) => {
-        const docs = snapshot.docs.map((d) => {
-          const data = d.data();
-          return {
-            id: d.id,
-            random_code: data.random_code,
-            message: data.message,
-            createdAt: data.createdAt || null,
-          } as Message;
-        });
-        setMessages(docs);
-      },
-      (err) => {
-        console.error('snapshot error', err);
-      }
-    );
-
-    return () => unsub();
-  }, [messagesRef]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: 'end' });
   }, [messages]);
 
-
   async function handleSend(e?: React.FormEvent) {
     e?.preventDefault();
-    if (!text.trim() || !sessionCode || !isSignedIn) return;
+    if (!text.trim() || !sessionCode) return;
+
+    const newMessageText = text.trim();
+    
+    // Create an optimistic message object
+    const optimisticMessage: Message = {
+      id: crypto.randomUUID(), // temp id
+      random_code: sessionCode,
+      message: newMessageText,
+      created_at: new Date().toISOString(),
+    };
 
     const payload = {
       random_code: sessionCode,
-      message: text.trim(),
-      createdAt: serverTimestamp(),
-      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      message: newMessageText,
     };
 
     setText('');
+    
+    // Optimistic update
+    setMessages((prev) => [...prev, optimisticMessage]);
 
-    try {
-      await addDoc(messagesRef, payload);
-    } catch (err) {
-      console.error('failed to send message', err);
+    const { data, error } = await supabase.from('chat_messages').insert([payload]).select().single();
+
+    if (error) {
+      console.error('Failed to send message:', error);
+      alert(`Error sending message: ${error.message}`);
+      // Revert optimistic update
+      setMessages((prev) => prev.filter((m) => m.id !== optimisticMessage.id));
+    } else if (data) {
+      // We don't need to do anything here if Realtime is working, 
+      // but if Realtime is slow, the optimistic update handles the UI.
+      // We could update the ID to the real one to avoid duplicates if Realtime fires,
+      // but a simple approach is to let Realtime add the "real" one and we deduplicate.
     }
   }
 
@@ -130,8 +147,8 @@ export default function AnonChat() {
                           {m.random_code}
                         </span>
                         <span className="text-[10px] text-slate-500 sm:text-xs">
-                          {m.createdAt
-                            ? new Date(m.createdAt.seconds * 1000).toLocaleTimeString('en-US', {
+                          {m.created_at
+                            ? new Date(m.created_at).toLocaleTimeString('en-US', {
                                 hour: 'numeric',
                                 minute: '2-digit',
                                 hour12: true,

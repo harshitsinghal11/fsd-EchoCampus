@@ -2,6 +2,7 @@
 import { User, Phone, CheckCircle } from 'lucide-react';
 import { useCallback, useEffect, useState } from "react";
 import { MarketplaceItem } from "@/types/marketplace"; 
+import { supabase } from "@/lib/supabaseClient";
 
 // 1. Update the Props Interface
 interface MarketListProps {
@@ -55,6 +56,21 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
 
   useEffect(() => {
     load();
+  }, [load]);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('public:marketplace')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'marketplace' },
+        () => load()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [load]);
 
   if (loading) return <p className="text-gray-500 text-center animate-pulse">Loading listings...</p>;

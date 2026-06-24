@@ -82,8 +82,6 @@ Campus communication and day-to-day utility workflows are often split across inf
 - The chat feature is available only on the student side and depends on Supabase Realtime instead of Firebase.
 
 # Future Enhancements
-- **Stack Consolidation:** Migrate Global Chat from Firebase to Supabase Realtime to unify the BaaS dependency.
-- **Live Feeds:** Implement Supabase Realtime subscriptions for Marketplace and Complaints feeds.
 - **UI/UX Polish:** Add modern Toast Notifications (replacing `alert()`) and React `<Suspense>` loading skeletons for data fetching boundaries.
 - **SEO Optimization:** Add comprehensive Next.js metadata to all route files for proper social sharing previews.
 - **Error Boundaries:** Introduce `error.tsx` pages for graceful React error handling.
