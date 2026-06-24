@@ -142,6 +142,11 @@ export async function POST(req: Request) {
     // 2. Insert
     const { error: insertError } = await supabase
       .from("complaint_box")
+    }
+    
+    // 2. Insert
+    const { error: insertError } = await supabase
+      .from("complaint_box")
       .insert({ 
         user_id: user.id,
         content: complaint,
@@ -149,9 +154,8 @@ export async function POST(req: Request) {
       });
 
     if (insertError) {
-        // Warning: Checking error string is fragile, but acceptable for simple apps
-        if (insertError.message.toLowerCase().includes("limit") || insertError.code === "23505") { // 23505 is generic unique violation
-            return NextResponse.json({ error: "Daily limit reached! 1 Complaint per Week" }, { status: 429 });
+        if (insertError.message.includes("Weekly limit reached!")) {
+            return NextResponse.json({ error: "Weekly limit reached! You can only submit 1 complaint per week." }, { status: 429 });
         }
         return NextResponse.json({ error: insertError.message }, { status: 500 });
     }

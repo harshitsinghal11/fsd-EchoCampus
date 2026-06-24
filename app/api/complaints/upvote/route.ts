@@ -11,8 +11,6 @@ type CookieToSet = { name: string; value: string; options?: CookieOptions };
 export async function POST(req: Request) {
   try {
     const cookieStore = await cookies();
-
-    // 1. Setup Client
     const supabase = createServerClient(
       supabaseUrl,
       supabasePublicKey,
@@ -25,8 +23,6 @@ export async function POST(req: Request) {
         },
       }
     );
-
-    // 2. Auth Check
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -36,8 +32,6 @@ export async function POST(req: Request) {
     if (!complaintId) {
       return NextResponse.json({ error: "Missing Complaint ID" }, { status: 400 });
     }
-
-    // 3. CHECK: Does a vote already exist?
     const { data: existing, error: fetchError } = await supabase
       .from("complaint_upvotes")
       .select("id")

@@ -14,9 +14,6 @@ import {
 import { supabase } from "@/lib/supabaseClient";
 
 export default function SignUpPage() {
-  const facultySignupErrorMessage =
-    "This email is not registered as a faculty email. If you are not faculty, sign up without the faculty option.";
-
   const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -25,7 +22,6 @@ export default function SignUpPage() {
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [isFacultySignup, setIsFacultySignup] = useState(false);
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -50,26 +46,6 @@ export default function SignUpPage() {
     setSuccessMessage("");
 
     try {
-      if (isFacultySignup) {
-        const { data: isFaculty, error: facultyCheckError } = await supabase.rpc(
-          "is_faculty_email",
-          {
-            input_email: normalizedEmail,
-          }
-        );
-
-        if (facultyCheckError) {
-          setErrorMessage(facultySignupErrorMessage);
-          setIsLoading(false);
-          return;
-        }
-
-        if (!isFaculty) {
-          setErrorMessage(facultySignupErrorMessage);
-          setIsLoading(false);
-          return;
-        }
-      }
 
       const { data, error } = await supabase.auth.signUp({
         email: normalizedEmail,
@@ -103,11 +79,7 @@ export default function SignUpPage() {
         return;
       }
 
-      setSuccessMessage(
-        isFacultySignup
-          ? "Faculty account request accepted. Confirm your email, then sign in."
-          : "Account created. Check your email to confirm it, then sign in."
-      );
+      setSuccessMessage("Account created. Check your email to confirm it, then sign in. Faculty status will be automatically detected.");
     } catch (error: unknown) {
       let message =
         error instanceof Error ? error.message : "Something went wrong.";
@@ -217,27 +189,7 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            {/* Faculty Checkbox (Dark Theme Optimized) */}
-            <div className="rounded-xl border border-slate-700/50 bg-slate-900/30 p-4 transition-colors hover:bg-slate-900/50">
-              <label className="flex items-start gap-3 text-sm cursor-pointer group">
-                <div className="relative flex items-center pt-0.5">
-                  <input
-                    type="checkbox"
-                    checked={isFacultySignup}
-                    onChange={(e) => setIsFacultySignup(e.target.checked)}
-                    className="peer h-4 w-4 rounded border-slate-600 bg-slate-800 text-blue-500 focus:ring-blue-500/50 focus:ring-offset-slate-900 transition-all cursor-pointer"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <span className="block font-semibold text-slate-200 group-hover:text-white transition-colors">
-                    I am a faculty member
-                  </span>
-                  <span className="text-xs text-slate-500 mt-0.5">
-                    Select this if you are a professor or staff.
-                  </span>
-                </div>
-              </label>
-            </div>
+            {/* Faculty Checkbox Removed - Handled Automatically by Backend Trigger */}
 
             {/* Alert Messages (Dark Theme Optimized) */}
             {errorMessage && (

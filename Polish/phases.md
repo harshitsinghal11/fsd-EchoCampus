@@ -2,7 +2,7 @@
 
 This document outlines the codebase issues, inconsistent logic, and UX flaws discovered during the initial analysis of the EchoCampus project. They are grouped into phases by priority (High to Low) so they can be addressed sequentially without breaking the application flow.
 
-## Phase 1: Critical Architecture & Security (High Priority)
+## Phase 1: Critical Architecture & Security (High Priority) [COMPLETED]
 
 ### 1.1 Middleware Database Query Bottleneck
 *   **Location:** `src/middleware.ts`
@@ -21,7 +21,7 @@ This document outlines the codebase issues, inconsistent logic, and UX flaws dis
 
 ---
 
-## Phase 2: Logic Bugs & Data Integrity (Medium Priority)
+## Phase 2: Logic Bugs & Data Integrity (Medium Priority) [COMPLETED]
 
 ### 2.1 False Positives on "Mark as Sold"
 *   **Location:** `app/api/marketplace/sold/route.ts`
