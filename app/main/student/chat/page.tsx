@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Send, Users } from 'lucide-react';
+import { Send, Users, ArrowLeft } from 'lucide-react';
 import { useSessionCode } from '@/hooks/useSessionCode';
 import { supabase } from '@/lib/supabaseClient';
+import { toast } from 'sonner';
 
 type Message = {
   id: string;
@@ -94,7 +95,7 @@ export default function AnonChat() {
 
     if (error) {
       console.error('Failed to send message:', error);
-      alert(`Error sending message: ${error.message}`);
+      toast.error(`Error sending message: ${error.message}`);
       // Revert optimistic update
       setMessages((prev) => prev.filter((m) => m.id !== optimisticMessage.id));
     } else if (data) {

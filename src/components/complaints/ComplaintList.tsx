@@ -2,6 +2,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { ThumbsUp, MessageSquare, Clock } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
+import { toast } from "sonner";
+import { ComplaintSkeleton } from "@/components/shared/Skeletons";
 
 type Complaint = {
   id: string;
@@ -57,8 +59,8 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
       });
 
       if (!res.ok) {
-        if (res.status === 401) alert("Please login to vote.");
-        if (res.status === 403) alert("Only students can upvote.");
+        if (res.status === 401) toast.error("Please login to vote.");
+        if (res.status === 403) toast.error("Only students can upvote.");
         return;
       }
 
@@ -139,7 +141,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
   }, [load]);
 
   if (loading) {
-    return <div className="text-center text-gray-400 py-10">Loading complaints...</div>;
+    return <ComplaintSkeleton isWidget={isWidget} />;
   }
 
   return (

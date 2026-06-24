@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { Send, Loader2, Link as LinkIcon } from "lucide-react";
+import { toast } from "sonner";
 
 export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void }) {
   const router = useRouter();
@@ -74,12 +75,13 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
       setTitle("");
       setContent("");
       setLink("");
+      toast.success("Announcement posted!");
       if (onSuccess) onSuccess();
       router.refresh();
 
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Failed to post.";
-      alert(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }

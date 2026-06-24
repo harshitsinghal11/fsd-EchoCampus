@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { AuthApiError } from "@supabase/supabase-js";
 import { ArrowRight, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
+import { toast } from "sonner";
 
 import {
   ensureOwnUserRow,
@@ -18,8 +19,6 @@ export default function SignUpPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -32,18 +31,16 @@ export default function SignUpPage() {
     const normalizedEmail = email.trim().toLowerCase();
 
     if (!trimmedName) {
-      setErrorMessage("Full name is required.");
+      toast.error("Full name is required.");
       return;
     }
 
     if (password.length < 8) {
-      setErrorMessage("Password must be at least 8 characters.");
+      toast.error("Password must be at least 8 characters.");
       return;
     }
 
     setIsLoading(true);
-    setErrorMessage("");
-    setSuccessMessage("");
 
     try {
 
@@ -85,7 +82,7 @@ export default function SignUpPage() {
         return;
       }
 
-      setSuccessMessage("Account created. Check your email to confirm it, then sign in. Faculty status will be automatically detected.");
+      toast.success("Account created. Check your email to confirm it, then sign in. Faculty status will be automatically detected.");
     } catch (error: unknown) {
       let message =
         error instanceof Error ? error.message : "Something went wrong.";
@@ -95,7 +92,7 @@ export default function SignUpPage() {
         message = `${error.message}${statusText}`;
       }
 
-      setErrorMessage(message);
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }
@@ -196,19 +193,6 @@ export default function SignUpPage() {
             </div>
 
             {/* Faculty Checkbox Removed - Handled Automatically by Backend Trigger */}
-
-            {/* Alert Messages (Dark Theme Optimized) */}
-            {errorMessage && (
-              <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400 flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
-                {errorMessage}
-              </div>
-            )}
-
-            {successMessage && (
-              <div className="rounded-xl border border-teal-500/30 bg-teal-500/10 px-4 py-3 text-sm text-teal-400 flex items-center gap-2 animate-in fade-in slide-in-from-top-2">
-                {successMessage}
-              </div>
-            )}
 
             {/* Submit Button */}
             <button

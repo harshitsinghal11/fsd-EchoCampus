@@ -12,12 +12,12 @@ import {
 import React, { useState } from "react";
 import { useUserEmail } from "@/hooks/useUserEmail";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function MarketCreateForm() {
   const userEmail = useUserEmail();
   const router = useRouter();
 
-  const [errorMsg, setErrorMsg] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Consolidated all fields into one state object
@@ -31,10 +31,14 @@ export default function MarketCreateForm() {
   // Added React.FormEvent type to fix the 'e' error
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setErrorMsg("");
-
-    if (!userEmail) return setErrorMsg("Email not loaded. Please wait.");
-    if (form.contact_info.length !== 10) return setErrorMsg("Contact info must be 10 digits");
+    if (!userEmail) {
+      toast.error("Email not loaded. Please wait.");
+      return;
+    }
+    if (form.contact_info.length !== 10) {
+      toast.error("Contact info must be 10 digits");
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -51,7 +55,7 @@ export default function MarketCreateForm() {
         throw new Error(data.error || "Failed to publish item.");
       }
 
-      alert("Item Published Successfully!");
+      toast.success("Item Published Successfully!");
 
       setForm({
         product_title: "",
@@ -64,7 +68,7 @@ export default function MarketCreateForm() {
 
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Connection failed.";
-      setErrorMsg(message);
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -186,14 +190,6 @@ export default function MarketCreateForm() {
           </div>
         </div>
       </div>
-
-      {/* Error Message */}
-      {errorMsg && (
-        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400 flex items-center gap-2 animate-in fade-in">
-          <AlertCircle className="w-5 h-5 shrink-0" />
-          <p>{errorMsg}</p>
-        </div>
-      )}
 
       {/* Submit Button */}
       <button

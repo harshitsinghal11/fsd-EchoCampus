@@ -3,6 +3,7 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { Loader2, X, UploadCloud, Search, MapPin, Phone, AlignLeft, Camera} from "lucide-react";
 import Image from "next/image";
+import { toast } from "sonner";
 
 
 export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) {
@@ -21,7 +22,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
     if (!file) return;
 
     if (file.size > 200 * 1024) {
-      alert("Image too large! Please select an image under 200KB.");
+      toast.error("Image too large! Please select an image under 200KB.");
       return;
     }
 
@@ -36,7 +37,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        alert("Session expired. Please login again.");
+        toast.error("Session expired. Please login again.");
         return;
       }
 
@@ -70,7 +71,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
 
       if (error) throw error;
 
-      alert("Lost Item Reported Successfully!");
+      toast.success("Lost Item Reported Successfully!");
       setForm({ title: "", description: "", location_found: "", contact_info: "", image_url: "" });
       setFileToUpload(null);
       onSuccess();
@@ -78,9 +79,9 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Unknown error";
       if (message.includes("Daily limit reached")) {
-        alert("Limit Reached: You can only post 2 items every 24 hours. Please try again tomorrow.");
+        toast.error("Limit Reached: You can only post 2 items every 24 hours. Please try again tomorrow.");
       } else {
-        alert("Error: " + message);
+        toast.error("Error: " + message);
       }
     } finally {
       setLoading(false);

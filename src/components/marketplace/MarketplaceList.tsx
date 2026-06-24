@@ -3,6 +3,8 @@ import { User, Phone, CheckCircle } from 'lucide-react';
 import { useCallback, useEffect, useState } from "react";
 import { MarketplaceItem } from "@/types/marketplace"; 
 import { supabase } from "@/lib/supabaseClient";
+import { toast } from 'sonner';
+import { MarketplaceSkeleton } from "@/components/shared/Skeletons";
 
 // 1. Update the Props Interface
 interface MarketListProps {
@@ -45,12 +47,13 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
       });
       
       if (res.ok) {
+        toast.success("Item marked as sold");
         load(); 
       } else {
-        alert("Failed to update status.");
+        toast.error("Failed to update status.");
       }
     } catch {
-      alert("Network error.");
+      toast.error("Network error.");
     }
   }
 
@@ -73,7 +76,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
     };
   }, [load]);
 
-  if (loading) return <p className="text-gray-500 text-center animate-pulse">Loading listings...</p>;
+  if (loading) return <MarketplaceSkeleton isWidget={isWidget} />;
 
   if (items.length === 0) return <p className="text-gray-500 text-center">No items found.</p>;
 

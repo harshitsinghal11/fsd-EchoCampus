@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { MapPin, Phone, Calendar, Search, Camera, Trash2, ArrowRight } from "lucide-react";
 import Image from "next/image";
+import { toast } from "sonner";
+import { LostFoundSkeleton } from "@/components/shared/Skeletons";
 
 
 interface LostFoundListProps {
@@ -75,8 +77,11 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
     if (!confirm) return;
 
     const { error } = await supabase.from("lost_found").delete().eq("id", id);
-    if (error) alert("Error: " + error.message);
-    else setInternalRefresh(prev => prev + 1);
+    if (error) toast.error("Error: " + error.message);
+    else {
+      toast.success("Item removed");
+      setInternalRefresh(prev => prev + 1);
+    }
   };
 
   return (
@@ -99,10 +104,7 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
 
       {/* --- LOADING STATE --- */}
       {loading && (
-        <div className="text-center py-10 flex flex-col items-center justify-center gap-3 animate-pulse">
-          <div className="w-8 h-8 border-4 border-teal-500/30 border-t-teal-400 rounded-full animate-spin"></div>
-          <span className="text-teal-400/80 text-sm font-medium">Loading feed...</span>
-        </div>
+        <LostFoundSkeleton isWidget={!showSearch} />
       )}
 
       {/* --- EMPTY STATE (no data) --- */}

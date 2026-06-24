@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
 import {
   ensureOwnUserRow,
@@ -30,7 +31,7 @@ export default function Login() {
       });
 
       if (authError || !authData.user) {
-        alert(authError?.message || "Login failed");
+        toast.error(authError?.message || "Login failed");
         setIsLoading(false);
         return;
       }
@@ -54,14 +55,14 @@ export default function Login() {
         router.replace("/main/student/dashboard/");
       }
       else {
-        alert("Unknown role");
+        toast.error("Unknown role");
         setIsLoading(false);
       }
 
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Something went wrong.";
       console.error("Critical Login Error:", error);
-      alert(message);
+      toast.error(message);
       setIsLoading(false);
     }
   };
