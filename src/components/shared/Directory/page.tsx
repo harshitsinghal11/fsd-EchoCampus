@@ -7,6 +7,20 @@ import { Search, Mail, Phone, Building, Calendar, User } from 'lucide-react'
 import { DirectorySkeleton } from '@/components/shared/Skeletons'
 import { toast } from 'sonner'
 
+interface FacultyProfileData {
+  department: string | null;
+  phone_no: string | null;
+  cabin_no: string | null;
+  experience_years: number | null;
+}
+
+interface DirectoryUser {
+  id: string;
+  email: string;
+  full_name: string | null;
+  faculty_profiles: FacultyProfileData | FacultyProfileData[] | null;
+}
+
 export default function DirectoryPage() {
   const [faculty, setFaculty] = useState<Faculty[]>([])
   const [filteredFaculty, setFilteredFaculty] = useState<Faculty[]>([])
@@ -41,16 +55,16 @@ export default function DirectoryPage() {
 
       if (error) throw error
 
-      const formattedData: Faculty[] = (data || []).map((user: any) => {
+      const formattedData: Faculty[] = (data || []).map((user: DirectoryUser) => {
         const profile = Array.isArray(user.faculty_profiles) ? user.faculty_profiles[0] : user.faculty_profiles;
         return {
           id: user.id,
           name: user.full_name || 'Unknown',
           email: user.email,
           department: profile?.department || 'General',
-          phone_no: profile?.phone_no,
-          cabin_no: profile?.cabin_no,
-          experience: profile?.experience_years,
+          phone_no: profile?.phone_no ?? null,
+          cabin_no: profile?.cabin_no ?? null,
+          experience: profile?.experience_years ?? null,
         };
       })
 

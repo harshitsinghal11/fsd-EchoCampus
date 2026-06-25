@@ -68,7 +68,7 @@ export default function StudentDashboard() {
         </section>
 
         {/* 2. NEWEST LISTINGS (Left 2/3) */}
-        <section className="lg:col-span-2 bg-slate-800/40 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl p-5 md:p-6 lg:p-8 border border-slate-700/50 shadow-xl flex flex-col min-h-[350px] md:min-h-[400px]">
+        <section className="lg:col-span-2 bg-slate-800/40 backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-slate-700/50 shadow-xl flex flex-col min-h-[350px] md:min-h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
               <div className="p-2 md:p-2.5 bg-purple-500/20 rounded-lg md:rounded-xl">

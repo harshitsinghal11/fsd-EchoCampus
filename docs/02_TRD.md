@@ -48,7 +48,7 @@ public/
 - Supabase handles authentication, role data, profiles, announcements, complaints, marketplace records, lost and found records, and the directory (via faculty profiles).
 - Supabase Realtime handles the anonymous chat stream.
 - Middleware and protected client layouts enforce route access by role.
-- Complaint and marketplace writes are routed through Next.js route handlers, while announcements, directory, lost and found, and profile reads/writes mostly use the Supabase browser client directly.
+- Database writes (mutations) for forms are routed through Next.js Server Actions, while reads mostly use the Supabase browser client directly.
 
 # Frontend Architecture
 - Route groups are split into public pages, auth pages, student pages, and faculty pages.
@@ -62,7 +62,7 @@ public/
 - Supabase Postgres is the primary relational backend.
 - Supabase RLS policies are the main authorization layer for direct client database access.
 - Supabase triggers enforce posting limits and bootstrap public profile data from `auth.users`.
-- Next.js route handlers under `app/api` wrap complaint and marketplace server-side operations that require auth-aware validation.
+- Next.js Server Actions under `src/actions/` securely handle write operations (e.g. creating announcements, marketplace items, complaints, lost and found). Route handlers under `app/api` are still used for some custom logic.
 - Supabase Realtime powers the student chat room, sharing the primary authentication state.
 
 # Authentication & Authorization

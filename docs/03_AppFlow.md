@@ -26,13 +26,11 @@ EchoCampus has a public entry flow and two protected application areas. Students
 
 # Feature Workflows
 - Announcements: faculty opens announcement center -> fills title, optional link, and content -> app resolves `faculty_users.faculty_id` -> announcement is inserted into `announcements` -> students and faculty read the updated feed.
-- Complaints: student opens complaints page -> writes complaint text and selects anonymous mode -> request goes to `POST /api/complaints` -> route validates auth -> record is inserted into `complaint_box` -> complaint appears in complaint feeds.
+- Complaints: student opens complaints page -> writes complaint text and selects anonymous mode -> form calls `submitComplaint` server action -> action validates auth -> record is inserted into `complaint_box` -> complaint appears in complaint feeds.
 - Complaint upvote: student presses vote button -> request goes to `POST /api/complaints/upvote` -> route checks existing vote -> inserts or deletes vote -> UI updates vote count locally.
-- Marketplace: student opens marketplace page -> list loads from `GET /api/marketplace` -> student submits listing form -> `POST /api/marketplace` validates ownership and fields -> listing is saved -> owner can later call `POST /api/marketplace/sold`.
-- Lost and found: user opens lost and found page -> feed loads from `lost_found` -> user submits item details and optional image data -> row is inserted -> owner can later delete the post when the item is returned.
-- Directory: user opens directory page -> app reads admin `users` with their `faculty_profiles` -> client applies search text and department filters.
-- Anonymous chat: student opens chat page -> Supabase client fetches recent `chat_messages` -> realtime subscription connects to Supabase channel -> student sends message with `random_code = session_code`.
-- Profile: user opens profile page -> app reads role-specific profile data from Supabase -> profile card renders user details.
+- Marketplace: student opens marketplace page -> list loads from Supabase -> student submits listing form -> `addMarketplaceItem` server action validates ownership and fields -> listing is saved.
+- Announcement creation: faculty submits form -> `addAnnouncement` server action validates auth -> record inserted into `announcements`.
+- Lost and Found reporting: student submits form -> image uploaded to Supabase storage -> `addLostFoundItem` server action validates auth and inserts record.
 
 # Data Flow
 - Auth data flow: browser -> Supabase Auth -> `public.users` and profile helpers -> middleware and protected routes -> role-specific page

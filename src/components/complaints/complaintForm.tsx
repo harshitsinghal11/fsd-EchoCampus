@@ -4,13 +4,16 @@ import { useState } from "react";
 import { AlertCircle, CheckCircle2, MessageSquare, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { submitComplaint } from "@/actions/complaintActions";
+import { useRouter } from "next/navigation";
 
 export default function ComplaintForm() {
+  const router = useRouter();
   const [complaint, setComplaint] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  async function submitComplaint() {
+  async function handleSubmit() {
     if (!complaint.trim()) {
       toast.error("Please enter your complaint before submitting");
       return;
@@ -19,22 +22,17 @@ export default function ComplaintForm() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/complaints", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          complaint: complaint.trim(),
-          isAnonymous,
-        }),
+      const result = await submitComplaint({
+        complaint: complaint.trim(),
+        isAnonymous,
       });
 
-      const data = (await res.json()) as { error?: string };
-
-      if (!res.ok || data.error) {
-        toast.error(data.error || "Something went wrong.");
+      if (result.error) {
+        toast.error(result.error);
       } else {
         toast.success("Thank you! Your complaint has been submitted successfully.");
         setComplaint("");
+        router.refresh();
       }
     } catch (error) {
       toast.error("Network error. Please try again.");
@@ -82,7 +80,7 @@ export default function ComplaintForm() {
       </div>
 
       <motion.button
-        onClick={submitComplaint}
+        onClick={handleSubmit}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.95 }}
         disabled={loading || !complaint.trim()}

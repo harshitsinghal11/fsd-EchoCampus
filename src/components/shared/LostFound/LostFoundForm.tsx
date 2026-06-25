@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { Loader2, X, UploadCloud, Search, MapPin, Phone, AlignLeft, Camera } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
+import { addLostFoundItem } from "@/actions/lostFoundActions";
 
 
 export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) {
@@ -59,17 +60,17 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
         finalImageUrl = publicUrl;
       }
 
-      const { error } = await supabase.from("lost_found").insert({
-        user_id: user.id,
+      const result = await addLostFoundItem({
         title: form.title,
         description: form.description,
         location_found: form.location_found,
         contact_info: form.contact_info,
-        image_url: finalImageUrl,
-        is_resolved: false
+        image_url: finalImageUrl
       });
 
-      if (error) throw error;
+      if (result.error) {
+        throw new Error(result.error);
+      }
 
       toast.success("Lost Item Reported Successfully!");
       setForm({ title: "", description: "", location_found: "", contact_info: "", image_url: "" });
@@ -78,11 +79,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
 
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Unknown error";
-      if (message.includes("Daily limit reached")) {
-        toast.error("Limit Reached: You can only post 2 items every 24 hours. Please try again tomorrow.");
-      } else {
-        toast.error("Error: " + message);
-      }
+      toast.error(message);
     } finally {
       setLoading(false);
     }

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import { Send, Loader2, Link as LinkIcon } from "lucide-react";
 import { toast } from "sonner";
+import { addAnnouncement } from "@/actions/announcementActions";
 
 export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void }) {
   const router = useRouter();
@@ -17,18 +18,11 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
     setLoading(true);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      const result = await addAnnouncement({ title, content, link });
 
-      // Insert Announcement
-      const { error: postError } = await supabase.from("announcements").insert({
-        title,
-        content,
-        link: link || null, // If empty string, save as NULL
-        author_id: user.id,
-      });
-
-      if (postError) throw postError;
+      if (result.error) {
+        throw new Error(result.error);
+      }
 
       // Reset Form
       setTitle("");

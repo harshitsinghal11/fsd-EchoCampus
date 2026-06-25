@@ -11,8 +11,8 @@ import React, { useState } from "react";
 import { useUserEmail } from "@/hooks/useUserEmail";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabaseClient";
 import { motion } from "framer-motion";
+import { addMarketplaceItem } from "@/actions/marketplaceActions";
 
 export default function MarketCreateForm() {
   const userEmail = useUserEmail();
@@ -43,44 +43,18 @@ export default function MarketCreateForm() {
     setIsSubmitting(true);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Unauthorized");
 
-      const { data: userData } = await supabase
-        .from("users")
-        .select(`
-          full_name,
-          role,
-          student_profiles ( session_code )
-        `)
-        .eq("id", user.id)
-        .single();
-
-      let ownerName = "Unknown Seller";
-
-      if (userData?.role === 'student' && userData.student_profiles) {
-        const profile = Array.isArray(userData.student_profiles)
-          ? userData.student_profiles[0]
-          : userData.student_profiles;
-        ownerName = (profile as any)?.session_code || "Anonymous Student";
-      } else if (userData?.full_name) {
-        ownerName = userData.full_name;
-      }
       const parsedPrice = Number(form.price);
 
-      const { error: insertError } = await supabase.from("marketplace").insert({
-        owner_id: user.id,
-        product_title: form.product_title.trim(),
-        description: form.description.trim(),
+      const result = await addMarketplaceItem({
+        product_title: form.product_title,
+        description: form.description,
         price: parsedPrice,
-        owner_name: ownerName,
-        contact_info: form.contact_info,
-        owner_email: user.email,
-        is_sold: false,
+        contact_info: form.contact_info
       });
 
-      if (insertError) {
-        throw insertError;
+      if (result.error) {
+        throw new Error(result.error);
       }
 
       toast.success("Item Published Successfully!");
@@ -94,8 +68,8 @@ export default function MarketCreateForm() {
 
       router.refresh();
 
-    } catch (error: any) {
-      const message = error?.message || "Connection failed.";
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Connection failed.";
       toast.error(message);
     } finally {
       setIsSubmitting(false);
