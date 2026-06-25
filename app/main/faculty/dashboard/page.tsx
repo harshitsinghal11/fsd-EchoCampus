@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ROUTES } from "@/lib/routes";
 import { Megaphone, BookUser, Camera, ArrowRight, AlertTriangle, LayoutDashboard } from "lucide-react";
 
 import ComplaintList from "@/components/complaints/ComplaintList";
@@ -28,7 +29,7 @@ export default function FacultyDashboard() {
         {/* Top Right Action Buttons */}
         <div className="flex items-center gap-3">
           <Link
-            href="/main/faculty/directory"
+            href={ROUTES.FACULTY.DIRECTORY}
             className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/80 hover:bg-slate-700 text-white rounded-xl font-medium border border-slate-600/50 hover:border-teal-500/50 hover:shadow-[0_0_15px_rgba(20,184,166,0.2)] transition-all"
           >
             <BookUser className="w-4 h-4 text-teal-400" />
@@ -50,7 +51,7 @@ export default function FacultyDashboard() {
               <h2 className="text-lg md:text-xl font-semibold text-white">Student Complaints</h2>
             </div>
             <Link 
-              href="/main/faculty/complaints" 
+              href={ROUTES.FACULTY.COMPLAINTS} 
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-orange-400 hover:text-orange-300 transition-colors"
             >
               View All
@@ -71,7 +72,7 @@ export default function FacultyDashboard() {
               <h2 className="text-lg md:text-xl font-semibold text-white">Your Announcements</h2>
             </div>
             <Link 
-              href="/main/faculty/announcements" 
+              href={ROUTES.FACULTY.ANNOUNCEMENTS} 
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-teal-400 hover:text-teal-300 transition-colors"
             >
               Manage
@@ -96,7 +97,7 @@ export default function FacultyDashboard() {
               <h2 className="text-lg md:text-xl font-semibold text-white">Lost Items</h2>
             </div>
             <Link 
-              href="/main/faculty/lost-found" 
+              href={ROUTES.FACULTY.LOST_FOUND} 
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-teal-400 hover:text-teal-300 transition-colors"
             >
               View all 

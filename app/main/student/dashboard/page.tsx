@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ROUTES } from "@/lib/routes";
 import { Megaphone, ShoppingBag, MessageSquare, AlertTriangle, Camera, ArrowRight, BookUser, LayoutDashboard } from "lucide-react";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
 import MarketplaceList from "@/components/marketplace/MarketplaceList";
@@ -27,14 +28,14 @@ export default function StudentDashboard() {
         {/* Top Right Action Buttons */}
         <div className="flex items-center gap-3">
           <Link
-            href="/main/student/chat"
+            href={ROUTES.STUDENT.CHAT}
             className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/80 hover:bg-slate-700 text-white rounded-xl font-medium border border-slate-600/50 hover:border-blue-500/50 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] transition-all"
           >
             <MessageSquare className="w-4 h-4 text-blue-400" />
             Global Chat
           </Link>
           <Link
-            href="/main/student/directory"
+            href={ROUTES.STUDENT.DIRECTORY}
             className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/80 hover:bg-slate-700 text-white rounded-xl font-medium border border-slate-600/50 hover:border-teal-500/50 hover:shadow-[0_0_15px_rgba(20,184,166,0.2)] transition-all"
           >
             <BookUser className="w-4 h-4 text-teal-400" />
@@ -56,7 +57,7 @@ export default function StudentDashboard() {
               <h2 className="text-lg md:text-xl font-semibold text-white">Latest Announcements</h2>
             </div>
             <Link
-              href="/main/student/announcements"
+              href={ROUTES.STUDENT.ANNOUNCEMENTS}
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
             >
               View All
@@ -76,7 +77,7 @@ export default function StudentDashboard() {
               <h2 className="text-lg md:text-xl font-semibold text-white">Newest Listings</h2>
             </div>
             <Link
-              href="/main/student/marketplace"
+              href={ROUTES.STUDENT.MARKETPLACE}
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors"
             >
               Browse Market
@@ -96,7 +97,7 @@ export default function StudentDashboard() {
               <h2 className="text-lg md:text-xl font-semibold text-white">Recent Complaints</h2>
             </div>
             <Link
-              href="/main/student/complaint"
+              href={ROUTES.STUDENT.COMPLAINTS}
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-orange-400 hover:text-orange-300 transition-colors"
             >
               View All
@@ -116,7 +117,7 @@ export default function StudentDashboard() {
               <h2 className="text-lg md:text-xl font-semibold text-white">Recent Lost & Found</h2>
             </div>
             <Link
-              href="/main/student/lost-found"
+              href={ROUTES.STUDENT.LOST_FOUND}
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-teal-400 hover:text-teal-300 transition-colors"
             >
               View All

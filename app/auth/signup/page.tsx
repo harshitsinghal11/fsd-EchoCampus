@@ -13,6 +13,7 @@ import {
   fetchUserRole,
 } from "@/lib/authProfile";
 import { supabase } from "@/lib/supabaseClient";
+import { ROUTES } from "@/lib/routes";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -36,10 +37,10 @@ export default function SignUpPage() {
     const checkAuth = async () => {
       const role = sessionStorage.getItem("userRole");
       if (role === "student") {
-        router.replace("/main/student/dashboard/");
+        router.replace(ROUTES.STUDENT.DASHBOARD);
         return;
       } else if (role === "faculty" || role === "admin") {
-        router.replace("/main/faculty/dashboard/");
+        router.replace(ROUTES.FACULTY.DASHBOARD);
         return;
       }
 
@@ -50,9 +51,9 @@ export default function SignUpPage() {
         if (fetchedRole === "student") {
           const sessionCode = await ensureStudentSessionCode(session.user.id);
           if (sessionCode) sessionStorage.setItem("userSessionCode", sessionCode);
-          router.replace("/main/student/dashboard/");
+          router.replace(ROUTES.STUDENT.DASHBOARD);
         } else if (fetchedRole === "faculty" || fetchedRole === "admin") {
-          router.replace("/main/faculty/dashboard/");
+          router.replace(ROUTES.FACULTY.DASHBOARD);
         }
       }
     };
@@ -110,14 +111,14 @@ export default function SignUpPage() {
         if (role === "faculty" || role === "admin") {
           sessionStorage.removeItem("userSessionCode");
           toast.success("Account created! Welcome, Professor.");
-          router.replace("/main/faculty/dashboard/");
+          router.replace(ROUTES.FACULTY.DASHBOARD);
           return;
         }
 
         const sessionCode = await ensureStudentSessionCode(data.user.id);
         sessionStorage.setItem("userSessionCode", sessionCode);
         toast.success("Account created! Welcome to EchoCampus.");
-        router.replace("/main/student/dashboard/");
+        router.replace(ROUTES.STUDENT.DASHBOARD);
         return;
       }
 
@@ -330,7 +331,7 @@ export default function SignUpPage() {
 
           <p className="mt-5 md:mt-6 text-center text-sm text-slate-400">
             Already have an account?{" "}
-            <Link href="/auth/login" className="font-semibold text-teal-400 hover:text-teal-300 transition-colors">
+            <Link href={ROUTES.AUTH.LOGIN} className="font-semibold text-teal-400 hover:text-teal-300 transition-colors">
               Sign in
             </Link>
           </p>

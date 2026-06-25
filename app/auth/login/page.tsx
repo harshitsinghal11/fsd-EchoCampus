@@ -10,6 +10,7 @@ import {
   ensureStudentSessionCode,
   fetchUserRole,
 } from "@/lib/authProfile";
+import { ROUTES } from "@/lib/routes";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -24,10 +25,10 @@ export default function Login() {
     const checkAuth = async () => {
       const role = sessionStorage.getItem("userRole");
       if (role === "student") {
-        router.replace("/main/student/dashboard/");
+        router.replace(ROUTES.STUDENT.DASHBOARD);
         return;
       } else if (role === "faculty" || role === "admin") {
-        router.replace("/main/faculty/dashboard/");
+        router.replace(ROUTES.FACULTY.DASHBOARD);
         return;
       }
 
@@ -39,9 +40,9 @@ export default function Login() {
         if (fetchedRole === "student") {
           const sessionCode = await ensureStudentSessionCode(session.user.id);
           if (sessionCode) sessionStorage.setItem("userSessionCode", sessionCode);
-          router.replace("/main/student/dashboard/");
+          router.replace(ROUTES.STUDENT.DASHBOARD);
         } else if (fetchedRole === "faculty" || fetchedRole === "admin") {
-          router.replace("/main/faculty/dashboard/");
+          router.replace(ROUTES.FACULTY.DASHBOARD);
         }
       }
     };
@@ -72,7 +73,7 @@ export default function Login() {
       // 3. Routing Logic
       if (role === "faculty" || role === "admin") {
         sessionStorage.setItem("userRole", role);
-        router.replace("/main/faculty/dashboard/");
+        router.replace(ROUTES.FACULTY.DASHBOARD);
       }
       else if (role === "student") {
         // Generate/Get Session Code
@@ -80,7 +81,7 @@ export default function Login() {
 
         sessionStorage.setItem("userSessionCode", sessionCode || "");
         sessionStorage.setItem("userRole", "student");
-        router.replace("/main/student/dashboard/");
+        router.replace(ROUTES.STUDENT.DASHBOARD);
       }
       else {
         toast.error("Unknown role");
@@ -192,7 +193,7 @@ export default function Login() {
           {/* Footer Link */}
           <p className="mt-5 md:mt-6 text-center text-sm text-slate-400">
             New here?{" "}
-            <Link href="/auth/signup" className="font-semibold text-teal-400 hover:text-teal-300 transition-colors">
+            <Link href={ROUTES.AUTH.SIGNUP} className="font-semibold text-teal-400 hover:text-teal-300 transition-colors">
               Create a student account
             </Link>
           </p>

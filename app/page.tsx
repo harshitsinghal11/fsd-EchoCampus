@@ -3,6 +3,7 @@ import {
   ArrowRight, Store, BellRing, MessageSquare, Mic, BookUser, ShieldAlert
 } from "lucide-react";
 import Footer from "@/components/Footer/FooterStudent";
+import { ROUTES } from "@/lib/routes";
 
 export default function Home() {
   return (
@@ -31,7 +32,7 @@ export default function Home() {
 
         <div className="flex gap-4">
           <Link
-            href="/auth/login"
+            href={ROUTES.AUTH.LOGIN}
             className="flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-teal-600 to-emerald-600 text-white font-bold rounded-xl hover:-translate-y-0.5 transition-all duration-200 shadow-lg shadow-teal-900/20 hover:shadow-teal-900/40 group"
           >
             Get Started <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />

@@ -115,7 +115,8 @@
 - Data fetching failures (e.g. lists, profiles, directory, chat) use global toast notification popups from the `sonner` library.
 - Directory fetch errors additionally render a retry card.
 - Unauthorized route access redirects instead of rendering an error page.
-- **(Phase 6 Refinement):** Global `error.tsx` boundaries will be implemented to gracefully catch React runtime errors.
+- **Global Error Boundary (`error.tsx`)**: Gracefully catches React runtime errors with a stylized glassmorphism fallback UI.
+- **Global 404 Page (`not-found.tsx`)**: Catch-all for missing routes featuring dynamic Framer Motion animations.
 
 # Accessibility Guidelines
 - Most form fields include visible labels.

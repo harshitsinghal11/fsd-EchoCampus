@@ -2,6 +2,7 @@
 EchoCampus has a public entry flow and two protected application areas. Students receive the broader day-to-day campus toolkit, while faculty and admin users receive announcement management, complaint visibility, directory access, lost and found access, and a profile page.
 
 # Navigation Structure
+- All route strings are centralized in `src/lib/routes.ts` via the `ROUTES` constant.
 - Public routes: `/`, `/privacy`, `/terms`
 - Auth routes: `/auth/login`, `/auth/signup`
 - Student routes: `/main/student/dashboard`, `/main/student/announcements`, `/main/student/chat`, `/main/student/complaint`, `/main/student/directory`, `/main/student/lost-found`, `/main/student/marketplace`, `/main/student/profile`

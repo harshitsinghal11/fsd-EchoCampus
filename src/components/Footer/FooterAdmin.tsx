@@ -1,80 +1,98 @@
 "use client";
-import { Heart, Mail, MapPin, Instagram, Linkedin } from 'lucide-react';
 import Link from 'next/link';
+import { Mail, ArrowUpRight, Linkedin, Instagram, ArrowRight, Heart } from 'lucide-react';
+import { ROUTES } from "@/lib/routes";
 
-export default function Footer() {
+export default function FooterAdmin() {
   return (
-    <footer className="bg-slate-950 border-t border-slate-800/50 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Brand and Description */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center mb-4">
-              <span className="text-xl font-bold tracking-tight">
-                Echo<span className="text-teal-400">Campus</span>
-              </span>
-            </div>
-            <p className="text-slate-400 text-sm leading-relaxed max-w-md mb-6">
-              EchoCampus is a comprehensive web platform designed to bridge the gap between students and campus resources,
-              establishing the foundation for digital campus community building through modern web technologies.
+    <footer className="bg-slate-950 border-t border-slate-800/50 mt-auto relative overflow-hidden">
+      {/* Decorative gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 to-slate-950 pointer-events-none" />
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 md:gap-8">
+          
+          {/* Brand Column */}
+          <div className="col-span-1 md:col-span-2 space-y-6">
+            <span className="text-2xl font-extrabold text-white tracking-tight flex items-center">
+              Echo<span className="text-teal-400">Campus</span>
+            </span>
+            <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
+              Empowering faculty with seamless campus connectivity, 
+              efficient directory access, and streamlined issue management.
             </p>
-            <div className="flex space-x-4">
-              <a
-                href="https://www.instagram.com/harshitsinghal11"
-                className="w-10 h-10 bg-slate-900 border border-slate-800/50 rounded-lg flex items-center justify-center hover:bg-pink-500 hover:border-pink-500 transition-colors duration-200 group"
-                aria-label="Instagram"
+            <div className="flex space-x-4 pt-2">
+              <a 
+                href="https://www.instagram.com/harshitsinghal11" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="text-slate-500 hover:text-teal-400 transition-colors duration-200"
               >
-                <Instagram className="w-5 h-5 text-slate-400 group-hover:text-white" />
+                <Instagram className="h-5 w-5" />
               </a>
-              <a
-                href="www.linkedin.com/in/harshitsinghal11"
-                className="w-10 h-10 bg-slate-900 border border-slate-800/50 rounded-lg flex items-center justify-center hover:bg-teal-600 hover:border-teal-600 transition-colors duration-200 group"
-                aria-label="LinkedIn"
+              <a 
+                href="https://www.linkedin.com/in/harshitsinghal11" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="text-slate-500 hover:text-teal-400 transition-colors duration-200"
               >
-                <Linkedin className="w-5 h-5 text-slate-400 group-hover:text-white" />
+                <Linkedin className="h-5 w-5" />
               </a>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">Quick Links</h3>
+          {/* Quick Links Column */}
+          <div className="space-y-6">
+            <h3 className="text-white font-semibold text-sm tracking-wider uppercase">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <Link href="/main/faculty/announcements" className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
+                <Link href={ROUTES.FACULTY.ANNOUNCEMENTS} className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm inline-flex items-center group">
+                  <ArrowRight className="w-3 h-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all" />
                   Announcements
                 </Link>
               </li>
               <li>
-                <Link href="/main/faculty/directory" className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
+                <Link href={ROUTES.FACULTY.DIRECTORY} className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm inline-flex items-center group">
+                  <ArrowRight className="w-3 h-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all" />
                   Directory
                 </Link>
               </li>
               <li>
-                <Link href="/main/faculty/lost-found" className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
+                <Link href={ROUTES.FACULTY.LOST_FOUND} className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm inline-flex items-center group">
+                  <ArrowRight className="w-3 h-3 mr-2 opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all" />
                   Lost & Found
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4 text-white">Contact Us</h3>
-            <div className="space-y-3">
-              <div className="flex items-center text-slate-400 text-sm">
-                <Mail className="w-4 h-4 mr-3 text-teal-400" />
-                <span>harshitsinghal.dev@outlook.com</span>
-              </div>
-              <div className="flex items-start text-slate-400 text-sm">
-                <MapPin className="w-4 h-4 mr-3 mt-0.5 text-teal-400 shrink-0" />
-                <span>Manav Rachna University<br /> Faridabad, 121004</span>              </div>
-            </div>
+          {/* Contact Column */}
+          <div className="space-y-6">
+            <h3 className="text-white font-semibold text-sm tracking-wider uppercase">Support</h3>
+            <ul className="space-y-4">
+              <li>
+                <a href="mailto:faculty-support@campus.edu" className="group flex items-center text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
+                  <div className="w-8 h-8 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center mr-3 group-hover:border-teal-500/50 group-hover:bg-teal-500/10 transition-colors">
+                    <Mail className="h-4 w-4" />
+                  </div>
+                  faculty-support@campus.edu
+                </a>
+              </li>
+              <li>
+                <a href="#" className="group flex items-center text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
+                  <div className="w-8 h-8 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center mr-3 group-hover:border-teal-500/50 group-hover:bg-teal-500/10 transition-colors">
+                    <ArrowUpRight className="h-4 w-4" />
+                  </div>
+                  Admin Portal Help
+                </a>
+              </li>
+            </ul>
           </div>
+
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-slate-800/50 mt-8 pt-8">
+        <div className="border-t border-slate-800/50 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center text-slate-500 text-sm mb-4 md:mb-0">
               <span>Made with</span>
@@ -82,12 +100,12 @@ export default function Footer() {
               <span>for students by Harshit Singhal</span>
             </div>
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-slate-500 text-sm">
-              <span>&copy; 2025 EchoCampus. All rights reserved.</span>
+              <span>&copy; {new Date().getFullYear()} EchoCampus Admin. All rights reserved.</span>
               <div className="flex space-x-4">
-                <Link href="/privacy" className="hover:text-teal-400 transition-colors duration-200">
+                <Link href={ROUTES.LEGAL.PRIVACY} className="hover:text-teal-400 transition-colors duration-200">
                   Privacy Policy
                 </Link>
-                <Link href="/terms" className="hover:text-teal-400 transition-colors duration-200">
+                <Link href={ROUTES.LEGAL.TERMS} className="hover:text-teal-400 transition-colors duration-200">
                   Terms of Service
                 </Link>
               </div>

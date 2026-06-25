@@ -1,14 +1,15 @@
 "use client";
 import { Home, User, BookUser, ShieldAlert, BellRing } from "lucide-react";
 import BaseNavBar, { NavLink } from "@/components/shared/BaseNavBar";
+import { ROUTES } from "@/lib/routes";
 
 export default function Navbar() {
   const navLinks: NavLink[] = [
-    { name: "Dashboard", href: "/main/faculty/dashboard", icon: Home },
-    { name: "Announcements", href: "/main/faculty/announcements", icon: BellRing },
-    { name: "Directory", href: "/main/faculty/directory", icon: BookUser },
-    { name: "Lost & Found", href: "/main/faculty/lost-found", icon: ShieldAlert },
-    { name: "Profile", href: "/main/faculty/profile", icon: User },
+    { name: "Dashboard", href: ROUTES.FACULTY.DASHBOARD, icon: Home },
+    { name: "Announcements", href: ROUTES.FACULTY.ANNOUNCEMENTS, icon: BellRing },
+    { name: "Directory", href: ROUTES.FACULTY.DIRECTORY, icon: BookUser },
+    { name: "Lost & Found", href: ROUTES.FACULTY.LOST_FOUND, icon: ShieldAlert },
+    { name: "Profile", href: ROUTES.FACULTY.PROFILE, icon: User },
   ];
 
   return <BaseNavBar navLinks={navLinks} />;

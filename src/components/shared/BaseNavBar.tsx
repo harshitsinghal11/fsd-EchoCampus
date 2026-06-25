@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Menu, X, LogOut } from "lucide-react";
 import React from "react";
+import { ROUTES } from "@/lib/routes";
 
 export interface NavLink {
   name: string;
@@ -37,7 +38,7 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
 
     // 3. Close Menu & Redirect
     setIsMenuOpen(false);
-    router.push('/auth/login');
+    router.push(ROUTES.AUTH.LOGIN);
   };
 
   return (
