@@ -18,7 +18,7 @@ Campus communication and day-to-day utility workflows are often split across inf
 
 # User Roles & Permissions
 - Student: can access student pages, read announcements, use anonymous chat, submit complaints, upvote complaints, browse faculty directory, create marketplace listings, mark own marketplace listings as sold, create lost and found posts, delete own lost and found posts, and view student profile details.
-- Faculty: can access faculty pages, post announcements, view complaints, browse directory, create lost and found posts, delete own lost and found posts, and view faculty profile details.
+- Admin (Faculty): can access faculty pages, post announcements, view complaints, browse directory, create lost and found posts, delete own lost and found posts, and view faculty profile details.
 - Admin: treated as faculty-like in middleware, protected routes, and profile/announcement permissions. A separate admin interface is not implemented.
 
 # Core Features
@@ -33,12 +33,11 @@ Campus communication and day-to-day utility workflows are often split across inf
 
 # Functional Requirements
 - The application must allow users to sign up and log in with email and password through Supabase Auth.
-- Faculty signup must validate the entered email against the `directory` table before allowing a faculty account path.
-- The application must create or recover the matching `users` row after authentication and assign role based on faculty directory matching.
+- Faculty signup requires explicitly checking the 'I am a Faculty Member' checkbox which dynamically prompts for faculty profile data and assigns the 'admin' role.
 - Student logins must generate or reuse a unique anonymous `session_code` stored in `student_profiles`.
 - Unauthenticated users attempting to access `/main/*` routes must be redirected to `/auth/login`.
 - Students must be blocked from faculty routes and faculty/admin users must be blocked from student routes.
-- Faculty and admin users must be able to post announcements tied to their mapped faculty directory record.
+- Admin (Faculty) users must be able to post announcements tied to their user account.
 - Authenticated users must be able to read announcements and the faculty directory.
 - Students must be able to submit one complaint at a time, with optional anonymous mode, and other students must be able to upvote complaints.
 - Students must be able to create one marketplace listing within the configured posting window and mark their own listing as sold.
@@ -57,7 +56,7 @@ Campus communication and day-to-day utility workflows are often split across inf
 # Business Rules
 - Only users with role `faculty` or `admin` can use faculty routes.
 - Only users with role `student` can use student routes.
-- Faculty account recognition depends on an email match in the `directory` table.
+- Faculty account recognition depends on users explicitly selecting 'I am a Faculty Member' during signup which provisions them as 'admin'.
 - Only mapped faculty records can create announcements.
 - Students can submit only 1 complaint every 7 days.
 - Students can create only 1 marketplace listing every 3 days.
@@ -68,7 +67,7 @@ Campus communication and day-to-day utility workflows are often split across inf
 - Only the lost and found post owner can delete the post.
 
 # Assumptions
-- The `directory` table is pre-populated with valid faculty records.
+
 - Supabase environment variables are configured correctly in the runtime environment.
 - Realtime environment variables are configured correctly for anonymous chat.
 - Supabase Auth email/password is the active authentication method.

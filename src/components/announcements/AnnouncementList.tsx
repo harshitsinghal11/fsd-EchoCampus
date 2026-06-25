@@ -7,9 +7,8 @@ type Announcement = {
   content: string;
   link: string | null;
   created_at: string;
-  directory?: {
-    name?: string;
-    department?: string;
+  users?: {
+    full_name?: string;
   } | null;
 };
 
@@ -22,7 +21,7 @@ export default async function AnnouncementList({ isWidget = false }: Announcemen
   
   let query = supabase
     .from("announcements")
-    .select(`*, directory ( name, department )`)
+    .select(`*, users ( full_name )`)
     .order("created_at", { ascending: false });
 
   if (isWidget) query = query.limit(3);
@@ -79,7 +78,7 @@ export default async function AnnouncementList({ isWidget = false }: Announcemen
               <div className="flex items-center justify-between pt-4 mt-4 border-t border-slate-700/50 text-xs md:text-sm text-slate-500">
                 <div className="flex items-center gap-2">
                   <User className="w-4 h-4 text-slate-400" />
-                  <span className="font-semibold text-slate-300">{item.directory?.name || "Faculty"}</span>
+                  <span className="font-semibold text-slate-300">{item.users?.full_name || "Faculty"}</span>
                 </div>
               </div>
             )}

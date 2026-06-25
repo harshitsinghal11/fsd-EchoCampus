@@ -45,7 +45,7 @@ public/
 # System Architecture
 - The app uses a hybrid client-heavy Next.js architecture.
 - Page rendering and navigation live in the Next.js App Router under `app/`.
-- Supabase handles authentication, role data, profiles, announcements, complaints, marketplace records, lost and found records, and the faculty directory.
+- Supabase handles authentication, role data, profiles, announcements, complaints, marketplace records, lost and found records, and the directory (via faculty profiles).
 - Supabase Realtime handles the anonymous chat stream.
 - Middleware and protected client layouts enforce route access by role.
 - Complaint and marketplace writes are routed through Next.js route handlers, while announcements, directory, lost and found, and profile reads/writes mostly use the Supabase browser client directly.
@@ -67,7 +67,7 @@ public/
 
 # Authentication & Authorization
 - Authentication uses Supabase email/password sign-in and sign-up.
-- Faculty signup optionally calls the SQL function `is_faculty_email` to verify that the email exists in `directory`.
+- Faculty signup utilizes a dynamic form that passes metadata into Supabase Auth. A backend Postgres trigger handles row creation without RLS obstruction.
 - After login or signup, `ensureOwnUserRow` creates or restores the matching `public.users` record and fills faculty mapping data when applicable.
 - Students receive a generated `session_code` from `student_profiles` for anonymous identity usage.
 - `src/middleware.ts` blocks unauthenticated access to `/main/*` and redirects users away from the wrong role area.

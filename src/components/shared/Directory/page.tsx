@@ -22,13 +22,38 @@ export default function DirectoryPage() {
     try {
       setLoading(true)
       const { data, error } = await supabase
-        .from('directory')
-        .select('*')
-        .order('name', { ascending: true })
+        .from('users')
+        .select(`
+          id,
+          email,
+          full_name,
+          faculty_profiles (
+            department,
+            phone_no,
+            cabin_no,
+            experience_years
+          )
+        `)
+        .eq('role', 'admin')
+        .order('full_name', { ascending: true })
 
       if (error) throw error
-      setFaculty(data || [])
-      setFilteredFaculty(data || [])
+
+      const formattedData: Faculty[] = (data || []).map((user: any) => {
+        const profile = Array.isArray(user.faculty_profiles) ? user.faculty_profiles[0] : user.faculty_profiles;
+        return {
+          id: user.id,
+          name: user.full_name || 'Unknown',
+          email: user.email,
+          department: profile?.department || 'General',
+          phone_no: profile?.phone_no,
+          cabin_no: profile?.cabin_no,
+          experience: profile?.experience_years,
+        };
+      })
+
+      setFaculty(formattedData)
+      setFilteredFaculty(formattedData)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch faculty')
       console.error('Error fetching faculty:', err)
@@ -195,7 +220,7 @@ export default function DirectoryPage() {
 
                   {/* Experience */}
                   {member.experience !== null && (
-                    <div className="flex items-center gap-2">
+                     <div className="flex items-center gap-2">
                       <Calendar className="h-4 w-4 text-slate-400 shrink-0" />
                       <span className="text-slate-300">
                         {member.experience} years experience

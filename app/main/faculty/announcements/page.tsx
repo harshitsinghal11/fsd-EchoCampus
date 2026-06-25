@@ -66,7 +66,7 @@ export default function AdminAnnouncementsPage() {
                      <div className="mt-6 bg-slate-800/60 rounded-2xl p-5 border border-slate-700/50 text-sm text-slate-300 flex gap-3 shadow-sm">
                         <Activity className="w-5 h-5 shrink-0 mt-0.5 text-teal-400" />
                         <p className="text-xs md:text-sm leading-relaxed font-medium">
-                           <strong className="text-white">Pro Tip:</strong> Keep titles short and concise. Check the &quot;Live Broadcasts&quot; list on the left to confirm your post appears correctly.
+                           <strong className="text-white">Pro Tip: </strong> Keep titles short and concise. Check the &quot;Live Broadcasts&quot; list on the left to confirm your post appears correctly.
                         </p>
                      </div>
 

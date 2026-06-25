@@ -53,14 +53,17 @@ export async function middleware(request: NextRequest) {
   // RULE 2: If Logged in, Check ROLE in the 'users' table
   if (user && path.startsWith("/main")) {
     
-    // Fetch role from the 'users' table securely
-    const { data: userData } = await supabase
-      .from("users")
-      .select("role")
-      .eq("id", user.id)
-      .single();
+    // Fetch role securely (Prefer JWT metadata to avoid database hit, fallback to DB for legacy accounts)
+    let userRole = user.user_metadata?.role as AppRole | undefined;
 
-    const userRole = userData?.role as AppRole | undefined;
+    if (!userRole) {
+      const { data: userData } = await supabase
+        .from("users")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+      userRole = userData?.role as AppRole | undefined;
+    }
 
     if (!userRole) {
       url.pathname = "/auth/login";

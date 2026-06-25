@@ -20,53 +20,12 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
-      // Get Faculty mapping (user_id -> directory.id)
-      const { data: facultyRow, error: facultyError } = await supabase
-        .from("faculty_users")
-        .select("faculty_id")
-        .eq("user_id", user.id)
-        .single();
-
-      let facultyId = facultyRow?.faculty_id ?? null;
-
-      // Self-heal mapping if missing: match by authenticated email -> directory.email
-      if (!facultyId && (facultyError?.code === "PGRST116" || !facultyRow)) {
-        if (!user.email) throw new Error("User email not available for faculty mapping.");
-
-        const { data: directoryRow, error: directoryError } = await supabase
-          .from("directory")
-          .select("id")
-          .eq("email", user.email)
-          .single();
-
-        if (directoryError || !directoryRow) {
-          throw new Error("Faculty directory profile not found for this account.");
-        }
-
-        const { data: insertedMapping, error: mappingError } = await supabase
-          .from("faculty_users")
-          .upsert(
-            { user_id: user.id, faculty_id: directoryRow.id },
-            { onConflict: "user_id" }
-          )
-          .select("faculty_id")
-          .single();
-
-        if (mappingError || !insertedMapping) {
-          throw new Error("Faculty mapping setup failed. Please contact admin.");
-        }
-
-        facultyId = insertedMapping.faculty_id;
-      }
-
-      if (!facultyId) throw new Error("Faculty profile not found.");
-
       // Insert Announcement
       const { error: postError } = await supabase.from("announcements").insert({
         title,
         content,
         link: link || null, // If empty string, save as NULL
-        author_id: facultyId,
+        author_id: user.id,
       });
 
       if (postError) throw postError;
@@ -144,7 +103,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
         type="submit"
         className="w-full mt-2 bg-linear-to-r from-teal-600 to-emerald-600 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-teal-900/20 hover:shadow-teal-900/40 transform hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group"
       >
-        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" /> Publish Now</>}
+        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4"/> Publish Now</>}
       </button>
     </form>
   );

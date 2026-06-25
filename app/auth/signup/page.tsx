@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { AuthApiError } from "@supabase/supabase-js";
-import { ArrowRight, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
+import { ArrowRight, Eye, EyeOff, Lock, Mail, User, Building, MapPin, Phone, Briefcase } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -19,6 +19,14 @@ export default function SignUpPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
+  // Faculty specific fields
+  const [isFaculty, setIsFaculty] = useState(false);
+  const [department, setDepartment] = useState("");
+  const [cabinNo, setCabinNo] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [experience, setExperience] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -70,13 +78,17 @@ export default function SignUpPage() {
     setIsLoading(true);
 
     try {
-
       const { data, error } = await supabase.auth.signUp({
         email: normalizedEmail,
         password,
         options: {
           data: {
             full_name: trimmedName,
+            role: isFaculty ? "admin" : "student",
+            department: isFaculty ? (department.trim() || null) : null,
+            cabin_no: isFaculty ? (cabinNo.trim() || null) : null,
+            phone_no: isFaculty ? (phoneNo.trim() || null) : null,
+            experience_years: isFaculty ? (experience ? parseInt(experience) : 0) : null,
           },
         },
       });
@@ -85,31 +97,31 @@ export default function SignUpPage() {
         throw new Error(error?.message || "Signup failed.");
       }
 
-      // Supabase Email Enumeration Protection:
-      // If the email already exists, Supabase returns a fake user object with an empty identities array.
       if (data.user.identities && data.user.identities.length === 0) {
         throw new Error("An account with this email already exists. Please log in instead.");
       }
 
       if (data.session) {
         await ensureOwnUserRow(data.user);
-        const role = await fetchUserRole(data.user.id);
 
+        const role = await fetchUserRole(data.user.id);
         sessionStorage.setItem("userRole", role);
 
         if (role === "faculty" || role === "admin") {
           sessionStorage.removeItem("userSessionCode");
+          toast.success("Account created! Welcome, Professor.");
           router.replace("/main/faculty/dashboard/");
           return;
         }
 
         const sessionCode = await ensureStudentSessionCode(data.user.id);
         sessionStorage.setItem("userSessionCode", sessionCode);
+        toast.success("Account created! Welcome to EchoCampus.");
         router.replace("/main/student/dashboard/");
         return;
       }
 
-      toast.success("Account created. Check your email to confirm it, then sign in. Faculty status will be automatically detected.");
+      toast.success("Account created. Check your email to confirm it, then sign in.");
     } catch (error: unknown) {
       let message =
         error instanceof Error ? error.message : "Something went wrong.";
@@ -127,12 +139,8 @@ export default function SignUpPage() {
 
   return (
     <div className="min-h-[100dvh] w-full bg-slate-950 flex items-center justify-center p-4 sm:p-6 md:p-8">
-
       <div className="relative w-full max-w-md">
-        {/* Glassmorphism Card */}
         <div className="bg-slate-900/50 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl shadow-2xl border border-slate-700/50 p-6 sm:p-8">
-
-          {/* Header */}
           <div className="text-center mb-6">
             <h3 className="text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight">
               Join <span className="text-teal-400">EchoCampus</span>
@@ -143,8 +151,6 @@ export default function SignUpPage() {
           </div>
 
           <form onSubmit={onSubmit} className="space-y-4 md:space-y-5">
-
-            {/* Full Name Input */}
             <div className="space-y-1.5">
               <label htmlFor="full_name" className="block text-sm font-semibold text-slate-300">
                 Full Name
@@ -165,7 +171,6 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            {/* Email Input */}
             <div className="space-y-1.5">
               <label htmlFor="email" className="block text-sm font-semibold text-slate-300">
                 Email Address
@@ -186,7 +191,6 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            {/* Password Input */}
             <div className="space-y-1.5">
               <label htmlFor="password" className="block text-sm font-semibold text-slate-300">
                 Password
@@ -210,18 +214,99 @@ export default function SignUpPage() {
                   onClick={togglePasswordVisibility}
                   className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-500 hover:text-slate-300 transition-colors duration-200"
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
               </div>
             </div>
 
-            {/* Faculty Checkbox Removed - Handled Automatically by Backend Trigger */}
+            {/* Faculty Checkbox */}
+            <div className="flex items-center gap-3 pt-2">
+              <input
+                id="faculty-checkbox"
+                type="checkbox"
+                checked={isFaculty}
+                onChange={(e) => setIsFaculty(e.target.checked)}
+                className="w-4 h-4 rounded border-slate-600 text-teal-500 focus:ring-teal-500/50 bg-slate-900/50"
+              />
+              <label htmlFor="faculty-checkbox" className="text-sm font-medium text-slate-300 cursor-pointer">
+                I am a Faculty Member
+              </label>
+            </div>
 
-            {/* Submit Button */}
+            {/* Dynamic Faculty Fields */}
+            {isFaculty && (
+               <div className="space-y-4 p-4 bg-slate-800/40 rounded-xl border border-slate-700/50 animate-in fade-in slide-in-from-top-4">
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Department</label>
+                    <div className="relative group">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Building className="h-4 w-4 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                      </div>
+                      <input
+                        type="text"
+                        required
+                        value={department}
+                        onChange={(e) => setDepartment(e.target.value)}
+                        className="w-full pl-9 pr-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm transition-all hover:bg-slate-800/60"
+                        placeholder="e.g. Computer Science"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                     <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Cabin No.</label>
+                        <div className="relative group">
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <MapPin className="h-4 w-4 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                          </div>
+                          <input
+                            type="text"
+                            required
+                            value={cabinNo}
+                            onChange={(e) => setCabinNo(e.target.value)}
+                            className="w-full pl-9 pr-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm transition-all hover:bg-slate-800/60"
+                            placeholder="e.g. A-302"
+                          />
+                        </div>
+                     </div>
+                     <div className="space-y-1.5">
+                        <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Experience</label>
+                        <div className="relative group">
+                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <Briefcase className="h-4 w-4 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                          </div>
+                          <input
+                            type="number"
+                            required
+                            value={experience}
+                            onChange={(e) => setExperience(e.target.value)}
+                            className="w-full pl-9 pr-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm transition-all hover:bg-slate-800/60"
+                            placeholder="Years"
+                            min="0"
+                          />
+                        </div>
+                     </div>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Phone</label>
+                    <div className="relative group">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Phone className="h-4 w-4 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                      </div>
+                      <input
+                        type="tel"
+                        value={phoneNo}
+                        onChange={(e) => setPhoneNo(e.target.value)}
+                        className="w-full pl-9 pr-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm transition-all hover:bg-slate-800/60"
+                        placeholder="Optional"
+                      />
+                    </div>
+                  </div>
+               </div>
+            )}
+
             <button
               type="submit"
               disabled={isLoading}
@@ -243,7 +328,6 @@ export default function SignUpPage() {
             </button>
           </form>
 
-          {/* Footer Link */}
           <p className="mt-5 md:mt-6 text-center text-sm text-slate-400">
             Already have an account?{" "}
             <Link href="/auth/login" className="font-semibold text-teal-400 hover:text-teal-300 transition-colors">
