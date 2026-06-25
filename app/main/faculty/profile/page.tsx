@@ -9,14 +9,13 @@ import {
   MapPin, 
   Award, 
   ArrowLeft,
-  Loader2
 } from "lucide-react";
+import { ProfileSkeleton } from '@/components/shared/Skeletons';
 
 export default function ProfilePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   
-  // State to store full profile details
   const [profile, setProfile] = useState({
     name: '',
     email: '',
@@ -29,7 +28,6 @@ export default function ProfilePage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // 1. Get Auth User
         const { data: { user }, error: authError } = await supabase.auth.getUser();
 
         if (authError || !user) {
@@ -37,8 +35,6 @@ export default function ProfilePage() {
           return;
         }
 
-        // 2. Fetch User & Faculty Details (Joined Query)
-        // We query the main 'users' table and join 'faculty_profiles'
         const { data: userData, error: dbError } = await supabase
           .from('users')
           .select(`
@@ -58,8 +54,6 @@ export default function ProfilePage() {
           console.error("Database Error:", dbError);
         }
 
-        // 3. Map Data to State
-        // Supabase returns the joined table as an object (single relationship)
         const facultyDetails = Array.isArray(userData?.faculty_profiles) 
             ? userData?.faculty_profiles[0] 
             : userData?.faculty_profiles;
@@ -84,29 +78,23 @@ export default function ProfilePage() {
   }, [router]);
 
   if (loading) {
-    return (
-      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-slate-950 text-slate-400 gap-3">
-        <Loader2 className="w-10 h-10 animate-spin text-teal-400" />
-        <p className="font-medium animate-pulse">Loading profile information...</p>
-      </div>
-    );
+    return <ProfileSkeleton />;
   }
 
   return (
-    <div className="min-h-[100dvh] bg-slate-950 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-dvh bg-slate-950 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         
         {/* Main Card */}
-        <div className="bg-slate-900/50 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl overflow-hidden border border-slate-700/50 shadow-2xl relative">
+        <div className="bg-slate-900/50 backdrop-blur-xl rounded-3xl md:rounded-3xl overflow-hidden border border-slate-700/50 shadow-2xl relative">
           
           {/* Header Section */}
-          <div className="bg-gradient-to-r from-slate-900 to-slate-800 border-b border-slate-700/50 px-8 py-12 relative overflow-hidden">
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full -ml-20 -mb-20 blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="bg-linear-to-r from-slate-900 to-slate-800 border-b border-slate-700/50 px-8 py-12 relative overflow-hidden">
             
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
                {/* Avatar */}
-               <div className="w-28 h-28 rounded-full bg-gradient-to-br from-teal-400 to-blue-500 p-1 shadow-lg shadow-teal-500/20 group cursor-default shrink-0">
-                 <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center border-4 border-slate-900 group-hover:bg-slate-800 transition-colors">
+               <div className="w-28 h-28 rounded-full bg-linear-to-br from-teal-400 to-blue-500 p-1 shadow-lg shadow-teal-500/20 group cursor-default shrink-0">
+                 <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center border-4 border-slate-900 transition-colors">
                    <span className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-teal-400 to-blue-400">
                      {profile.name.charAt(0).toUpperCase() || 'F'}
                    </span>
@@ -132,10 +120,9 @@ export default function ProfilePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               {/* Email */}
-              <div className="group relative p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 hover:border-teal-500/30 hover:shadow-lg hover:shadow-teal-500/5 hover:-translate-y-1 transition-all duration-300">
-                 <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none"></div>
+              <div className="group relative p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 hover:border-teal-500/30 transition-all duration-300">
                  <div className="flex items-start gap-4">
-                   <div className="p-3 rounded-xl bg-slate-900/80 text-teal-400 group-hover:text-teal-300 border border-slate-700/50 shadow-sm">
+                   <div className="p-3 rounded-xl bg-slate-900/80 text-teal-400 border border-slate-700/50 shadow-sm">
                      <Mail className="w-5 h-5" />
                    </div>
                    <div className="overflow-hidden">
@@ -148,10 +135,9 @@ export default function ProfilePage() {
               </div>
 
               {/* Phone */}
-              <div className="group relative p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 hover:border-teal-500/30 hover:shadow-lg hover:shadow-teal-500/5 hover:-translate-y-1 transition-all duration-300">
-                 <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none"></div>
+              <div className="group relative p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 hover:border-teal-500/30 transition-all duration-300">
                  <div className="flex items-start gap-4">
-                   <div className="p-3 rounded-xl bg-slate-900/80 text-teal-400 group-hover:text-teal-300 border border-slate-700/50 shadow-sm">
+                   <div className="p-3 rounded-xl bg-slate-900/80 text-teal-400 border border-slate-700/50 shadow-sm">
                      <Phone className="w-5 h-5" />
                    </div>
                    <div>
@@ -164,10 +150,9 @@ export default function ProfilePage() {
               </div>
 
               {/* Cabin */}
-              <div className="group relative p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 hover:border-teal-500/30 hover:shadow-lg hover:shadow-teal-500/5 hover:-translate-y-1 transition-all duration-300">
-                 <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none"></div>
+              <div className="group relative p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 hover:border-teal-500/30 transition-all duration-300">
                  <div className="flex items-start gap-4">
-                   <div className="p-3 rounded-xl bg-slate-900/80 text-teal-400 group-hover:text-teal-300  border border-slate-700/50 shadow-sm">
+                   <div className="p-3 rounded-xl bg-slate-900/80 text-teal-400 border border-slate-700/50 shadow-sm">
                      <MapPin className="w-5 h-5" />
                    </div>
                    <div>
@@ -180,10 +165,9 @@ export default function ProfilePage() {
               </div>
 
               {/* Experience */}
-              <div className="group relative p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 hover:border-teal-500/30 hover:shadow-lg hover:shadow-teal-500/5 hover:-translate-y-1 transition-all duration-300">
-                 <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none"></div>
+              <div className="group relative p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 hover:border-teal-500/30 transition-all duration-300">
                  <div className="flex items-start gap-4">
-                   <div className="p-3 rounded-xl bg-slate-900/80 text-teal-400 group-hover:text-teal-300  border border-slate-700/50 shadow-sm">
+                   <div className="p-3 rounded-xl bg-slate-900/80 text-teal-400 border border-slate-700/50 shadow-sm">
                      <Award className="w-5 h-5" />
                    </div>
                    <div>
@@ -201,9 +185,9 @@ export default function ProfilePage() {
             <div className="mt-10 pt-8 border-t border-slate-700/50 flex justify-end">
               <button
                 onClick={() => router.push('/main/faculty/dashboard')}
-                className="group flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-white bg-slate-800 hover:bg-teal-600 border border-slate-700/50 hover:border-teal-500 transition-all shadow-sm hover:shadow-teal-500/20"
+                className="group flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-white bg-slate-800 hover:bg-teal-600 border border-slate-700/50 hover:border-teal-500 transition-all shadow-sm"
               >
-                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+                <ArrowLeft className="w-4 h-4" />
                 Back to Dashboard
               </button>
             </div>

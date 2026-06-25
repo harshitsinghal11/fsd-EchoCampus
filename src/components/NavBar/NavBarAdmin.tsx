@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 import { Menu, X, Home, User, BookUser, ShieldAlert, BellRing, LogOut } from "lucide-react";
 
 export default function Navbar() {
@@ -104,7 +105,7 @@ export default function Navbar() {
                 const isActive = pathname === link.href;
 
                 return (
-                  <a
+                  <Link
                     key={link.name}
                     href={link.href}
                     onClick={toggleMenu}
@@ -127,7 +128,7 @@ export default function Navbar() {
                       `}
                     />
                     <span className="flex-1">{link.name}</span>
-                  </a>
+                  </Link>
                 );
               })}
             </nav>

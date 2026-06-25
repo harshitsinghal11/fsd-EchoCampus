@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Megaphone, ShoppingBag, MessageSquare, AlertTriangle, Camera, ArrowRight } from "lucide-react";
+import { Megaphone, ShoppingBag, MessageSquare, AlertTriangle, Camera, ArrowRight, BookUser } from "lucide-react";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
 import MarketplaceList from "@/components/marketplace/MarketplaceList";
 import ComplaintList from "@/components/complaints/ComplaintList";
@@ -13,18 +13,37 @@ export default function StudentDashboard() {
     <div className="min-h-screen p-4 md:p-6 lg:p-8 mx-auto space-y-6 md:space-y-8 text-slate-100">
 
       {/* HEADER */}
-      <div className="flex flex-col gap-1 md:gap-2 pt-2 md:pt-0">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white capitalize">
-          Hey! Welcome To EchoCampus
-        </h1>
-        <p className="text-sm md:text-base text-slate-400 font-medium">
-          Here&apos;s what&apos;s happening around campus today.
-        </p>
+      <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 pt-2 md:pt-0">
+        <div className="flex flex-col gap-1 md:gap-2">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white capitalize">
+            Hey! Welcome To EchoCampus
+          </h1>
+          <p className="text-sm md:text-base text-slate-400 font-medium">
+            Here&apos;s what&apos;s happening around campus today.
+          </p>
+        </div>
+
+        {/* Top Right Action Buttons */}
+        <div className="flex items-center gap-3">
+          <Link
+            href="/main/student/chat"
+            className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/80 hover:bg-slate-700 text-white rounded-xl font-medium border border-slate-600/50 hover:border-blue-500/50 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] transition-all"
+          >
+            <MessageSquare className="w-4 h-4 text-blue-400" />
+            Global Chat
+          </Link>
+          <Link
+            href="/main/student/directory"
+            className="flex items-center gap-2 px-4 py-2.5 bg-slate-800/80 hover:bg-slate-700 text-white rounded-xl font-medium border border-slate-600/50 hover:border-teal-500/50 hover:shadow-[0_0_15px_rgba(20,184,166,0.2)] transition-all"
+          >
+            <BookUser className="w-4 h-4 text-teal-400" />
+            Directory
+          </Link>
+        </div>
       </div>
 
       {/* --- GRID LAYOUT --- */}
-      {/* gap-4 on mobile, gap-6 on desktop */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 md:gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
 
         {/* 1. LATEST ANNOUNCEMENTS (Full Width) */}
         <section className="lg:col-span-3 bg-slate-800/40 backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-slate-700/50 shadow-xl">
@@ -66,50 +85,28 @@ export default function StudentDashboard() {
           <MarketplaceList isWidget={true} />
         </section>
 
-        {/* 3. RIGHT COLUMN (Complaints + 2x2 Actions) */}
-        <div className="space-y-4 md:space-y-6 flex flex-col">
-
-          {/* A. Top Complaints */}
-          <section className="bg-slate-800/40 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl p-5 md:p-6 border border-slate-700/50 shadow-xl flex-1 flex flex-col">
-            <div className="flex items-center gap-2 md:gap-3 mb-5 md:mb-6">
+        {/* 3. RECENT COMPLAINTS (Right 1/3) */}
+        <section className="bg-slate-800/40 backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-slate-700/50 shadow-xl flex flex-col min-h-[350px] md:min-h-[400px]">
+          <div className="flex justify-between items-center mb-5 md:mb-6">
+            <div className="flex items-center gap-2 md:gap-3">
               <div className="p-2 md:p-2.5 bg-orange-500/20 rounded-lg md:rounded-xl">
                 <AlertTriangle className="w-4 h-4 md:w-5 md:h-5 text-orange-400" />
               </div>
               <h2 className="text-lg md:text-xl font-semibold text-white">Recent Complaints</h2>
             </div>
-            <ComplaintList isWidget={true} />
-          </section>
-
-          {/* B. Quick Actions (Static Links) */}
-          <section className="bg-slate-800/40 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl p-5 md:p-6 border border-slate-700/50 shadow-xl">
-            <h3 className="text-base md:text-lg font-semibold text-white mb-4 md:mb-5">Quick Actions</h3>
-            <div className="grid grid-cols-2 gap-3 md:gap-4">
-              <Link href="/main/student/marketplace" className="flex flex-col items-center justify-center p-3 md:p-4 bg-slate-700/30 rounded-xl md:rounded-2xl shadow-sm hover:bg-slate-700/60 hover:shadow-lg transition-all border border-slate-600/30 group">
-                <ShoppingBag className="w-6 h-6 md:w-7 md:h-7 text-purple-400 mb-2 md:mb-3" />
-                <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Sell Item</span>
-              </Link>
-
-              <Link href="/main/student/complaint" className="flex flex-col items-center justify-center p-3 md:p-4 bg-slate-700/30 rounded-xl md:rounded-2xl shadow-sm hover:bg-slate-700/60 hover:shadow-lg transition-all border border-slate-600/30 group">
-                <AlertTriangle className="w-6 h-6 md:w-7 md:h-7 text-orange-400 mb-2 md:mb-3" />
-                <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Complaint</span>
-              </Link>
-
-              <Link href="/main/student/chat" className="flex flex-col items-center justify-center p-3 md:p-4 bg-slate-700/30 rounded-xl md:rounded-2xl shadow-sm hover:bg-slate-700/60 hover:shadow-lg transition-all border border-slate-600/30 group">
-                <MessageSquare className="w-6 h-6 md:w-7 md:h-7 text-blue-400 mb-2 md:mb-3" />
-                <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Global Chat</span>
-              </Link>
-
-              <Link href="/main/student/lost-found" className="flex flex-col items-center justify-center p-3 md:p-4 bg-slate-700/30 rounded-xl md:rounded-2xl shadow-sm hover:bg-slate-700/60 hover:shadow-lg transition-all border border-slate-600/30 group">
-                <Camera className="w-6 h-6 md:w-7 md:h-7 text-teal-400 mb-2 md:mb-3" />
-                <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Lost & Found</span>
-              </Link>
-            </div>
-          </section>
-
-        </div>
+            <Link
+              href="/main/student/complaint"
+              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-orange-400 hover:text-orange-300 transition-colors"
+            >
+              View All
+              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+          <ComplaintList isWidget={true} />
+        </section>
 
         {/* 4. LOST & FOUND SECTION (Full Width at Bottom) */}
-        <section className="lg:col-span-3 bg-slate-800/40 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl p-5 md:p-6 lg:p-8 border border-slate-700/50 shadow-xl">
+        <section className="lg:col-span-3 bg-slate-800/40 backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-slate-700/50 shadow-xl">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
               <div className="p-2 md:p-2.5 bg-teal-500/20 rounded-lg md:rounded-xl">

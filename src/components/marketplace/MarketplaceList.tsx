@@ -95,7 +95,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
           key={item.id}
           className={`relative overflow-hidden rounded-2xl p-5 md:p-6 border transition-all duration-300 ${
             item.is_sold 
-              ? "bg-slate-900/50 border-slate-800 opacity-75 grayscale-[30%]" 
+              ? "bg-slate-900/50 border-slate-800 opacity-75 grayscale-30" 
               : "bg-slate-800/40 backdrop-blur-xl border-slate-700/50 shadow-xl hover:bg-slate-800/60 hover:-translate-y-1 hover:shadow-2xl hover:shadow-purple-900/10 group"
           }`}
         >
@@ -129,7 +129,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
           </p>
           
           {/* Footer details (User & Phone) */}
-          <div className="mt-5 pt-4 border-t border-slate-700/50 text-xs md:text-sm text-slate-300 space-y-2.5 flex flex-col justify-end flex-grow">
+          <div className="mt-5 pt-4 border-t border-slate-700/50 text-xs md:text-sm text-slate-300 space-y-2.5 flex flex-col justify-end grow">
             <div className="flex items-center gap-2">
               <User className="w-4 h-4 text-slate-500 shrink-0" />
               <span className="truncate">{item.owner_name}</span>

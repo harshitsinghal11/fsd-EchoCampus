@@ -47,11 +47,24 @@ export default function MarketCreateForm() {
 
       const { data: userData } = await supabase
         .from("users")
-        .select("full_name")
+        .select(`
+          full_name,
+          role,
+          student_profiles ( session_code )
+        `)
         .eq("id", user.id)
         .single();
 
-      const ownerName = userData?.full_name || "Unknown Seller";
+      let ownerName = "Unknown Seller";
+      
+      if (userData?.role === 'student' && userData.student_profiles) {
+        const profile = Array.isArray(userData.student_profiles) 
+          ? userData.student_profiles[0] 
+          : userData.student_profiles;
+        ownerName = (profile as any)?.session_code || "Anonymous Student";
+      } else if (userData?.full_name) {
+        ownerName = userData.full_name;
+      }
       const parsedPrice = Number(form.price);
 
       const { error: insertError } = await supabase.from("marketplace").insert({
@@ -80,8 +93,8 @@ export default function MarketCreateForm() {
 
       router.refresh();
 
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Connection failed.";
+    } catch (error: any) {
+      const message = error?.message || "Connection failed.";
       toast.error(message);
     } finally {
       setIsSubmitting(false);

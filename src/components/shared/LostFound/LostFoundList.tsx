@@ -131,7 +131,7 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
         className={
           !showSearch
             ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5"
-            : "grid grid-cols-1 xl:grid-cols-2 gap-6"
+            : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 md:gap-6 items-start"
         }
       >
         {displayItems.map((item) => (
@@ -141,7 +141,7 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
               group overflow-hidden transition-all duration-300
               ${!showSearch 
                 ? 'bg-slate-900/40 hover:bg-slate-800/80 rounded-xl p-3 flex items-center gap-3 border border-transparent hover:border-slate-700/50 cursor-pointer' 
-                : 'bg-slate-800/40 backdrop-blur-xl rounded-[1.5rem] p-5 flex flex-col sm:flex-row gap-5 md:gap-6 border border-slate-700/50 shadow-xl hover:bg-slate-800/60 hover:-translate-y-1 hover:shadow-2xl hover:shadow-teal-900/10'
+                : 'relative overflow-hidden bg-slate-800/40 backdrop-blur-xl p-5 md:p-6 rounded-2xl border-slate-700/50 hover:bg-slate-800/60 hover:-translate-y-1 hover:shadow-2xl hover:shadow-teal-900/10 shadow-xl flex flex-col'
               }
             `}
           >
@@ -149,7 +149,7 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
             {/* 1. IMAGE THUMBNAIL */}
             <div className={`
               bg-slate-900 shrink-0 overflow-hidden border border-slate-700/50 flex items-center justify-center relative
-              ${!showSearch ? 'rounded-lg w-16 h-16' : 'rounded-2xl w-full sm:w-40 md:w-48 h-48 sm:h-auto'}
+              ${!showSearch ? 'rounded-lg w-16 h-16' : 'rounded-xl w-full h-48 mb-4'}
             `}>
               {item.image_url ? (
                 <Image
@@ -213,9 +213,12 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
                     {item.description || "No additional description."}
                   </p>
 
+                  {/* Footer Action Space (forces buttons to bottom) */}
+                  <div className="grow" />
+
                   {/* Action Footer */}
                   {currentUserId === item.user_id && (
-                    <div className="mt-auto pt-4 border-t border-slate-700/50 flex justify-end">
+                    <div className="mt-5 pt-4 border-t border-slate-700/50 flex justify-end">
                       <button 
                         onClick={() => handleDelete(item.id)}
                         className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 hover:text-red-300 text-xs font-bold rounded-xl transition-all active:scale-95 group/btn"

@@ -1,5 +1,6 @@
 "use client";
 import { Heart, Mail, MapPin, Instagram, Linkedin } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -40,24 +41,24 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4 text-white">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <a href="/main/student/announcements" className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
+                <Link href="/main/student/announcements" className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
                   Announcements
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/main/student/directory" className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
+                <Link href="/main/student/directory" className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
                   Directory
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/main/student/marketplace" className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
+                <Link href="/main/student/marketplace" className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
                   Marketplace
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/main/student/lost-found" className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
+                <Link href="/main/student/lost-found" className="text-slate-400 hover:text-teal-400 transition-colors duration-200 text-sm">
                   Lost & Found
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -88,12 +89,12 @@ export default function Footer() {
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-slate-500 text-sm">
               <span>&copy; 2025 EchoCampus. All rights reserved.</span>
               <div className="flex space-x-4">
-                <a href="/privacy" className="hover:text-teal-400 transition-colors duration-200">
+                <Link href="/privacy" className="hover:text-teal-400 transition-colors duration-200">
                   Privacy Policy
-                </a>
-                <a href="/terms" className="hover:text-teal-400 transition-colors duration-200">
+                </Link>
+                <Link href="/terms" className="hover:text-teal-400 transition-colors duration-200">
                   Terms of Service
-                </a>
+                </Link>
               </div>
             </div>
           </div>

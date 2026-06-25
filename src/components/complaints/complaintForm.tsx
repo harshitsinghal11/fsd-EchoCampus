@@ -1,46 +1,45 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, CheckCircle2, MessageSquare, Send } from "lucide-react";
+import { AlertCircle, CheckCircle2, MessageSquare, Send, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function ComplaintForm() {
   const [complaint, setComplaint] = useState("");
   const [isAnonymous, setIsAnonymous] = useState(true);
-  const [msg, setMsg] = useState("");
-  const [msgType, setMsgType] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function submitComplaint() {
     if (!complaint.trim()) {
-      setMsg("Please enter your complaint before submitting");
-      setMsgType("error");
+      toast.error("Please enter your complaint before submitting");
       return;
     }
 
     setLoading(true);
-    setMsg("");
-    setMsgType("");
 
-    const res = await fetch("/api/complaints", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        complaint: complaint.trim(),
-        isAnonymous,
-      }),
-    });
+    try {
+      const res = await fetch("/api/complaints", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          complaint: complaint.trim(),
+          isAnonymous,
+        }),
+      });
 
-    const data = (await res.json()) as { error?: string };
+      const data = (await res.json()) as { error?: string };
 
-    if (!res.ok || data.error) {
-      setMsg(data.error || "Something went wrong.");
-      setMsgType("error");
-    } else {
-      setMsg("Thank you! Your complaint has been submitted successfully.");
-      setMsgType("success");
-      setComplaint("");
+      if (!res.ok || data.error) {
+        toast.error(data.error || "Something went wrong.");
+      } else {
+        toast.success("Thank you! Your complaint has been submitted successfully.");
+        setComplaint("");
+      }
+    } catch (error) {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   const charCount = complaint.length;
@@ -58,24 +57,7 @@ export default function ComplaintForm() {
         </p>
       </div>
 
-      <div className="px-2 py-4">
-        <label className="flex items-start gap-3 text-sm cursor-pointer group rounded-lg border border-slate-700/50 bg-slate-900/30 p-4 hover:bg-slate-900/50 transition-colors">
-          <input
-            type="checkbox"
-            checked={isAnonymous}
-            onChange={(e) => setIsAnonymous(e.target.checked)}
-            className="mt-0.5 h-4 w-4 rounded border-slate-600 bg-slate-800 text-orange-500 focus:ring-orange-500/50"
-          />
-          <span className="text-slate-200">
-            <span className="font-semibold text-white">Submit anonymously</span>
-            <span className="block text-slate-400 text-xs mt-1">
-              When checked, your session code is hidden from other students on the feed.
-            </span>
-          </span>
-        </label>
-      </div>
-
-      <div className="space-y-4">
+      <div className="space-y-4 mt-4">
         <div>
           <textarea
             id="complaint"
@@ -83,7 +65,7 @@ export default function ComplaintForm() {
             onChange={(e) => setComplaint(e.target.value)}
             placeholder="Please provide detailed information about your complaint..."
             maxLength={maxChars}
-            className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-lg focus:ring-2 focus:ring-orange-500/50 focus:border-transparent transition-all resize-none text-slate-100 placeholder-slate-400"
+            className="w-full px-4 py-3 bg-slate-900/50 border border-slate-700/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500/50 transition-all resize-none text-slate-100 placeholder-slate-400"
             rows={6}
           />
           <div className="flex justify-between items-center mt-2">
@@ -96,43 +78,25 @@ export default function ComplaintForm() {
           </div>
         </div>
 
-        {msg && (
-          <div
-            className={`flex items-start gap-3 p-4 rounded-lg border ${
-              msgType === "success"
-                ? "bg-teal-500/20 border-teal-500/30"
-                : "bg-orange-500/20 border-orange-500/30"
-            }`}
-          >
-            {msgType === "success" ? (
-              <CheckCircle2 className="w-5 h-5 text-teal-400 shrink-0 mt-0.5" />
-            ) : (
-              <AlertCircle className="w-5 h-5 text-orange-400 shrink-0 mt-0.5" />
-            )}
-            <p className={`text-sm ${msgType === "success" ? "text-teal-400" : "text-orange-400"}`}>
-              {msg}
-            </p>
-          </div>
-        )}
-
-        <button
-          onClick={submitComplaint}
-          disabled={loading || !complaint.trim()}
-          className="w-full bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/50 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
-        >
-          {loading ? (
-            <>
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              <span>Submitting...</span>
-            </>
-          ) : (
-            <>
-              <Send className="w-5 h-5 text-orange-400" />
-              <span>Submit</span>
-            </>
-          )}
-        </button>
       </div>
+
+      <button
+        onClick={submitComplaint}
+        disabled={loading || !complaint.trim()}
+        className="w-full bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/50 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-lg transition-all mt-2 duration-200 flex items-center justify-center gap-2"
+      >
+        {loading ? (
+          <>
+            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <span>Submitting...</span>
+          </>
+        ) : (
+          <>
+            <Send className="w-5 h-5 text-orange-400" />
+            <span>Submit</span>
+          </>
+        )}
+      </button>
     </div>
   );
 }

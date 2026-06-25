@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import { Faculty } from '@/types/faculty'
 import { Search, Mail, Phone, Building, Calendar, User } from 'lucide-react'
+import { DirectorySkeleton } from '@/components/shared/Skeletons'
 
 export default function DirectoryPage() {
   const [faculty, setFaculty] = useState<Faculty[]>([])
@@ -89,10 +90,26 @@ export default function DirectoryPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mx-auto"></div>
-          <p className="mt-4 text-slate-300">Please Wait...</p>
+      <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-white">Faculty Directory</h1>
+            <p className="mt-2 text-slate-300">
+              Browse and search our faculty members
+            </p>
+          </div>
+
+          {/* Search and Filter Section Skeleton */}
+          <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 p-6 rounded-xl mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="h-11 bg-slate-900/50 border border-slate-700/50 rounded-lg animate-pulse"></div>
+              <div className="h-11 bg-slate-900/50 border border-slate-700/50 rounded-lg animate-pulse"></div>
+            </div>
+            <div className="mt-4 h-4 w-48 bg-slate-700/50 rounded animate-pulse"></div>
+          </div>
+
+          <DirectorySkeleton />
         </div>
       </div>
     )

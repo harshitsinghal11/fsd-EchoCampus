@@ -141,7 +141,20 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
   }, [load]);
 
   if (loading) {
-    return <ComplaintSkeleton isWidget={isWidget} />;
+    return (
+      <div className={`flex-1 flex flex-col overflow-y-auto ${isWidget ? '' : 'bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6'}`}>
+        {!isWidget && (
+          <div className="mb-4">
+            <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+              <MessageSquare className="w-5 h-5 text-orange-400" />
+              Live Complaints
+            </h1>
+            <div className="h-5 bg-slate-700/50 rounded-md w-48 mt-2 animate-pulse"></div>
+          </div>
+        )}
+        <ComplaintSkeleton isWidget={isWidget} />
+      </div>
+    );
   }
 
   return (
