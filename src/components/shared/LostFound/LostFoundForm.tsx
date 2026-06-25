@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { Loader2, X, UploadCloud, Search, MapPin, Phone, AlignLeft, Camera} from "lucide-react";
+import { Loader2, X, UploadCloud, Search, MapPin, Phone, AlignLeft, Camera } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 
@@ -45,17 +45,17 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
       if (fileToUpload) {
         const fileExt = fileToUpload.name.split('.').pop();
         const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-        
+
         const { error: uploadError } = await supabase.storage
           .from('lost_found_images')
           .upload(fileName, fileToUpload);
-          
+
         if (uploadError) throw uploadError;
-        
+
         const { data: { publicUrl } } = supabase.storage
           .from('lost_found_images')
           .getPublicUrl(fileName);
-          
+
         finalImageUrl = publicUrl;
       }
 
@@ -91,20 +91,11 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
   const isPhoneInvalid = form.contact_info?.length > 0 && !/^(?:\+\d{1,3}[- ]?)?\d{10}$/.test(form.contact_info);
 
   return (
-    <form 
-      onSubmit={handleSubmit} 
+    <form
+      onSubmit={handleSubmit}
       className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-3xl md:rounded-3xl shadow-2xl p-6 md:p-8 space-y-5"
     >
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2.5 bg-teal-500/20 rounded-xl">
-          <Camera className="w-6 h-6 text-teal-400" />
-        </div>
-        <div>
-          <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">Report an Item</h2>
-          <p className="text-sm text-slate-400 font-medium">Did you lose or find something on campus?</p>
-        </div>
-      </div>
+
 
       {/* Image Upload / Preview Area */}
       <div className="w-full space-y-1.5">
@@ -149,12 +140,12 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <Search className="h-5 w-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
           </div>
-          <input 
-            required 
-            value={form.title} 
-            onChange={(e) => setForm({ ...form, title: e.target.value })} 
-            placeholder="e.g. Realme TWS Earbuds" 
-            className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-900/80" 
+          <input
+            required
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            placeholder="e.g. Realme TWS Earbuds"
+            className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-900/80"
           />
         </div>
       </div>
@@ -168,12 +159,12 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <MapPin className="h-5 w-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
             </div>
-            <input 
-              required 
-              value={form.location_found} 
-              onChange={(e) => setForm({ ...form, location_found: e.target.value })} 
-              placeholder="e.g. Main Library, 2nd Floor" 
-              className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-900/80" 
+            <input
+              required
+              value={form.location_found}
+              onChange={(e) => setForm({ ...form, location_found: e.target.value })}
+              placeholder="e.g. Main Library, 2nd Floor"
+              className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-900/80"
             />
           </div>
         </div>
@@ -199,11 +190,10 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
                 }
               }}
               placeholder="+91 9876543210 (10 digits)"
-              className={`w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-200 hover:bg-slate-900/80 ${
-                isPhoneInvalid
-                  ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50"
-                  : "border-slate-700/50 focus:ring-teal-500/50 focus:border-teal-500/50"
-              }`}
+              className={`w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-200 hover:bg-slate-900/80 ${isPhoneInvalid
+                ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50"
+                : "border-slate-700/50 focus:ring-teal-500/50 focus:border-teal-500/50"
+                }`}
             />
           </div>
         </div>
@@ -216,19 +206,19 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
           <div className="absolute top-3.5 left-0 pl-4 flex pointer-events-none">
             <AlignLeft className="h-5 w-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
           </div>
-          <textarea 
-            required 
-            rows={3} 
-            value={form.description} 
-            onChange={(e) => setForm({ ...form, description: e.target.value })} 
-            placeholder="Provide details (color, brand, scratches, distinguishing marks)..." 
-            className="w-full pl-11 pr-4 py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-900/80 resize-none" 
+          <textarea
+            required
+            rows={3}
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            placeholder="Provide details (color, brand, scratches, distinguishing marks)..."
+            className="w-full pl-11 pr-4 py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-900/80 resize-none"
           />
         </div>
       </div>
 
-      <button 
-        disabled={loading || isPhoneInvalid} 
+      <button
+        disabled={loading || isPhoneInvalid}
         className="w-full mt-2 bg-teal-600 hover:bg-teal-500 text-white py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-teal-900/20 hover:shadow-teal-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 group"
       >
         {loading ? (

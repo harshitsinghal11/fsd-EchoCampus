@@ -2,6 +2,7 @@
 import { useState } from "react";
 import LostFoundForm from "@/components/shared/LostFound/LostFoundForm";
 import LostFoundList from "@/components/shared/LostFound/LostFoundList";
+import { Search } from "lucide-react";
 
 export default function LostFoundPage() {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -9,8 +10,17 @@ export default function LostFoundPage() {
   return (
     <div className="min-h-[100dvh] p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-slate-950 text-slate-100">
       
+      {/* Page Title */}
+      <div className="flex flex-col gap-1 md:gap-2">
+         <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3">
+            <Search className="w-7 h-7 md:w-8 md:h-8 text-teal-400" />
+            Lost & Found
+         </h1>
+         <p className="text-sm md:text-base text-slate-400 font-medium">Report and find lost items across the campus.</p>
+      </div>
+
       {/* MAIN CONTENT GRID */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mx-auto">
         
         {/* LEFT COLUMN: Feed */}
         <div className="lg:col-span-2">

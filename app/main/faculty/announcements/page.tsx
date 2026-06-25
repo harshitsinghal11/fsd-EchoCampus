@@ -5,12 +5,15 @@ import { Megaphone, Activity, Radio } from "lucide-react";
 export default function AdminAnnouncementsPage() {
    return (
       <div className="min-h-[100dvh] text-slate-100">
-         <div className="max-w-7xl mx-auto p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8">
+         <div className="mx-auto p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8">
 
             {/* Page Title */}
-            <div>
-               <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">Announcement Center</h1>
-               <p className="text-slate-400 mt-1 font-medium text-sm md:text-base">Manage campus-wide broadcasts and updates.</p>
+            <div className="flex flex-col gap-1 md:gap-2">
+               <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3">
+                  <Megaphone className="w-7 h-7 md:w-8 md:h-8 text-teal-400" />
+                  Announcement Center
+               </h1>
+               <p className="text-sm md:text-base text-slate-400 font-medium">Manage campus-wide broadcasts and updates.</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
@@ -60,14 +63,6 @@ export default function AdminAnnouncementsPage() {
                         <div className="p-6 md:p-8">
                            <AnnouncementForm />
                         </div>
-                     </div>
-
-                     {/* Optional Helper Card */}
-                     <div className="mt-6 bg-slate-800/60 rounded-2xl p-5 border border-slate-700/50 text-sm text-slate-300 flex gap-3 shadow-sm">
-                        <Activity className="w-5 h-5 shrink-0 mt-0.5 text-teal-400" />
-                        <p className="text-xs md:text-sm leading-relaxed font-medium">
-                           <strong className="text-white">Pro Tip: </strong> Keep titles short and concise. Check the &quot;Live Broadcasts&quot; list on the left to confirm your post appears correctly.
-                        </p>
                      </div>
 
                   </div>

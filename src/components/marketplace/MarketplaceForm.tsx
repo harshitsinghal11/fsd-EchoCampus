@@ -56,10 +56,10 @@ export default function MarketCreateForm() {
         .single();
 
       let ownerName = "Unknown Seller";
-      
+
       if (userData?.role === 'student' && userData.student_profiles) {
-        const profile = Array.isArray(userData.student_profiles) 
-          ? userData.student_profiles[0] 
+        const profile = Array.isArray(userData.student_profiles)
+          ? userData.student_profiles[0]
           : userData.student_profiles;
         ownerName = (profile as any)?.session_code || "Anonymous Student";
       } else if (userData?.full_name) {
@@ -106,16 +106,6 @@ export default function MarketCreateForm() {
       onSubmit={handleSubmit}
       className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-[1.5rem] md:rounded-3xl shadow-2xl p-6 md:p-8 space-y-5"
     >
-      {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2.5 bg-purple-500/20 rounded-xl">
-          <Tag className="w-6 h-6 text-purple-400" />
-        </div>
-        <div>
-          <h2 className="text-xl md:text-2xl font-bold text-white tracking-tight">Trade Something?</h2>
-          <p className="text-sm text-slate-400 font-medium">List your item on the campus market.</p>
-        </div>
-      </div>
 
       {/* Title Input */}
       <div className="space-y-1.5">

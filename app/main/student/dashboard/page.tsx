@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Megaphone, ShoppingBag, MessageSquare, AlertTriangle, Camera, ArrowRight, BookUser } from "lucide-react";
+import { Megaphone, ShoppingBag, MessageSquare, AlertTriangle, Camera, ArrowRight, BookUser, LayoutDashboard } from "lucide-react";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
 import MarketplaceList from "@/components/marketplace/MarketplaceList";
 import ComplaintList from "@/components/complaints/ComplaintList";
@@ -15,7 +15,8 @@ export default function StudentDashboard() {
       {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 pt-2 md:pt-0">
         <div className="flex flex-col gap-1 md:gap-2">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white capitalize">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white capitalize flex items-center gap-3">
+            <LayoutDashboard className="w-7 h-7 md:w-8 md:h-8 text-teal-400" />
             Hey! Welcome To EchoCampus
           </h1>
           <p className="text-sm md:text-base text-slate-400 font-medium">

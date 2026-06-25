@@ -91,7 +91,7 @@ export default function DirectoryPage() {
   if (loading) {
     return (
       <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="mx-auto">
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-white">Faculty Directory</h1>
@@ -134,13 +134,22 @@ export default function DirectoryPage() {
 
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white">Faculty Directory</h1>
-          <p className="mt-2 text-slate-300">
-            Browse and search our faculty members
-          </p>
+        <div className="mb-8 flex flex-col md:flex-row justify-between md:items-end gap-4">
+          <div className="flex flex-col gap-1 md:gap-2">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3">
+              <User className="w-7 h-7 md:w-8 md:h-8 text-teal-400" />
+              Faculty Directory
+            </h1>
+            <p className="text-sm md:text-base text-slate-400 font-medium">
+              Find and connect with faculty members across different departments.
+            </p>
+          </div>
+          
+          <div className="bg-slate-900/50 border border-slate-700/50 px-4 py-2 rounded-full font-medium shadow-sm text-sm text-slate-400 self-start md:self-auto">
+            Total: <span className="text-teal-400 font-bold">{filteredFaculty.length}</span> faculty members
+          </div>
         </div>
 
         {/* Search and Filter Section */}
@@ -170,10 +179,6 @@ export default function DirectoryPage() {
             </select>
           </div>
 
-          {/* Results Count */}
-          <div className="mt-4 text-sm text-slate-400">
-            Showing <span className="text-white">{filteredFaculty.length}</span> of <span className="text-white">{faculty.length}</span> faculty members
-          </div>
         </div>
 
         {/* Faculty Grid */}

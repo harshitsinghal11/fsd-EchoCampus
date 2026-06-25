@@ -3,17 +3,17 @@ import { Megaphone, Search } from "lucide-react";
 
 export default function StudentAnnouncementsPage() {
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen p-4 sm:p-6 md:p-8">
+      <div className="mx-auto space-y-6">
 
         {/* 1. Header (No Lines) */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
-          <div>
-            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <Megaphone className="w-7 h-7 text-blue-400" />
+          <div className="flex flex-col gap-1 md:gap-2">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3">
+              <Megaphone className="w-7 h-7 md:w-8 md:h-8 text-teal-400" />
               Announcements
             </h1>
-            <p className="text-slate-300 mt-2 text-base">
+            <p className="text-sm md:text-base text-slate-400 font-medium">
               Latest updates and notices from the faculty.
             </p>
           </div>
