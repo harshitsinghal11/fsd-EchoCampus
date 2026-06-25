@@ -1,19 +1,12 @@
 'use client';
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { ThumbsUp, MessageSquare, Clock } from "lucide-react";
-import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 import { ComplaintSkeleton } from "@/components/shared/Skeletons";
 import { MotionList } from "@/components/shared/MotionList";
 import { MotionItem } from "@/components/shared/MotionItem";
-
-type Complaint = {
-  id: string;
-  complaint: string;
-  created_at: string;
-  upvotes: number;
-  current_user_has_upvoted?: boolean;
-};
+import { useComplaints } from "@/hooks/data/useComplaints";
+import { EmptyComplaints } from "@/components/shared/EmptyStates";
 
 type UpvoteApiResponse = {
   added?: boolean;
@@ -26,39 +19,17 @@ interface ComplaintListProps {
 }
 
 export default function ComplaintList({ isWidget = false }: ComplaintListProps) {
-  const [list, setList] = useState<Complaint[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { items, isLoading, mutate } = useComplaints(isWidget);
   const [upvoting, setUpvoting] = useState<string | null>(null);
 
-  // 1. LOAD COMPLAINTS
-  const load = useCallback(async () => {
-    try {
-      const res = await fetch("/api/complaints"); // Make sure this matches your file name
-      const json = await res.json();
-      let data = (json.complaints as Complaint[]) || [];
-
-      if (isWidget) {
-        data = data.slice(0, 3);
-      }
-
-      setList(data);
-    } catch (error) {
-      toast.error("Failed to load complaints");
-      console.error("Failed to load complaints:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [isWidget]);
-
-  // 2. NEW UPVOTE FUNCTION (Toggle Logic)
   async function upvote(id: string) {
     setUpvoting(id);
 
     try {
-      const res = await fetch("/api/complaints/upvote", { // Ensure path matches your API folder structure
+      const res = await fetch("/api/complaints/upvote", { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ complaintId: id }) // No email needed anymore!
+        body: JSON.stringify({ complaintId: id })
       });
 
       if (!res.ok) {
@@ -67,36 +38,8 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
         return;
       }
 
-      const data = (await res.json()) as UpvoteApiResponse;
-
-      // 3. UPDATE UI IMMEDIATELY (Toggle Count)
-      setList(currentList =>
-        currentList.map(item => {
-          if (item.id === id) {
-            const hasUpvoted = Boolean(item.current_user_has_upvoted);
-            const nextHasUpvoted =
-              typeof data.current_user_has_upvoted === "boolean"
-                ? data.current_user_has_upvoted
-                : typeof data.added === "boolean"
-                  ? data.added
-                  : hasUpvoted;
-
-            const nextUpvotes =
-              typeof data.upvotes === "number"
-                ? data.upvotes
-                : nextHasUpvoted === hasUpvoted
-                  ? item.upvotes
-                  : Math.max(0, item.upvotes + (nextHasUpvoted ? 1 : -1));
-
-            return {
-              ...item,
-              upvotes: nextUpvotes,
-              current_user_has_upvoted: nextHasUpvoted,
-            };
-          }
-          return item;
-        })
-      );
+      await res.json();
+      mutate();
 
     } catch (error) {
       toast.error("Failed to upvote");
@@ -120,31 +63,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
     return date.toLocaleDateString();
   }
 
-  useEffect(() => {
-    load();
-  }, [load]);
-
-  useEffect(() => {
-    const channel = supabase
-      .channel('public:complaints')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'complaint_box' },
-        () => load()
-      )
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'complaint_upvotes' },
-        () => load()
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [load]);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className={`flex-1 flex flex-col overflow-y-auto ${isWidget ? '' : 'bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6'}`}>
         {!isWidget && (
@@ -171,19 +90,16 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
             Live Complaints
           </h1>
           <p className="text-slate-300 mt-2">
-            {list.length} {list.length === 1 ? 'complaint' : 'complaints'} from the community
+            {items.length} {items.length === 1 ? 'complaint' : 'complaints'} from the community
           </p>
         </div>
       )}
 
-      {list.length === 0 ? (
-        <div className={`${isWidget ? 'h-full flex items-center justify-center' : 'bg-slate-800/40 border border-slate-700/50 rounded-xl p-6 text-center'}`}>
-          {!isWidget && <MessageSquare className="w-16 h-16 text-slate-400 mx-auto mb-4" />}
-          <p className="text-slate-400">No active complaints.</p>
-        </div>
+      {items.length === 0 ? (
+        <EmptyComplaints isWidget={isWidget} />
       ) : (
         <MotionList className="space-y-3">
-          {list.map((c) => (
+          {items.map((c) => (
             <MotionItem
               key={c.id}
               className={`bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl hover:bg-slate-700/60 transition-all duration-200 ${isWidget ? 'p-4' : 'p-4'}`}
@@ -199,7 +115,6 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
                   </div>
                 </div>
 
-                {/* Vote Button */}
                 <button
                   onClick={() => upvote(c.id)}
                   disabled={upvoting === c.id}

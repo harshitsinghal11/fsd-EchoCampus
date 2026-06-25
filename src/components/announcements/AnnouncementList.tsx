@@ -1,52 +1,30 @@
-import { createSupabaseServerClient } from "@/utils/supabaseServer";
+"use client";
 import { User, ExternalLink } from "lucide-react";
 import { MotionList } from "@/components/shared/MotionList";
 import { MotionItem } from "@/components/shared/MotionItem";
-import { toast } from "sonner";
-
-type Announcement = {
-  id: string;
-  title: string;
-  content: string;
-  link: string | null;
-  created_at: string;
-  users?: {
-    full_name?: string;
-  } | null;
-};
+import { useAnnouncements } from "@/hooks/data/useAnnouncements";
+import { EmptyAnnouncements } from "@/components/shared/EmptyStates";
 
 interface AnnouncementListProps {
   isWidget?: boolean;
 }
 
-export default async function AnnouncementList({ isWidget = false }: AnnouncementListProps) {
-  const supabase = await createSupabaseServerClient();
-  
-  let query = supabase
-    .from("announcements")
-    .select(`*, users ( full_name )`)
-    .order("created_at", { ascending: false });
+export default function AnnouncementList({ isWidget = false }: AnnouncementListProps) {
+  const { items, isLoading } = useAnnouncements(isWidget);
 
-  if (isWidget) query = query.limit(3);
-
-  const { data, error } = await query;
-  
-  if (error) {
-    toast.error("Error fetching announcements");
-    console.error("Error fetching announcements:", error);
+  if (isLoading) {
+    return (
+      <div className={`flex flex-col w-full ${isWidget ? "py-10" : "py-20"}`}>
+        <p className="text-center text-slate-500 animate-pulse">Loading announcements...</p>
+      </div>
+    );
   }
-  
-  const list = (data as Announcement[]) || [];
 
   return (
     <MotionList className="space-y-4 pr-2 custom-scrollbar h-full overflow-y-auto w-full">
-      {list.length === 0 && (
-        <MotionItem className={`text-center flex w-full items-center justify-center text-slate-500 ${isWidget ? "py-10" : "py-20 bg-slate-900/30 rounded-2xl border border-dashed border-slate-700/50"}`}>
-          <p>No announcements yet.</p>
-        </MotionItem>
-      )}
+      {items.length === 0 && <EmptyAnnouncements isWidget={isWidget} />}
 
-      {list.map((item) => (
+      {items.map((item) => (
         <MotionItem
           key={item.id}
           className={`transition-all duration-300 border w-full flex flex-col ${

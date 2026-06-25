@@ -86,10 +86,12 @@ public/
 - UI state is local to each page or component through React hooks.
 - Auth state is read from Supabase session helpers on demand.
 - Student anonymous identity is cached in `sessionStorage` as `userSessionCode`.
-- No global store such as Redux, Zustand, Context-based app state, or React Query cache is implemented.
+- Server state and data fetching are globally managed and cached using `swr` via custom hooks in `src/hooks/data/`.
 
 # Caching Strategy
-Project not Supported. The repository does not implement Redis, SWR, React Query, server-side cache tags, or application-level caching. Data is fetched on demand, and chat uses Supabase Realtime subscriptions instead of a cache layer.
+- The application implements **SWR (stale-while-revalidate)** for aggressive client-side caching of data.
+- Supabase queries are wrapped in custom hooks (e.g. `useMarketplace`, `useComplaints`) powered by SWR. This ensures immediate cached responses while background re-validation occurs.
+- Cache invalidation is handled gracefully through Supabase Realtime subscriptions that call SWR's `mutate()` when underlying data changes.
 
 # Security Considerations
 - Supabase public key validation rejects accidental service role usage in `supabaseConfig.ts`.

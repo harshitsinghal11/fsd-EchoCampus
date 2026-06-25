@@ -7,30 +7,20 @@ import { toast } from "sonner";
 import { LostFoundSkeleton } from "@/components/shared/Skeletons";
 import { MotionList } from "@/components/shared/MotionList";
 import { MotionItem } from "@/components/shared/MotionItem";
-
+import { useLostFound } from "@/hooks/data/useLostFound";
+import { EmptyLostFound } from "@/components/shared/EmptyStates";
 
 interface LostFoundListProps {
   refreshTrigger?: number;
   showSearch?: boolean; // If false, renders as a compact "Widget" for dashboards
 }
-interface LostFoundItem {
-  id: string;
-  user_id: string;
-  title: string;
-  description: string | null;
-  location_found: string;
-  contact_info: string;
-  image_url: string | null;
-  created_at: string;
-}
+
 export default function LostFoundList({ 
   refreshTrigger, 
   showSearch = true 
 }: LostFoundListProps) {
   
-const [items, setItems] = useState<LostFoundItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [internalRefresh, setInternalRefresh] = useState(0);
+  const { items, isLoading, mutate } = useLostFound(!showSearch);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -52,27 +42,19 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
   }, [items, searchTerm, showSearch]);
 
   useEffect(() => {
-    async function fetchItems() {
-      setLoading(true);
+    async function fetchUser() {
       const { data: { user } } = await supabase.auth.getUser();
       setCurrentUserId(user?.id || null);
-
-      let query = supabase
-        .from("lost_found")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      // In Widget mode (Dashboard), limit to top 3
-      if (!showSearch) {
-        query = query.limit(3);
-      }
-
-      const { data, error } = await query;
-      if (!error) setItems(data || []);
-      setLoading(false);
     }
-    fetchItems();
-  }, [refreshTrigger, internalRefresh, showSearch]);
+    fetchUser();
+  }, []);
+
+  // Use refreshTrigger to mutate if a new item is added
+  useEffect(() => {
+    if (refreshTrigger) {
+      mutate();
+    }
+  }, [refreshTrigger, mutate]);
 
   const handleDelete = async (id: string) => {
     const confirm = window.confirm("Has this item been returned? This post will be deleted.");
@@ -82,7 +64,7 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
     if (error) toast.error("Error: " + error.message);
     else {
       toast.success("Item removed");
-      setInternalRefresh(prev => prev + 1);
+      mutate();
     }
   };
 
@@ -105,21 +87,17 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
       )}
 
       {/* --- LOADING STATE --- */}
-      {loading && (
+      {isLoading && (
         <LostFoundSkeleton isWidget={!showSearch} />
       )}
 
       {/* --- EMPTY STATE (no data) --- */}
-      {!loading && items.length === 0 && (
-        <div className={`flex flex-col w-full items-center justify-center text-center ${showSearch ? "py-20" : "py-10"} bg-slate-900/30 rounded-2xl border border-dashed border-slate-700/50 text-slate-500`}>
-          <Camera className="w-12 h-12 mb-3 opacity-30 text-teal-500" />
-          <p className="font-medium text-sm text-slate-400">No items found.</p>
-          {showSearch && <p className="text-xs text-slate-500 mt-1">Be the first to report a lost or found item.</p>}
-        </div>
+      {!isLoading && items.length === 0 && (
+        <EmptyLostFound isWidget={!showSearch} />
       )}
 
       {/* --- NO SEARCH MATCHES --- */}
-      {!loading && showSearch && items.length > 0 && displayItems.length === 0 && (
+      {!isLoading && showSearch && items.length > 0 && displayItems.length === 0 && (
         <div className="flex flex-col w-full items-center justify-center text-center py-16 bg-slate-900/30 rounded-2xl border border-dashed border-slate-700/50 text-slate-500">
           <Search className="w-12 h-12 mb-3 opacity-30 text-teal-500" />
           <p className="font-medium text-sm text-slate-400">No matching items.</p>

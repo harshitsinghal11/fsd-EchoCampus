@@ -1,276 +1,135 @@
-'use client'
+"use client";
+import { useState } from 'react';
+import { Search, Mail, Phone, BookOpen, Briefcase, ChevronRight } from 'lucide-react';
+import { useDirectory } from '@/hooks/data/useDirectory';
+import { EmptyDirectory } from '@/components/shared/EmptyStates';
 
-import { useState, useEffect } from 'react'
-import { supabase } from '@/lib/supabaseClient'
-import { Faculty } from '@/types/faculty'
-import { Search, Mail, Phone, Building, Calendar, User } from 'lucide-react'
-import { DirectorySkeleton } from '@/components/shared/Skeletons'
-import { toast } from 'sonner'
+export default function Directory() {
+  const { items: facultyList, isLoading } = useDirectory();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState('All');
 
-interface FacultyProfileData {
-  department: string | null;
-  phone_no: string | null;
-  cabin_no: string | null;
-  experience_years: number | null;
-}
+  // Derive departments dynamically from fetched data
+  const departments = ['All', ...Array.from(new Set(facultyList.map(f => f.department)))].filter(Boolean);
 
-interface DirectoryUser {
-  id: string;
-  email: string;
-  full_name: string | null;
-  faculty_profiles: FacultyProfileData | FacultyProfileData[] | null;
-}
+  const filteredFaculty = facultyList.filter(faculty => {
+    const matchesSearch = faculty.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          faculty.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesDept = selectedDepartment === 'All' || faculty.department === selectedDepartment;
+    return matchesSearch && matchesDept;
+  });
 
-export default function DirectoryPage() {
-  const [faculty, setFaculty] = useState<Faculty[]>([])
-  const [filteredFaculty, setFilteredFaculty] = useState<Faculty[]>([])
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedDepartment, setSelectedDepartment] = useState('All')
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  // Fetch faculty data
-  useEffect(() => {
-    fetchFaculty()
-  }, [])
-
-  const fetchFaculty = async () => {
-    try {
-      setLoading(true)
-      const { data, error } = await supabase
-        .from('users')
-        .select(`
-          id,
-          email,
-          full_name,
-          faculty_profiles (
-            department,
-            phone_no,
-            cabin_no,
-            experience_years
-          )
-        `)
-        .eq('role', 'admin')
-        .order('full_name', { ascending: true })
-
-      if (error) throw error
-
-      const formattedData: Faculty[] = (data || []).map((user: DirectoryUser) => {
-        const profile = Array.isArray(user.faculty_profiles) ? user.faculty_profiles[0] : user.faculty_profiles;
-        return {
-          id: user.id,
-          name: user.full_name || 'Unknown',
-          email: user.email,
-          department: profile?.department || 'General',
-          phone_no: profile?.phone_no ?? null,
-          cabin_no: profile?.cabin_no ?? null,
-          experience: profile?.experience_years ?? null,
-        };
-      })
-
-      setFaculty(formattedData)
-      setFilteredFaculty(formattedData)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch faculty')
-      toast.error('Failed to fetch faculty directory')
-      console.error('Error fetching faculty:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Filter faculty based on search and department
-  useEffect(() => {
-    let filtered = faculty
-
-    // Filter by search term
-    if (searchTerm) {
-      filtered = filtered.filter(f =>
-        f.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        f.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        f.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        f.cabin_no?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    }
-
-    // Filter by department
-    if (selectedDepartment !== 'All') {
-      filtered = filtered.filter(f => f.department === selectedDepartment)
-    }
-
-    setFilteredFaculty(filtered)
-  }, [searchTerm, selectedDepartment, faculty])
-
-  // Get unique departments
-  const departments = ['All', ...Array.from(new Set(faculty.map(f => f.department)))]
-
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white">Faculty Directory</h1>
-            <p className="mt-2 text-slate-300">
-              Browse and search our faculty members
-            </p>
-          </div>
-
-          {/* Search and Filter Section Skeleton */}
-          <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 p-6 rounded-xl mb-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="h-11 bg-slate-900/50 border border-slate-700/50 rounded-lg animate-pulse"></div>
-              <div className="h-11 bg-slate-900/50 border border-slate-700/50 rounded-lg animate-pulse"></div>
-            </div>
-            <div className="mt-4 h-4 w-48 bg-slate-700/50 rounded animate-pulse"></div>
-          </div>
-
-          <DirectorySkeleton />
-        </div>
+      <div className="w-full h-full flex items-center justify-center py-20">
+        <p className="text-slate-500 animate-pulse">Loading directory...</p>
       </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-center bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl p-8 max-w-md w-full">
-          <p className="text-xl font-semibold text-orange-400">Error loading directory</p>
-          <p className="mt-2 text-slate-300">{error}</p>
-          <button
-            onClick={fetchFaculty}
-            className="mt-6 px-6 py-2 bg-orange-500/20 border border-orange-500/50 text-orange-400 rounded-lg hover:bg-orange-500/30 transition-all duration-200"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    )
+    );
   }
 
   return (
-    <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-      <div className="mx-auto">
-        {/* Header */}
-        <div className="mb-8 flex flex-col md:flex-row justify-between md:items-end gap-4">
-          <div className="flex flex-col gap-1 md:gap-2">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3">
-              <User className="w-7 h-7 md:w-8 md:h-8 text-teal-400" />
-              Faculty Directory
-            </h1>
-            <p className="text-sm md:text-base text-slate-400 font-medium">
-              Find and connect with faculty members across different departments.
-            </p>
-          </div>
-          
-          <div className="bg-slate-900/50 border border-slate-700/50 px-4 py-2 rounded-full font-medium shadow-sm text-sm text-slate-400 self-start md:self-auto">
-            Total: <span className="text-teal-400 font-bold">{filteredFaculty.length}</span> faculty members
-          </div>
+    <div className="w-full max-w-6xl mx-auto space-y-8">
+      {/* Search and Filter Section */}
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 p-6 rounded-2xl">
+        <div className="relative w-full sm:w-96 group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
+          <input
+            type="text"
+            placeholder="Search faculty by name or email..."
+            className="w-full bg-slate-900/50 border border-slate-700/50 rounded-xl py-3 pl-12 pr-4 text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-
-        {/* Search and Filter Section */}
-        <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 p-6 rounded-xl mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Search Box */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
-              <input
-                type="text"
-                placeholder="Search by name, email, department, or cabin..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-900/50 border border-slate-700/50 rounded-lg text-slate-100 placeholder-slate-400 outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all"
-              />
-            </div>
-
-            {/* Department Filter */}
-            <select
-              value={selectedDepartment}
-              onChange={(e) => setSelectedDepartment(e.target.value)}
-              className="px-4 py-2.5 bg-slate-900/50 border border-slate-700/50 text-slate-100 rounded-lg outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all [&>option]:bg-slate-900"
+        
+        <div className="flex gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 hide-scrollbar">
+          {departments.map(dept => (
+            <button
+              key={dept}
+              onClick={() => setSelectedDepartment(dept)}
+              className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all duration-300 ${
+                selectedDepartment === dept 
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' 
+                  : 'bg-slate-900/50 text-slate-400 border border-slate-700/50 hover:bg-slate-800 hover:text-slate-200'
+              }`}
             >
-              {departments.map(dept => (
-                <option key={dept} value={dept}>{dept}</option>
-              ))}
-            </select>
-          </div>
-
+              {dept}
+            </button>
+          ))}
         </div>
+      </div>
 
-        {/* Faculty Grid */}
-        {filteredFaculty.length === 0 ? (
-          <div className="text-center py-12 bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl">
-            <User className="mx-auto h-12 w-12 text-slate-400" />
-            <p className="mt-4 text-slate-300">No faculty members found</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredFaculty.map((member) => (
-              <div
-                key={member.id}
-                className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl hover:bg-slate-700/60 transition-all duration-200 p-6"
-              >
-                {/* Name and Department */}
-                <div className="mb-4">
-                  <h3 className="text-xl font-semibold text-white">
-                    {member.name}
+      {facultyList.length === 0 || filteredFaculty.length === 0 ? (
+        <EmptyDirectory />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {filteredFaculty.map((faculty) => (
+            <div 
+              key={faculty.id}
+              className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 hover:bg-slate-800/60 transition-all duration-300 group hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-900/10"
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-white group-hover:text-blue-300 transition-colors">
+                    {faculty.name}
                   </h3>
-                  <p className="text-sm text-blue-400 font-medium mt-1">
-                    {member.department}
-                  </p>
-                </div>
-
-                {/* Contact Details */}
-                <div className="space-y-3 text-sm">
-                  {/* Email */}
-                  <div className="flex items-start gap-2">
-                    <Mail className="h-4 w-4 text-slate-400 mt-0.5 shrink-0" />
-                    <a
-                      href={`mailto:${member.email}`}
-                      className="text-slate-300 hover:text-blue-400 break-all transition-colors"
-                    >
-                      {member.email}
-                    </a>
-                  </div>
-
-                  {/* Phone */}
-                  {member.phone_no && (
-                    <div className="flex items-center gap-2">
-                      <Phone className="h-4 w-4 text-slate-400 shrink-0" />
-                      <a
-                        href={`tel:${member.phone_no}`}
-                        className="text-slate-300 hover:text-blue-400 transition-colors"
-                      >
-                        {member.phone_no}
-                      </a>
-                    </div>
-                  )}
-
-                  {/* Cabin */}
-                  {member.cabin_no && (
-                    <div className="flex items-center gap-2">
-                      <Building className="h-4 w-4 text-slate-400 shrink-0" />
-                      <span className="text-slate-300">
-                        Cabin: {member.cabin_no}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Experience */}
-                  {member.experience !== null && (
-                    <div className="flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-slate-400 shrink-0" />
-                      <span className="text-slate-300">
-                        {member.experience} years experience
-                      </span>
-                    </div>
-                  )}
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 mt-2">
+                    <BookOpen className="w-3.5 h-3.5" />
+                    {faculty.department}
+                  </span>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+
+              <div className="space-y-3 mt-6">
+                <a 
+                  href={`mailto:${faculty.email}`}
+                  className="flex items-center gap-3 text-sm text-slate-400 hover:text-white transition-colors p-2 -mx-2 rounded-lg hover:bg-slate-700/30"
+                >
+                  <div className="bg-slate-900/50 p-1.5 rounded-md">
+                    <Mail className="w-4 h-4 text-blue-400" />
+                  </div>
+                  <span className="truncate">{faculty.email}</span>
+                  <ChevronRight className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
+
+                {faculty.phone_no && (
+                  <a 
+                    href={`tel:${faculty.phone_no}`}
+                    className="flex items-center gap-3 text-sm text-slate-400 hover:text-white transition-colors p-2 -mx-2 rounded-lg hover:bg-slate-700/30"
+                  >
+                    <div className="bg-slate-900/50 p-1.5 rounded-md">
+                      <Phone className="w-4 h-4 text-green-400" />
+                    </div>
+                    <span>{faculty.phone_no}</span>
+                    <ChevronRight className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </a>
+                )}
+
+                {(faculty.cabin_no || faculty.experience !== null) && (
+                  <div className="flex items-center gap-4 pt-4 mt-2 border-t border-slate-700/50">
+                    {faculty.cabin_no && (
+                      <div className="flex flex-col">
+                        <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1">Cabin</span>
+                        <span className="text-sm text-slate-300 font-medium">{faculty.cabin_no}</span>
+                      </div>
+                    )}
+                    
+                    {faculty.experience !== null && faculty.experience !== undefined && (
+                      <div className="flex flex-col ml-auto text-right">
+                        <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold mb-1 flex items-center gap-1 justify-end">
+                          <Briefcase className="w-3 h-3" />
+                          Experience
+                        </span>
+                        <span className="text-sm text-slate-300 font-medium">{faculty.experience} Years</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
-  )
+  );
 }
