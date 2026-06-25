@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AlertCircle, CheckCircle2, MessageSquare, Send, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { motion } from "framer-motion";
 
 export default function ComplaintForm() {
   const [complaint, setComplaint] = useState("");
@@ -80,8 +81,10 @@ export default function ComplaintForm() {
 
       </div>
 
-      <button
+      <motion.button
         onClick={submitComplaint}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.95 }}
         disabled={loading || !complaint.trim()}
         className="w-full bg-orange-500/20 hover:bg-orange-500/30 border border-orange-500/50 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium py-3 px-6 rounded-lg transition-all mt-2 duration-200 flex items-center justify-center gap-2"
       >
@@ -96,7 +99,7 @@ export default function ComplaintForm() {
             <span>Submit</span>
           </>
         )}
-      </button>
+      </motion.button>
     </div>
   );
 }

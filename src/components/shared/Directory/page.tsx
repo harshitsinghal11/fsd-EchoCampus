@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabaseClient'
 import { Faculty } from '@/types/faculty'
 import { Search, Mail, Phone, Building, Calendar, User } from 'lucide-react'
 import { DirectorySkeleton } from '@/components/shared/Skeletons'
+import { toast } from 'sonner'
 
 export default function DirectoryPage() {
   const [faculty, setFaculty] = useState<Faculty[]>([])
@@ -57,6 +58,7 @@ export default function DirectoryPage() {
       setFilteredFaculty(formattedData)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch faculty')
+      toast.error('Failed to fetch faculty directory')
       console.error('Error fetching faculty:', err)
     } finally {
       setLoading(false)

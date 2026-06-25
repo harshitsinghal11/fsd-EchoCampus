@@ -10,6 +10,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { ProfileSkeleton } from '@/components/shared/Skeletons';
+import { toast } from 'sonner';
 
 export default function StudentProfilePage() {
   const router = useRouter();
@@ -43,6 +44,7 @@ export default function StudentProfilePage() {
           .single();
 
         if (dbError) {
+          toast.error("Failed to load profile data");
           console.error("Database Error:", dbError);
         }
 
@@ -64,6 +66,7 @@ export default function StudentProfilePage() {
         });
 
       } catch (err) {
+        toast.error("Failed to load profile data");
         console.error('Error fetching data:', err);
       } finally {
         setLoading(false);

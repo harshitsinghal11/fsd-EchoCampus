@@ -120,7 +120,7 @@ export default function StudentDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-teal-400 hover:text-teal-300 transition-colors"
             >
               View All
-              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
             </Link>
           </div>
           <LostFoundList showSearch={false} />

@@ -11,6 +11,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { ProfileSkeleton } from '@/components/shared/Skeletons';
+import { toast } from 'sonner';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -51,6 +52,7 @@ export default function ProfilePage() {
           .single();
 
         if (dbError) {
+          toast.error("Failed to load profile data");
           console.error("Database Error:", dbError);
         }
 
@@ -68,6 +70,7 @@ export default function ProfilePage() {
         });
 
       } catch (err) {
+        toast.error("Failed to load profile data");
         console.error('Error fetching user data:', err);
       } finally {
         setLoading(false);

@@ -4,6 +4,8 @@ import { ThumbsUp, MessageSquare, Clock } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 import { ComplaintSkeleton } from "@/components/shared/Skeletons";
+import { MotionList } from "@/components/shared/MotionList";
+import { MotionItem } from "@/components/shared/MotionItem";
 
 type Complaint = {
   id: string;
@@ -41,6 +43,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
 
       setList(data);
     } catch (error) {
+      toast.error("Failed to load complaints");
       console.error("Failed to load complaints:", error);
     } finally {
       setLoading(false);
@@ -96,6 +99,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
       );
 
     } catch (error) {
+      toast.error("Failed to upvote");
       console.error("Failed to upvote:", error);
     } finally {
       setUpvoting(null);
@@ -178,9 +182,9 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
           <p className="text-slate-400">No active complaints.</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <MotionList className="space-y-3">
           {list.map((c) => (
-            <div
+            <MotionItem
               key={c.id}
               className={`bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl hover:bg-slate-700/60 transition-all duration-200 ${isWidget ? 'p-4' : 'p-4'}`}
             >
@@ -210,9 +214,9 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
                   <ThumbsUp className={`w-3.5 h-3.5 ${c.current_user_has_upvoted ? "text-orange-400" : "text-slate-400 group-hover:text-orange-400"} ${upvoting === c.id ? 'text-orange-400' : ''}`} />
                 </button>
               </div>
-            </div>
+            </MotionItem>
           ))}
-        </div>
+        </MotionList>
       )}
     </div>
   );

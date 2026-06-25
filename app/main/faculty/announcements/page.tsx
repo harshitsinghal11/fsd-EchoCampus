@@ -1,6 +1,8 @@
 import AnnouncementForm from "@/components/announcements/AnnouncementForm";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
+import { AnnouncementSkeleton } from "@/components/shared/Skeletons";
 import { Megaphone, Activity, Radio } from "lucide-react";
+import { Suspense } from "react";
 
 export default function AdminAnnouncementsPage() {
    return (
@@ -38,7 +40,9 @@ export default function AdminAnnouncementsPage() {
 
                      {/* Feed Content */}
                      <div className="p-5 md:p-6 lg:p-8 flex-1">
-                        <AnnouncementList />
+                        <Suspense fallback={<AnnouncementSkeleton />}>
+                           <AnnouncementList />
+                        </Suspense>
                      </div>
                   </div>
                </div>

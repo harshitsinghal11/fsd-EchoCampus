@@ -1,5 +1,7 @@
 import AnnouncementList from "@/components/announcements/AnnouncementList";
+import { AnnouncementSkeleton } from "@/components/shared/Skeletons";
 import { Megaphone, Search } from "lucide-react";
+import { Suspense } from "react";
 
 export default function StudentAnnouncementsPage() {
   return (
@@ -33,7 +35,9 @@ export default function StudentAnnouncementsPage() {
 
         {/* 3. The Feed */}
         <div>
-          <AnnouncementList />
+          <Suspense fallback={<AnnouncementSkeleton />}>
+            <AnnouncementList />
+          </Suspense>
         </div>
 
       </div>

@@ -31,6 +31,7 @@ export default function AnonChat() {
         .limit(500);
 
       if (error) {
+        toast.error('Failed to load messages');
         console.error('Error fetching messages:', error);
       } else if (data) {
         setMessages(data as Message[]);

@@ -1,5 +1,8 @@
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
 import { User, ExternalLink } from "lucide-react";
+import { MotionList } from "@/components/shared/MotionList";
+import { MotionItem } from "@/components/shared/MotionItem";
+import { toast } from "sonner";
 
 type Announcement = {
   id: string;
@@ -29,21 +32,22 @@ export default async function AnnouncementList({ isWidget = false }: Announcemen
   const { data, error } = await query;
   
   if (error) {
+    toast.error("Error fetching announcements");
     console.error("Error fetching announcements:", error);
   }
   
   const list = (data as Announcement[]) || [];
 
   return (
-    <div className="space-y-4 pr-2 custom-scrollbar h-full overflow-y-auto w-full">
+    <MotionList className="space-y-4 pr-2 custom-scrollbar h-full overflow-y-auto w-full">
       {list.length === 0 && (
-        <div className={`text-center flex w-full items-center justify-center text-slate-500 ${isWidget ? "py-10" : "py-20 bg-slate-900/30 rounded-2xl border border-dashed border-slate-700/50"}`}>
+        <MotionItem className={`text-center flex w-full items-center justify-center text-slate-500 ${isWidget ? "py-10" : "py-20 bg-slate-900/30 rounded-2xl border border-dashed border-slate-700/50"}`}>
           <p>No announcements yet.</p>
-        </div>
+        </MotionItem>
       )}
 
       {list.map((item) => (
-        <div
+        <MotionItem
           key={item.id}
           className={`transition-all duration-300 border w-full flex flex-col ${
             isWidget
@@ -85,8 +89,8 @@ export default async function AnnouncementList({ isWidget = false }: Announcemen
               </div>
             )}
           </div>
-        </div>
+        </MotionItem>
       ))}
-    </div>
+    </MotionList>
   );
 }

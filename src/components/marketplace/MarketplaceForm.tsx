@@ -12,6 +12,7 @@ import { useUserEmail } from "@/hooks/useUserEmail";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
+import { motion } from "framer-motion";
 
 export default function MarketCreateForm() {
   const userEmail = useUserEmail();
@@ -209,15 +210,17 @@ export default function MarketCreateForm() {
       </div>
 
       {/* Submit Button */}
-      <button
+      <motion.button
         type="submit"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.95 }}
         disabled={
           !form.product_title ||
           !form.price ||
           form.contact_info.length !== 10 ||
           isSubmitting
         }
-        className="w-full mt-2 bg-purple-600 hover:bg-purple-500 text-white py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group flex items-center justify-center gap-2"
+        className="w-full mt-2 bg-purple-600 hover:bg-purple-500 text-white py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center gap-2"
       >
         {isSubmitting ? (
           <>
@@ -230,7 +233,7 @@ export default function MarketCreateForm() {
             Publish Listing
           </>
         )}
-      </button>
+      </motion.button>
     </form>
   );
 }

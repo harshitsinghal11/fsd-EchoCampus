@@ -5,6 +5,8 @@ import { MapPin, Phone, Calendar, Search, Camera, Trash2, ArrowRight } from "luc
 import Image from "next/image";
 import { toast } from "sonner";
 import { LostFoundSkeleton } from "@/components/shared/Skeletons";
+import { MotionList } from "@/components/shared/MotionList";
+import { MotionItem } from "@/components/shared/MotionItem";
 
 
 interface LostFoundListProps {
@@ -127,9 +129,9 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
 
       {/* --- LIST LAYOUT --- */}
       {displayItems.length > 0 && (
-      <div className={!showSearch ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5" : "space-y-4 pr-2 custom-scrollbar w-full"}>
+      <MotionList className={!showSearch ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5" : "space-y-4 pr-2 custom-scrollbar w-full"}>
         {displayItems.map((item) => (
-          <div 
+          <MotionItem 
             key={item.id} 
             className={`
               group overflow-hidden transition-all duration-300 w-full
@@ -228,9 +230,9 @@ const [items, setItems] = useState<LostFoundItem[]>([]);
               <ArrowRight className="shrink-0 w-4 h-4 text-slate-600 group-hover:text-teal-400 group-hover:translate-x-1 transition-all mr-1" />
             )}
 
-          </div>
+          </MotionItem>
         ))}
-      </div>
+      </MotionList>
       )}
     </div>
   );

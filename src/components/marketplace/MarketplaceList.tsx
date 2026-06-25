@@ -5,6 +5,8 @@ import { MarketplaceItem } from "@/types/marketplace";
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from 'sonner';
 import { MarketplaceSkeleton } from "@/components/shared/Skeletons";
+import { MotionList } from "@/components/shared/MotionList";
+import { MotionItem } from "@/components/shared/MotionItem";
 
 // 1. Update the Props Interface
 interface MarketListProps {
@@ -34,6 +36,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
 
       setItems(fetchedItems);
     } catch (error) {
+      toast.error("Failed to load marketplace items");
       console.error("Failed to load marketplace items", error);
     } finally {
       setLoading(false);
@@ -85,13 +88,13 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
 
   return (
     // Grid adapts based on widget mode vs full page mode
-    <div className={`grid gap-4 md:gap-6 items-start ${
+    <MotionList className={`grid gap-4 md:gap-6 items-start ${
   isWidget 
     ? "grid-cols-1 sm:grid-cols-2"  
     : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"
 }`}>
       {items.map((item) => (
-        <div
+        <MotionItem
           key={item.id}
           className={`relative overflow-hidden rounded-2xl p-5 md:p-6 border transition-all duration-300 ${
             item.is_sold 
@@ -153,8 +156,8 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
               Mark as Sold
             </button>
           )}
-        </div>
+        </MotionItem>
       ))}
-    </div>
+    </MotionList>
   );
 }

@@ -41,8 +41,9 @@
 
 # Component Library
 - `ProtectedRoute`
-- `NavBarStudent`
-- `NavBarAdmin`
+- `BaseNavBar` (Shared component used by both Student and Admin NavBars)
+- `NavBarStudent` (Wrapper defining student links)
+- `NavBarAdmin` (Wrapper defining admin links)
 - `FooterStudent`
 - `FooterAdmin`
 - `AnnouncementList`
@@ -89,11 +90,14 @@
 
 # Loading States
 - Protected routes show a full-screen access verification spinner.
-- Profile pages show full-screen loading states.
 - Directory shows a full-page loading spinner before data is available.
-- Announcement, complaint, marketplace, and lost and found lists show inline loading text or spinners.
-- Submit buttons switch into loading states during form actions.
-- **(Phase 5 Refinement):** Next.js React `<Suspense>` boundaries with skeleton loaders will replace plain text loaders for smoother page transitions.
+- Announcement, complaint, marketplace, and lost and found lists use `Skeleton Loaders` matching their actual card layout, wrapped in React `<Suspense>` boundaries to prevent cumulative layout shift (CLS).
+- Submit buttons switch into loading states (spinners) during form actions.
+
+# Animations & Transitions
+- **Page Transitions:** All pages gently fade and slide up on enter via `framer-motion` integrated into `app/template.tsx`.
+- **List Cascades:** Items in the Announcements, Marketplace, Complaints, and Lost & Found feeds load sequentially (staggered animation) to create a dynamic cascading effect.
+- **Micro-Interactions:** Action buttons (e.g., Submit) slightly scale up on hover and scale down on tap to provide tactile feedback.
 
 # Empty States
 - Announcements: `No announcements yet.`
@@ -104,12 +108,12 @@
 - Chat: `No messages yet`
 
 # Error States
-- Login failures use alert popups (To be replaced with Toast Notifications in Phase 5).
-- Signup failures use inline error cards.
+- Login failures use toast notification popups.
+- Signup failures use inline error cards and toast notifications.
 - Marketplace form uses inline error messaging.
 - Complaint form uses inline success and error messaging.
-- Lost and found and announcement actions use alert popups for failure cases (To be replaced with Toast Notifications in Phase 5).
-- Directory fetch errors render a retry card.
+- Data fetching failures (e.g. lists, profiles, directory, chat) use global toast notification popups from the `sonner` library.
+- Directory fetch errors additionally render a retry card.
 - Unauthorized route access redirects instead of rendering an error page.
 - **(Phase 6 Refinement):** Global `error.tsx` boundaries will be implemented to gracefully catch React runtime errors.
 
