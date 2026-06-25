@@ -110,6 +110,9 @@ export default function StudentProfilePage() {
 
           {/* Profile Details Grid */}
           <div className="px-8 py-10">
+            <h2 className="text-lg font-bold text-white border-b border-slate-700/50 pb-4 mb-6">
+                Account Details
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               
               {/* Email */}

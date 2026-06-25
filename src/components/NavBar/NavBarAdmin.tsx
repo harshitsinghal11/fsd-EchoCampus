@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-import { usePathname } from "next/navigation"; 
+import { usePathname } from "next/navigation";
 import { Menu, X, Home, User, BookUser, ShieldAlert, BellRing, LogOut } from "lucide-react";
 
 export default function Navbar() {
@@ -26,6 +26,8 @@ export default function Navbar() {
 
     // 2. Clear Local Storage
     sessionStorage.removeItem('userSessionCode');
+    sessionStorage.removeItem('userRole');
+    sessionStorage.removeItem('userEmail');
     localStorage.removeItem('userRole');
     localStorage.removeItem('userEmail');
 
@@ -40,7 +42,7 @@ export default function Navbar() {
       <nav className="bg-slate-900/70 backdrop-blur-xl border-b border-slate-700/50 sticky top-0 z-50 shadow-lg shadow-black/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 md:h-20">
-            
+
             {/* Logo Container */}
             <div className="flex items-center">
               <div className="shrink-0 flex items-center">
@@ -68,17 +70,17 @@ export default function Navbar() {
       </nav>
 
       {/* --- SIDE MENU OVERLAY --- */}
-      <div 
+      <div
         className={`fixed inset-0 z-40 transition-opacity duration-300 ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
       >
         {/* Dark Backdrop */}
-        <div 
+        <div
           className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}
           onClick={toggleMenu}
         />
-        
+
         {/* Slide-out Panel */}
-        <div 
+        <div
           className={`absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-slate-900 border-l border-slate-700/50 shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
         >
           {/* 1. Header */}
@@ -86,14 +88,14 @@ export default function Navbar() {
             <span className="text-xl font-extrabold text-white tracking-tight">
               Echo<span className="text-teal-400">Campus</span>
             </span>
-            <button 
-              onClick={toggleMenu} 
+            <button
+              onClick={toggleMenu}
               className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
-          
+
           {/* 2. Scrollable Links Area */}
           <div className="flex-1 overflow-y-auto py-6 px-4">
             <nav className="space-y-2">
@@ -107,22 +109,22 @@ export default function Navbar() {
                     href={link.href}
                     onClick={toggleMenu}
                     className={`group flex items-center px-4 py-3.5 rounded-xl text-sm md:text-base font-medium transition-all duration-200 
-                      ${isActive 
-                        ? "bg-teal-500/20 text-teal-400 border border-teal-500/30 shadow-inner" 
+                      ${isActive
+                        ? "bg-teal-500/20 text-teal-400 border border-teal-500/30 shadow-inner"
                         : "text-slate-300 hover:bg-slate-800/60 hover:text-white border border-transparent"
                       }
                     `}
-                    style={{ 
+                    style={{
                       animationDelay: isMenuOpen ? `${index * 50}ms` : '0ms',
                       opacity: isMenuOpen ? 1 : 0,
                       transform: isMenuOpen ? 'translateY(0)' : 'translateY(10px)',
                       transition: 'all 0.3s ease-out'
                     }}
                   >
-                    <IconComponent 
+                    <IconComponent
                       className={`w-5 h-5 mr-3 transition-colors 
                         ${isActive ? "text-teal-400" : "text-slate-500 group-hover:text-slate-300"}
-                      `} 
+                      `}
                     />
                     <span className="flex-1">{link.name}</span>
                   </a>

@@ -29,6 +29,8 @@ export default function Navbar() {
 
     // 2. Clear Local Storage
     sessionStorage.removeItem('userSessionCode');
+    sessionStorage.removeItem('userRole');
+    sessionStorage.removeItem('userEmail');
     localStorage.removeItem('userRole');
     localStorage.removeItem('userEmail');
 

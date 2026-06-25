@@ -69,9 +69,9 @@ public.complaint_box
 - `idx_lost_found_user`
 
 # RLS Policies
-- `users`: authenticated users can select only their own row and insert only their own row with matching auth email and valid role rules; no direct client update policy exists
+- `users`: authenticated users can select their own row AND any row where `role = 'admin'` (for the directory); authenticated users can insert only their own row with matching auth email and valid role rules; no direct client update policy exists
 - `student_profiles`: authenticated users can read profiles, insert their own row, and update their own row
-- `faculty_profiles`: admin users can select, insert, and update only their own row
+- `faculty_profiles`: authenticated users can select all rows (for the directory); admin users can insert, and update only their own row
 - `announcements`: authenticated users can read all rows; only users with role `admin` can insert
 - `complaint_box`: authenticated users can read all complaints; only students can insert their own complaints
 - `complaint_upvotes`: authenticated users can read all votes; only students can insert their own votes and any authenticated user can delete only their own vote row

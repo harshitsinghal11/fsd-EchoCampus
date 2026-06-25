@@ -160,7 +160,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
       )}
 
       {list.length === 0 ? (
-        <div className={`${isWidget ? 'h-full flex items-center justify-center' : 'bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6 text-center'}`}>
+        <div className={`${isWidget ? 'h-full flex items-center justify-center' : 'bg-slate-800/40 border border-slate-700/50 rounded-xl p-6 text-center'}`}>
           {!isWidget && <MessageSquare className="w-16 h-16 text-slate-400 mx-auto mb-4" />}
           <p className="text-slate-400">No active complaints.</p>
         </div>
@@ -186,11 +186,10 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
                 <button
                   onClick={() => upvote(c.id)}
                   disabled={upvoting === c.id}
-                  className={`flex items-center gap-1 px-2 py-1.5 rounded-md border transition-colors disabled:opacity-50 group ${
-                    c.current_user_has_upvoted
-                      ? "bg-orange-500/20 border-orange-500/30"
-                      : "bg-transparent border-slate-700/50 hover:bg-orange-500/10 hover:border-orange-500/30"
-                  } ${isWidget ? '' : 'flex-col min-w-[60px]'}`}
+                  className={`flex items-center gap-1 px-2 py-1.5 rounded-md border transition-colors disabled:opacity-50 group ${c.current_user_has_upvoted
+                    ? "bg-orange-500/20 border-orange-500/30"
+                    : "bg-transparent border-slate-700/50 hover:bg-orange-500/10 hover:border-orange-500/30"
+                    } ${isWidget ? '' : 'flex-col min-w-[60px]'}`}
                 >
                   <span className={`text-sm font-bold ${c.current_user_has_upvoted ? 'text-white' : 'text-slate-300 group-hover:text-white'} ${upvoting === c.id ? 'animate-pulse' : ''}`}>
                     {c.upvotes}

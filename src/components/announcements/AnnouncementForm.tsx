@@ -101,7 +101,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
       <button
         disabled={loading}
         type="submit"
-        className="w-full mt-2 bg-linear-to-r from-teal-600 to-emerald-600 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-teal-900/20 hover:shadow-teal-900/40 transform hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group"
+        className="w-full mt-2 bg-teal-600 hover:bg-teal-500 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-teal-900/20 hover:shadow-teal-900/40 transform hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group"
       >
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4"/> Publish Now</>}
       </button>

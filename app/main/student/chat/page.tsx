@@ -126,51 +126,66 @@ export default function AnonChat() {
                 </div>
               </div>
             ) : (
-              messages.map((m) => {
+              messages.map((m, index) => {
                 const isOwn = isOwnMessage(m.random_code);
+                
+                // Determine if we need to show a date header
+                const msgDateObj = m.created_at ? new Date(m.created_at) : new Date();
+                const messageDate = msgDateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+                const prevMessageDate = index > 0 && messages[index - 1].created_at 
+                  ? new Date(messages[index - 1].created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) 
+                  : null;
+                const showDateHeader = messageDate !== prevMessageDate;
+
+                // Today/Yesterday logic
+                const today = new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+                const yesterdayObj = new Date();
+                yesterdayObj.setDate(yesterdayObj.getDate() - 1);
+                const yesterday = yesterdayObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+                
+                let displayDate = messageDate;
+                if (messageDate === today) displayDate = 'Today';
+                else if (messageDate === yesterday) displayDate = 'Yesterday';
 
                 return (
-                  <div
-                    key={m.id}
-                    className={`flex w-full ${isOwn ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div className="flex max-w-[min(86%,42rem)] flex-col">
-                      <div
-                        className={`mb-1.5 flex items-baseline gap-2 px-1 ${
-                          isOwn ? 'justify-end' : 'justify-start'
-                        }`}
-                      >
-                        <span
-                          className={`text-[11px] font-mono font-semibold uppercase tracking-[0.16em] sm:text-xs ${
-                            isOwn ? 'text-blue-300' : 'text-slate-300'
+                  <React.Fragment key={m.id}>
+                    {showDateHeader && (
+                      <div className="flex justify-center my-4">
+                        <span className="bg-slate-800/80 text-slate-400 text-[11px] uppercase tracking-wider font-semibold px-3 py-1 rounded-full border border-slate-700/50">
+                          {displayDate}
+                        </span>
+                      </div>
+                    )}
+                    <div className={`flex w-full ${isOwn ? 'justify-end' : 'justify-start'} mb-1`}>
+                      <div className="flex max-w-[min(86%,42rem)] flex-col">
+                        <div className={`mb-1 flex items-baseline px-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
+                          <span className={`text-[10px] font-mono font-bold uppercase tracking-[0.16em] ${isOwn ? 'text-blue-300' : 'text-slate-400'}`}>
+                            {m.random_code}
+                          </span>
+                        </div>
+
+                        <div className={`relative rounded-3xl px-3.5 py-2.5 pb-6 shadow-lg shadow-black/10 transition-colors sm:px-4 sm:pb-7 ${
+                            isOwn
+                              ? 'rounded-br-md border border-blue-500/30 bg-blue-500/20 text-white'
+                              : 'rounded-bl-md border border-slate-700/80 bg-slate-900/75 text-slate-100'
                           }`}
                         >
-                          {m.random_code}
-                        </span>
-                        <span className="text-[10px] text-slate-500 sm:text-xs">
-                          {m.created_at
-                            ? new Date(m.created_at).toLocaleTimeString('en-US', {
-                                hour: 'numeric',
-                                minute: '2-digit',
-                                hour12: true,
-                              })
-                            : 'Sending...'}
-                        </span>
-                      </div>
-
-                      <div
-                        className={`rounded-3xl px-4 py-3 shadow-lg shadow-black/10 transition-colors sm:px-5 ${
-                          isOwn
-                            ? 'rounded-br-md border border-blue-500/30 bg-blue-500/20 text-white'
-                            : 'rounded-bl-md border border-slate-700/80 bg-slate-900/75 text-slate-100'
-                        }`}
-                      >
-                        <p className="whitespace-pre-wrap wrap-break-word text-sm leading-7 sm:text-[15px]">
-                          {m.message}
-                        </p>
+                          <p className="whitespace-pre-wrap wrap-break-word text-sm leading-relaxed sm:text-[15px]">
+                            {m.message}
+                          </p>
+                          <div className={`absolute bottom-1.5 right-3 text-[9px] sm:text-[10px] font-medium tracking-wide ${isOwn ? 'text-blue-200/70' : 'text-slate-400/70'}`}>
+                            {m.created_at
+                              ? msgDateObj.toLocaleTimeString('en-US', {
+                                  hour: 'numeric',
+                                  minute: '2-digit',
+                                  hour12: true,
+                                })
+                              : 'Sending...'}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </React.Fragment>
                 );
               })
             )}

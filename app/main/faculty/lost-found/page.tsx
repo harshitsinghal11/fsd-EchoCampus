@@ -15,7 +15,7 @@ export default function LostFoundPage() {
         {/* LEFT COLUMN: Feed */}
         <div className="lg:col-span-2">
           {/* Pass the refreshKey to trigger reload */}
-          <LostFoundList refreshTrigger={refreshKey} />
+          <LostFoundList refreshTrigger={refreshKey} showSearch={true} />
         </div>
         
         {/* RIGHT COLUMN: Report Form */}

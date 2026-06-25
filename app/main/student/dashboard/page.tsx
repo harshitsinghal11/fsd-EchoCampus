@@ -6,12 +6,12 @@ import ComplaintList from "@/components/complaints/ComplaintList";
 import LostFoundList from "@/components/shared/LostFound/LostFoundList";
 
 export const metadata = {
-title: "Dashboard",
+  title: "Dashboard",
 };
 export default function StudentDashboard() {
   return (
     <div className="min-h-screen p-4 md:p-6 lg:p-8 mx-auto space-y-6 md:space-y-8 bg-linear-to-br from-slate-900 via-blue-950 to-black text-slate-100">
-      
+
       {/* HEADER */}
       <div className="flex flex-col gap-1 md:gap-2 pt-2 md:pt-0">
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white capitalize">
@@ -35,8 +35,8 @@ export default function StudentDashboard() {
               </div>
               <h2 className="text-lg md:text-xl font-semibold text-white">Latest Announcements</h2>
             </div>
-            <Link 
-              href="/main/student/announcements" 
+            <Link
+              href="/main/student/announcements"
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
             >
               View All
@@ -55,8 +55,8 @@ export default function StudentDashboard() {
               </div>
               <h2 className="text-lg md:text-xl font-semibold text-white">Newest Listings</h2>
             </div>
-            <Link 
-              href="/main/student/marketplace" 
+            <Link
+              href="/main/student/marketplace"
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors"
             >
               Browse Market
@@ -85,22 +85,22 @@ export default function StudentDashboard() {
             <h3 className="text-base md:text-lg font-semibold text-white mb-4 md:mb-5">Quick Actions</h3>
             <div className="grid grid-cols-2 gap-3 md:gap-4">
               <Link href="/main/student/marketplace" className="flex flex-col items-center justify-center p-3 md:p-4 bg-slate-700/30 rounded-xl md:rounded-2xl shadow-sm hover:bg-slate-700/60 hover:shadow-lg transition-all border border-slate-600/30 group">
-                <ShoppingBag className="w-6 h-6 md:w-7 md:h-7 text-purple-400 mb-2 md:mb-3 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300" />
+                <ShoppingBag className="w-6 h-6 md:w-7 md:h-7 text-purple-400 mb-2 md:mb-3" />
                 <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Sell Item</span>
               </Link>
 
               <Link href="/main/student/complaint" className="flex flex-col items-center justify-center p-3 md:p-4 bg-slate-700/30 rounded-xl md:rounded-2xl shadow-sm hover:bg-slate-700/60 hover:shadow-lg transition-all border border-slate-600/30 group">
-                <AlertTriangle className="w-6 h-6 md:w-7 md:h-7 text-orange-400 mb-2 md:mb-3 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300" />
+                <AlertTriangle className="w-6 h-6 md:w-7 md:h-7 text-orange-400 mb-2 md:mb-3" />
                 <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Complaint</span>
               </Link>
 
               <Link href="/main/student/chat" className="flex flex-col items-center justify-center p-3 md:p-4 bg-slate-700/30 rounded-xl md:rounded-2xl shadow-sm hover:bg-slate-700/60 hover:shadow-lg transition-all border border-slate-600/30 group">
-                <MessageSquare className="w-6 h-6 md:w-7 md:h-7 text-blue-400 mb-2 md:mb-3 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300" />
+                <MessageSquare className="w-6 h-6 md:w-7 md:h-7 text-blue-400 mb-2 md:mb-3" />
                 <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Global Chat</span>
               </Link>
 
               <Link href="/main/student/lost-found" className="flex flex-col items-center justify-center p-3 md:p-4 bg-slate-700/30 rounded-xl md:rounded-2xl shadow-sm hover:bg-slate-700/60 hover:shadow-lg transition-all border border-slate-600/30 group">
-                <Camera className="w-6 h-6 md:w-7 md:h-7 text-teal-400 mb-2 md:mb-3 group-hover:scale-110 group-hover:-translate-y-1 transition-all duration-300" />
+                <Camera className="w-6 h-6 md:w-7 md:h-7 text-teal-400 mb-2 md:mb-3" />
                 <span className="text-xs md:text-sm font-medium text-slate-300 group-hover:text-white transition-colors">Lost & Found</span>
               </Link>
             </div>
@@ -117,8 +117,8 @@ export default function StudentDashboard() {
               </div>
               <h2 className="text-lg md:text-xl font-semibold text-white">Recent Lost & Found</h2>
             </div>
-            <Link 
-              href="/main/student/lost-found" 
+            <Link
+              href="/main/student/lost-found"
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-teal-400 hover:text-teal-300 transition-colors"
             >
               View All
