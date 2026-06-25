@@ -48,7 +48,7 @@ export default function Navbar() {
             <div className="flex items-center">
               <div className="shrink-0 flex items-center">
                 <span className="text-xl md:text-2xl font-extrabold text-white tracking-tight">
-                  Echo<span className="text-blue-400">Campus</span>
+                  Echo<span className="text-teal-400">Campus</span>
                 </span>
               </div>
             </div>
@@ -57,7 +57,7 @@ export default function Navbar() {
             <div className="flex items-center">
               <button
                 onClick={toggleMenu}
-                className="inline-flex items-center justify-center p-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 z-50 group"
+                className="inline-flex items-center justify-center p-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500/50 z-50 group"
               >
                 {isMenuOpen ? (
                   <X className="h-6 w-6 transform transition-transform duration-300 group-hover:rotate-90" />
@@ -87,7 +87,7 @@ export default function Navbar() {
           {/* 1. Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-700/50">
             <span className="text-xl font-extrabold text-white tracking-tight">
-              Echo<span className="text-blue-400">Campus</span>
+              Echo<span className="text-teal-400">Campus</span>
             </span>
             <button 
               onClick={toggleMenu} 
@@ -111,7 +111,7 @@ export default function Navbar() {
                     onClick={toggleMenu}
                     className={`group flex items-center px-4 py-3.5 rounded-xl text-sm md:text-base font-medium transition-all duration-200 
                       ${isActive 
-                        ? "bg-blue-500/20 text-blue-400 border border-blue-500/30 shadow-inner" 
+                        ? "bg-teal-500/20 text-teal-400 border border-teal-500/30 shadow-inner" 
                         : "text-slate-300 hover:bg-slate-800/60 hover:text-white border border-transparent"
                       }
                     `}
@@ -124,7 +124,7 @@ export default function Navbar() {
                   >
                     <IconComponent 
                       className={`w-5 h-5 mr-3 transition-colors 
-                        ${isActive ? "text-blue-400" : "text-slate-500 group-hover:text-slate-300"}
+                        ${isActive ? "text-teal-400" : "text-slate-500 group-hover:text-slate-300"}
                       `} 
                     />
                     <span className="flex-1">{link.name}</span>

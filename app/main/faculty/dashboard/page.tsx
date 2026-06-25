@@ -44,14 +44,14 @@ export default function FacultyDashboard() {
         <section className="bg-slate-800/40 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl p-5 md:p-6 lg:p-8 border border-slate-700/50 shadow-xl flex flex-col h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6 shrink-0">
             <div className="flex items-center gap-2 md:gap-3">
-              <div className="p-2 md:p-2.5 bg-blue-500/20 rounded-lg md:rounded-xl">
-                <Megaphone className="w-4 h-4 md:w-5 md:h-5 text-blue-400" />
+              <div className="p-2 md:p-2.5 bg-teal-500/20 rounded-lg md:rounded-xl">
+                <Megaphone className="w-4 h-4 md:w-5 md:h-5 text-teal-400" />
               </div>
               <h2 className="text-lg md:text-xl font-semibold text-white">Your Announcements</h2>
             </div>
             <Link 
               href="/main/faculty/announcements" 
-              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-teal-400 hover:text-teal-300 transition-colors"
             >
               Manage
               <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
@@ -98,7 +98,7 @@ export default function FacultyDashboard() {
               className="flex items-center justify-between p-4 bg-slate-700/30 hover:bg-slate-700/60 shadow-sm hover:shadow-lg transition-all rounded-xl border border-slate-600/30 group"
             >
               <span className="font-bold text-slate-200">Post an Announcement</span>
-              <div className="p-2 bg-blue-500/20 rounded-lg text-blue-400 group-hover:scale-110 group-hover:bg-blue-500 group-hover:text-white transition-all">
+              <div className="p-2 bg-teal-500/20 rounded-lg text-teal-400 group-hover:scale-110 group-hover:bg-teal-500 group-hover:text-white transition-all">
                 <Megaphone className="w-5 h-5" />
               </div>
             </Link>

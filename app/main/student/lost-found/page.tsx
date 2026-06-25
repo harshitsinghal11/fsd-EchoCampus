@@ -7,10 +7,10 @@ export default function LostFoundPage() {
   const [refreshKey, setRefreshKey] = useState(0);
 
  return (
-    <div className="min-h-screen p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-linear-to-br from-slate-900 via-blue-950 to-black text-slate-100">
+    <div className="min-h-[100dvh] p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-slate-950 text-slate-100">
       
       {/* MAIN CONTENT GRID */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 max-w-7xl mx-auto">
         
         {/* LEFT COLUMN: Feed (Top on Mobile, Left on Desktop) */}
         <div className="lg:col-span-2">
