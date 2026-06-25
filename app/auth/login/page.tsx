@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { ArrowRight, Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
@@ -19,6 +19,34 @@ export default function Login() {
   const router = useRouter();
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const role = sessionStorage.getItem("userRole");
+      if (role === "student") {
+        router.replace("/main/student/dashboard/");
+        return;
+      } else if (role === "faculty" || role === "admin") {
+        router.replace("/main/faculty/dashboard/");
+        return;
+      }
+
+      // If no sessionStorage role, check if a Supabase session exists
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const fetchedRole = await fetchUserRole(session.user.id);
+        sessionStorage.setItem("userRole", fetchedRole);
+        if (fetchedRole === "student") {
+          const sessionCode = await ensureStudentSessionCode(session.user.id);
+          if (sessionCode) sessionStorage.setItem("userSessionCode", sessionCode);
+          router.replace("/main/student/dashboard/");
+        } else if (fetchedRole === "faculty" || fetchedRole === "admin") {
+          router.replace("/main/faculty/dashboard/");
+        }
+      }
+    };
+    checkAuth();
+  }, [router]);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -68,24 +96,24 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-900 via-blue-950 to-black flex items-center justify-center p-4 sm:p-6 md:p-8">
-      
+    <div className="min-h-[100dvh] w-full bg-slate-950 flex items-center justify-center p-4 sm:p-6 md:p-8">
+
       <div className="relative w-full max-w-md">
         {/* Glassmorphism Card matching the Dashboard */}
-        <div className="bg-slate-800/40 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl shadow-2xl border border-slate-700/50 p-6 sm:p-8 md:p-10">
-          
+        <div className="bg-slate-900/50 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl shadow-2xl border border-slate-700/50 p-6 sm:p-8">
+
           {/* Header */}
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-2 md:mb-3 tracking-tight">
-              Echo<span className="text-blue-400">Campus</span>
+              Echo<span className="text-teal-400">Campus</span>
             </h1>
             <p className="text-base md:text-lg text-slate-400 font-medium tracking-wide">
               Meet. Learn. Build.
             </p>
           </div>
 
-          <form onSubmit={onSubmit} className="space-y-5 md:space-y-6">
-            
+          <form onSubmit={onSubmit} className="space-y-4 md:space-y-5">
+
             {/* Email Input */}
             <div className="space-y-1.5 md:space-y-2">
               <label htmlFor="email" className="block text-sm font-semibold text-slate-300">
@@ -93,7 +121,7 @@ export default function Login() {
               </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
+                  <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
                 </div>
                 <input
                   id="email"
@@ -101,7 +129,7 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-11 pr-4 py-3 md:py-4 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 hover:bg-slate-900/80"
+                  className="w-full pl-11 pr-4 py-2.5 md:py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-800/60"
                   placeholder="Enter your email"
                 />
               </div>
@@ -114,7 +142,7 @@ export default function Login() {
               </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-blue-400 transition-colors" />
+                  <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
                 </div>
                 <input
                   id="password"
@@ -122,7 +150,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-11 pr-12 py-3 md:py-4 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 transition-all duration-200 hover:bg-slate-900/80"
+                  className="w-full pl-11 pr-12 py-2.5 md:py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-800/60"
                   placeholder="Enter your password"
                 />
                 <button
@@ -143,7 +171,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-2 md:mt-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 md:py-4 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-blue-900/20 hover:shadow-blue-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group"
+              className="w-full mt-2 md:mt-4 bg-gradient-to-r from-teal-600 to-emerald-600 text-white py-3 md:py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-teal-900/20 hover:shadow-teal-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group"
             >
               <span className="flex items-center justify-center">
                 {isLoading ? (
@@ -162,9 +190,9 @@ export default function Login() {
           </form>
 
           {/* Footer Link */}
-          <p className="mt-6 md:mt-8 text-center text-sm text-slate-400">
+          <p className="mt-5 md:mt-6 text-center text-sm text-slate-400">
             New here?{" "}
-            <Link href="/auth/signup" className="font-semibold text-blue-400 hover:text-blue-300 transition-colors">
+            <Link href="/auth/signup" className="font-semibold text-teal-400 hover:text-teal-300 transition-colors">
               Create a student account
             </Link>
           </p>

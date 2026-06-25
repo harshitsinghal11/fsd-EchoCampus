@@ -8,6 +8,8 @@ EchoCampus is a campus web platform that centralizes common student and faculty 
 
 ## Key Features
 - Role-based authentication with student and faculty/admin route separation
+- Client-side auth redirection to prevent login screen loops for active sessions
+- Full-screen dynamic UI using 100dvh for optimal mobile viewport fitting
 - Faculty announcement publishing and announcement feed
 - Student complaint submission with anonymous mode and upvoting
 - Student-only marketplace with owner-controlled sold status
@@ -70,6 +72,8 @@ README.md
 - [03_AppFlow.md](docs/03_AppFlow.md)
 - [04_UI_UX.md](docs/04_UI_UX.md)
 - [05_BackendSchema.md](docs/05_BackendSchema.md)
+- [06_Auth.md](docs/06_Auth.md)
+- [colors.md](docs/colors.md)
 
 ## Getting Started
 

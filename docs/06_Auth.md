@@ -31,7 +31,12 @@ When a user logs in (`app/auth/login/page.tsx`), the application performs the fo
 3. If they are `'faculty'` or `'admin'`, they are instantly routed to `/main/faculty/dashboard`.
 4. If they are `'student'`, their `session_code` is fetched, and they are routed to `/main/student/dashboard`.
 
-## 5. Route Protection (Middleware)
+## 5. Client-Side Auth Protection (Login / Signup)
+To prevent authenticated users from repeatedly viewing the login and signup forms, a client-side `useEffect` hook checks for an active session upon mounting `app/auth/login/page.tsx` and `app/auth/signup/page.tsx`.
+1. It first checks `sessionStorage` for an existing `userRole`. If found, it routes them directly to their respective dashboard.
+2. As a fallback, it queries `supabase.auth.getSession()` natively in case `sessionStorage` was cleared but the browser cookie/local storage persists.
+
+## 6. Route Protection (Middleware)
 Once inside the `/main/*` area, a Next.js Edge Middleware actively monitors their session. 
 - If a student tries to manually type `/main/faculty/dashboard` into their URL bar, the middleware detects their `'student'` role and kicks them out. 
 - Similarly, faculty cannot access student routes like the Marketplace or Global Chat.

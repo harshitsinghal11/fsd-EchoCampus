@@ -16,7 +16,7 @@
 - Announcements accent: blue
 - Marketplace accent: purple
 - Complaints accent: orange
-- Lost and found accent: teal/emerald
+- Primary Brand / Lost and found accent: teal/emerald (used for primary CTAs like Login/Signup)
 - Faculty base surfaces: white, gray, and soft blue
 - Destructive action accent: red
 - Success or active state accents: teal and yellow depending on feature
@@ -30,6 +30,7 @@
 # Spacing & Layout
 - Main application pages commonly use `p-4`, `p-6`, or `p-8`
 - Content widths commonly cap at `max-w-4xl` or `max-w-7xl`
+- Auth pages dynamically use `min-h-[100dvh]` to perfectly fit the exact viewport without unwanted scrolling on mobile.
 - Dashboard and feature screens use 1-column mobile layouts that expand into 2-column or 3-column grids on larger screens
 - Form panels become sticky on large screens for marketplace, lost and found, and faculty announcements
 - Rounded cards and panels rely heavily on `rounded-xl`, `rounded-2xl`, and `rounded-3xl`
