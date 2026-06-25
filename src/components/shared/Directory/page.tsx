@@ -89,7 +89,7 @@ export default function DirectoryPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mx-auto"></div>
           <p className="mt-4 text-slate-300">Please Wait...</p>
@@ -100,11 +100,11 @@ export default function DirectoryPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4">
         <div className="text-center bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl p-8 max-w-md w-full">
           <p className="text-xl font-semibold text-orange-400">Error loading directory</p>
           <p className="mt-2 text-slate-300">{error}</p>
-          <button 
+          <button
             onClick={fetchFaculty}
             className="mt-6 px-6 py-2 bg-orange-500/20 border border-orange-500/50 text-orange-400 rounded-lg hover:bg-orange-500/30 transition-all duration-200"
           >
@@ -116,7 +116,7 @@ export default function DirectoryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-black py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -220,7 +220,7 @@ export default function DirectoryPage() {
 
                   {/* Experience */}
                   {member.experience !== null && (
-                     <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                       <Calendar className="h-4 w-4 text-slate-400 shrink-0" />
                       <span className="text-slate-300">
                         {member.experience} years experience

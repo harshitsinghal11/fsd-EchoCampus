@@ -97,73 +97,113 @@ export default function ProfilePage() {
       <div className="max-w-4xl mx-auto">
         
         {/* Main Card */}
-        <div className="bg-slate-900/50 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl overflow-hidden border border-slate-700/50 shadow-2xl">
+        <div className="bg-slate-900/50 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl overflow-hidden border border-slate-700/50 shadow-2xl relative">
           
           {/* Header Section */}
-          <div className="bg-slate-900 border-b border-slate-700/50 px-8 py-10 relative overflow-hidden">
-            {/* Background Decoration */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+          <div className="bg-gradient-to-r from-slate-900 to-slate-800 border-b border-slate-700/50 px-8 py-12 relative overflow-hidden">
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-500/10 rounded-full -ml-20 -mb-20 blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
             
-            <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-6">
-              
+            <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+               {/* Avatar */}
+               <div className="w-28 h-28 rounded-full bg-gradient-to-br from-teal-400 to-blue-500 p-1 shadow-lg shadow-teal-500/20 group cursor-default shrink-0">
+                 <div className="w-full h-full bg-slate-900 rounded-full flex items-center justify-center border-4 border-slate-900 group-hover:bg-slate-800 transition-colors">
+                   <span className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-teal-400 to-blue-400">
+                     {profile.name.charAt(0).toUpperCase() || 'F'}
+                   </span>
+                 </div>
+               </div>
+               
                <div className="text-center md:text-left text-white">
-                  <h1 className="text-3xl font-bold tracking-tight">{profile.name}</h1>
-                  <p className="text-slate-400 font-medium text-lg flex items-center justify-center md:justify-start gap-2 mt-1">
-                     <Briefcase className="w-4 h-4 text-teal-400" /> {profile.department} Department
-                  </p>
+                  <h1 className="text-4xl font-extrabold tracking-tight mb-3">{profile.name}</h1>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-500/10 border border-teal-500/20 text-teal-400 text-sm font-semibold shadow-inner">
+                     <Briefcase className="w-4 h-4" />
+                     {profile.department}
+                  </div>
                </div>
             </div>
           </div>
 
           {/* Profile Details Grid */}
-          <div className="px-8 py-10">
-            <h2 className="text-lg font-bold text-white border-b border-slate-700/50 pb-4 mb-6">
-                Contact & Personal Details
+          <div className="px-8 py-10 relative">
+            <h2 className="text-xl font-bold text-white mb-8 flex items-center gap-2">
+                Contact & Professional Details
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
               {/* Email */}
-              <div className="group p-4 rounded-xl bg-slate-900/50 border border-slate-700/50 hover:border-teal-500/50 transition-colors">
-                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2 mb-2">
-                    <Mail className="w-3 h-3" /> Email Address
-                 </label>
-                 <p className="text-white font-semibold">{profile.email}</p>
+              <div className="group relative p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 hover:border-teal-500/30 hover:shadow-lg hover:shadow-teal-500/5 hover:-translate-y-1 transition-all duration-300">
+                 <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none"></div>
+                 <div className="flex items-start gap-4">
+                   <div className="p-3 rounded-xl bg-slate-900/80 text-teal-400 group-hover:text-teal-300 border border-slate-700/50 shadow-sm">
+                     <Mail className="w-5 h-5" />
+                   </div>
+                   <div className="overflow-hidden">
+                     <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 block">
+                        Email Address
+                     </label>
+                     <p className="text-white font-medium truncate" title={profile.email}>{profile.email}</p>
+                   </div>
+                 </div>
               </div>
 
               {/* Phone */}
-              <div className="group p-4 rounded-xl bg-slate-900/50 border border-slate-700/50 hover:border-teal-500/50 transition-colors">
-                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2 mb-2">
-                    <Phone className="w-3 h-3" /> Phone Number
-                 </label>
-                 <p className="text-white font-semibold">{profile.phone_no}</p>
+              <div className="group relative p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 hover:border-teal-500/30 hover:shadow-lg hover:shadow-teal-500/5 hover:-translate-y-1 transition-all duration-300">
+                 <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none"></div>
+                 <div className="flex items-start gap-4">
+                   <div className="p-3 rounded-xl bg-slate-900/80 text-teal-400 group-hover:text-teal-300 border border-slate-700/50 shadow-sm">
+                     <Phone className="w-5 h-5" />
+                   </div>
+                   <div>
+                     <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 block">
+                        Phone Number
+                     </label>
+                     <p className="text-white font-medium">{profile.phone_no}</p>
+                   </div>
+                 </div>
               </div>
 
               {/* Cabin */}
-              <div className="group p-4 rounded-xl bg-slate-900/50 border border-slate-700/50 hover:border-teal-500/50 transition-colors">
-                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2 mb-2">
-                    <MapPin className="w-3 h-3" /> Cabin / Office
-                 </label>
-                 <p className="text-white font-semibold">{profile.cabin_no}</p>
+              <div className="group relative p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 hover:border-teal-500/30 hover:shadow-lg hover:shadow-teal-500/5 hover:-translate-y-1 transition-all duration-300">
+                 <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none"></div>
+                 <div className="flex items-start gap-4">
+                   <div className="p-3 rounded-xl bg-slate-900/80 text-teal-400 group-hover:text-teal-300  border border-slate-700/50 shadow-sm">
+                     <MapPin className="w-5 h-5" />
+                   </div>
+                   <div>
+                     <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 block">
+                        Cabin / Office
+                     </label>
+                     <p className="text-white font-medium">{profile.cabin_no}</p>
+                   </div>
+                 </div>
               </div>
 
               {/* Experience */}
-              <div className="group p-4 rounded-xl bg-slate-900/50 border border-slate-700/50 hover:border-teal-500/50 transition-colors">
-                 <label className="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2 mb-2">
-                    <Award className="w-3 h-3" /> Experience
-                 </label>
-                 <p className="text-white font-semibold">{profile.experience} Years</p>
+              <div className="group relative p-6 rounded-2xl bg-slate-800/30 border border-slate-700/50 hover:bg-slate-800/60 hover:border-teal-500/30 hover:shadow-lg hover:shadow-teal-500/5 hover:-translate-y-1 transition-all duration-300">
+                 <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl pointer-events-none"></div>
+                 <div className="flex items-start gap-4">
+                   <div className="p-3 rounded-xl bg-slate-900/80 text-teal-400 group-hover:text-teal-300  border border-slate-700/50 shadow-sm">
+                     <Award className="w-5 h-5" />
+                   </div>
+                   <div>
+                     <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 block">
+                        Experience
+                     </label>
+                     <p className="text-white font-medium">{profile.experience} Years</p>
+                   </div>
+                 </div>
               </div>
 
             </div>
 
             {/* Back Button */}
-            <div className="mt-10 pt-6 border-t border-slate-700/50 flex justify-end">
+            <div className="mt-10 pt-8 border-t border-slate-700/50 flex justify-end">
               <button
                 onClick={() => router.push('/main/faculty/dashboard')}
-                className="flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-slate-300 bg-slate-900/50 border border-slate-700/50 hover:bg-slate-800/60 hover:text-white transition-all shadow-sm"
+                className="group flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-white bg-slate-800 hover:bg-teal-600 border border-slate-700/50 hover:border-teal-500 transition-all shadow-sm hover:shadow-teal-500/20"
               >
-                <ArrowLeft className="w-4 h-4" />
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                 Back to Dashboard
               </button>
             </div>

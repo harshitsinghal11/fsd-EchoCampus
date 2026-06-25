@@ -18,10 +18,14 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
 
   const load = useCallback(async () => {
     try {
-      const res = await fetch("/api/marketplace");
-      const data = await res.json();
+      const { data, error } = await supabase
+        .from("marketplace")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) throw error;
       
-      let fetchedItems = data.listings || [];
+      let fetchedItems = data || [];
 
       // 2. If used as a widget, only show the top 4 items
       if (isWidget) {
@@ -40,17 +44,16 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
     if (!confirm("Are you sure you want to mark this item as sold?")) return;
 
     try {
-      const res = await fetch("/api/marketplace/sold", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
-      });
+      const { error } = await supabase
+        .from("marketplace")
+        .update({ is_sold: true })
+        .eq("id", id);
       
-      if (res.ok) {
+      if (!error) {
         toast.success("Item marked as sold");
         load(); 
       } else {
-        toast.error("Failed to update status.");
+        toast.error("Failed to update status: " + error.message);
       }
     } catch {
       toast.error("Network error.");

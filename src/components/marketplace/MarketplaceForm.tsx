@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { useUserEmail } from "@/hooks/useUserEmail";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function MarketCreateForm() {
   const userEmail = useUserEmail();
@@ -41,16 +42,31 @@ export default function MarketCreateForm() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch("/api/marketplace", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Unauthorized");
+
+      const { data: userData } = await supabase
+        .from("users")
+        .select("full_name")
+        .eq("id", user.id)
+        .single();
+
+      const ownerName = userData?.full_name || "Unknown Seller";
+      const parsedPrice = Number(form.price);
+
+      const { error: insertError } = await supabase.from("marketplace").insert({
+        owner_id: user.id,
+        product_title: form.product_title.trim(),
+        description: form.description.trim(),
+        price: parsedPrice,
+        owner_name: ownerName,
+        contact_info: form.contact_info,
+        owner_email: user.email,
+        is_sold: false,
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to publish item.");
+      if (insertError) {
+        throw insertError;
       }
 
       toast.success("Item Published Successfully!");
@@ -198,7 +214,7 @@ export default function MarketCreateForm() {
           form.contact_info.length !== 10 ||
           isSubmitting
         }
-        className="w-full mt-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group flex items-center justify-center gap-2"
+        className="w-full mt-2 bg-purple-600 hover:bg-purple-500 text-white py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group flex items-center justify-center gap-2"
       >
         {isSubmitting ? (
           <>
