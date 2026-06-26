@@ -5,8 +5,8 @@ import { Suspense } from "react";
 
 export default function StudentAnnouncementsPage() {
   return (
-    <div className="min-h-screen p-4 sm:p-6 md:p-8">
-      <div className="mx-auto space-y-6">
+    <div className="w-full max-w-7xl mx-auto min-h-screen p-4 sm:p-6 md:p-8">
+      <div className="w-full space-y-6">
 
         {/* 1. Header (No Lines) */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">

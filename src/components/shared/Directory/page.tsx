@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Search, Mail, Phone, BookOpen, Briefcase, ChevronRight, BookUser, ChevronDown } from 'lucide-react';
 import { useDirectory } from '@/hooks/data/useDirectory';
 import { EmptyDirectory } from '@/components/shared/EmptyStates';
+import { DirectorySkeleton } from '@/components/shared/Skeletons';
 
 export default function Directory() {
   const { items: facultyList, isLoading } = useDirectory();
@@ -19,16 +20,8 @@ export default function Directory() {
     return matchesSearch && matchesDept;
   });
 
-  if (isLoading) {
-    return (
-      <div className="w-full h-full flex items-center justify-center py-20">
-        <p className="text-slate-500 animate-pulse">Loading directory...</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-6 md:space-y-8 p-4 md:p-6 lg:p-8">
+    <div className="w-full max-w-7xl mx-auto space-y-6 md:space-y-8 p-4 md:p-6 lg:p-8">
       {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 pt-2 md:pt-0">
         <div className="flex flex-col gap-1 md:gap-2">
@@ -71,7 +64,9 @@ export default function Directory() {
         </div>
       </div>
 
-      {facultyList.length === 0 || filteredFaculty.length === 0 ? (
+      {isLoading ? (
+        <DirectorySkeleton />
+      ) : facultyList.length === 0 || filteredFaculty.length === 0 ? (
         <EmptyDirectory />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

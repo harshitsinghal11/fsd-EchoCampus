@@ -1,6 +1,6 @@
 # EchoCampus UI Color Schema
 
-This document defines the official, consistent color palette to be used across the entire EchoCampus platform. Following this schema ensures that the UI looks highly professional, cohesive, and visually stunning. 
+This document defines the official, consistent color palette to be used across the entire EchoCampus platform. Following this schema ensures that the UI looks highly professional, cohesive, and visually appealing. 
 
 We are adopting a **modern dark theme** by default, using Tailwind CSS colors.
 
@@ -53,6 +53,3 @@ To fix the "unfinished" or "wide gap" issues, we will standardize padding and ma
 - **Cards/Forms:** Internal padding of `p-6` or `p-8`.
 - **Element Spacing:** Consistent `space-y-4` or `space-y-5` between form fields.
 - **Flex/Grid Gaps:** `gap-4` or `gap-6` between columns, never arbitrary large values.
-
----
-**Next Step:** Apply these classes strictly to both Student and Faculty (Admin) layouts so they look identical, then refactor individual components to align with this schema.

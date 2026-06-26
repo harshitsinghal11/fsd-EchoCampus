@@ -20,7 +20,7 @@ function BaseEmptyState({
 }: EmptyStateProps & { icon: React.ElementType; blobColor: string; iconColor: string }) {
   if (isWidget) {
     return (
-      <div className="flex flex-col w-full h-full items-center justify-center text-center p-6 text-slate-500">
+      <div className="flex flex-col w-full min-h-[200px] items-center justify-center text-center p-2 text-slate-500">
         <Icon className={`w-8 h-8 mb-2 opacity-50 ${iconColor}`} />
         <p className="font-medium text-sm text-slate-400">{title}</p>
       </div>
@@ -97,7 +97,7 @@ export function EmptyAnnouncements({ isWidget = false }: { isWidget?: boolean })
       description="There are no official announcements from the faculty at this time."
       isWidget={isWidget}
       icon={Megaphone}
-      blobColor="bg-blue-500"
+      blobColor="bg-blue-900"
       iconColor="text-blue-400"
     />
   );

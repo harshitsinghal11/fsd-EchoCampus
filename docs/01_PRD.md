@@ -79,8 +79,3 @@ Campus communication and day-to-day utility workflows are often split across inf
 - Lost and found image data is stored directly as text in the database instead of a dedicated storage service.
 - Logging, monitoring, analytics, and deployment automation are not implemented in the repository.
 - The chat feature is available only on the student side and depends on Supabase Realtime instead of Firebase.
-
-# Future Enhancements
-- **UI/UX Polish:** Add modern Toast Notifications (replacing `alert()`) and React `<Suspense>` loading skeletons for data fetching boundaries.
-- **SEO Optimization:** Add comprehensive Next.js metadata to all route files for proper social sharing previews.
-- **Error Boundaries:** Introduce `error.tsx` pages for graceful React error handling.

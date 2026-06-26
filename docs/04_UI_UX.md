@@ -37,7 +37,7 @@
 
 # Design Tokens
 - Implemented tokens in `app/globals.css`: `--background` and `--foreground`
-- Formal shared design tokens for color scale, spacing scale, radius scale, shadows, or typography are not implemented. Project not Supported.
+- Formal shared design tokens for color scale, spacing scale, radius scale, shadows, or typography are not implemented. 
 
 # Component Library
 - `ProtectedRoute`
@@ -123,4 +123,5 @@
 - Action buttons generally have clear text labels and visible focus styles.
 - Chat input and send button include explicit `aria-label` attributes.
 - Social icon links in footers include `aria-label` attributes.
-- A formal accessibility audit, keyboard interaction spec, contrast audit, and screen-reader validation process are not implemented. Project not Supported.
+- A formal accessibility audit, keyboard interaction spec, contrast audit, and screen-reader validation process are not implemented. 
+

@@ -25,7 +25,7 @@ export default function MarketplacePage() {
   }, []);
 
   return (
-    <div className="min-h-screen p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-slate-950 text-slate-100">
+    <div className="w-full max-w-7xl mx-auto min-h-screen p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-slate-950 text-slate-100">
       {/* Page Title */}
       <div className="flex flex-col gap-1 md:gap-2">
          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3">

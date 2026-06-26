@@ -60,3 +60,4 @@ EchoCampus has a public entry flow and two protected application areas. Students
 - Student first use: landing page -> signup -> role resolved as student -> session code generated -> student dashboard -> feature navigation
 - Returning student: login -> session restored -> student dashboard -> chat or marketplace or complaint action
 - Faculty use: login or faculty signup -> role resolved as faculty/admin -> faculty dashboard -> announcement posting or complaint review
+

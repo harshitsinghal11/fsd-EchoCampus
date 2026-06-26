@@ -85,9 +85,8 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-dvh bg-slate-950 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        
+    <div className="w-full max-w-7xl mx-auto space-y-6 md:space-y-8 p-4 md:p-6 lg:p-8">
+          
         {/* Main Card */}
         <div className="bg-slate-900/50 backdrop-blur-xl rounded-3xl md:rounded-3xl overflow-hidden border border-slate-700/50 shadow-2xl relative">
           
@@ -198,6 +197,5 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-    </div>
   );
 }

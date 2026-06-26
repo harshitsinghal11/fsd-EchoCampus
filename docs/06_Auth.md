@@ -16,7 +16,7 @@ We have a Postgres Trigger (`on_auth_user_created` or similar) that instantly ca
 ## 2. How the System Knows Who is Faculty
 Users can explicitly select their role during signup using the **"I am a Faculty Member"** checkbox on the registration page.
 - When checked, the frontend passes `role: 'admin'` securely inside the Supabase Auth metadata (`raw_user_meta_data`), along with their **Department**, **Cabin Number**, **Experience**, and **Phone**.
-- A powerful Postgres Trigger (`handle_new_auth_user`) dynamically extracts this role from the metadata and assigns it in the `public.users` table.
+- A Postgres trigger (`handle_new_auth_user`) dynamically extracts this role from the metadata and assigns it in the `public.users` table.
 - If the role is `admin`, the trigger *also* extracts the additional faculty fields from the metadata and securely inserts them into the `public.faculty_profiles` table automatically, bypassing the need for client-side queries and bypassing email-confirmation session blockages.
 
 ## 3. How the System Knows Who is a Student
@@ -43,4 +43,5 @@ Once inside the `/main/*` area, a Next.js Edge Middleware actively monitors thei
 - Similarly, faculty cannot access student routes like the Marketplace or Global Chat.
 
 **Why this structure?**
-It provides an incredibly fast routing experience (zero DB hits for role verification) while ensuring role boundaries are strictly enforced across the portal.
+It provides an fast routing experience (zero DB hits for role verification) while ensuring role boundaries are strictly enforced across the portal.
+

@@ -11,7 +11,7 @@ export const metadata = {
 };
 export default function StudentDashboard() {
   return (
-    <div className="min-h-screen p-4 md:p-6 lg:p-8 mx-auto space-y-6 md:space-y-8 text-slate-100">
+    <div className="w-full max-w-7xl mx-auto min-h-screen p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 text-slate-100">
 
       {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 pt-2 md:pt-0">

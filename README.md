@@ -1,8 +1,5 @@
 # EchoCampus
 
-## Project Title
-EchoCampus
-
 ## Overview
 EchoCampus is a campus web platform that centralizes common student and faculty workflows into one authenticated system. The current implementation focuses on announcements, faculty discovery, anonymous student interaction, complaint submission, lost and found reporting, and a student-only marketplace.
 
@@ -112,14 +109,14 @@ Open `http://localhost:3000` in your browser.
 - `npm run typecheck` - run TypeScript type checking
 
 ## Deployment
-Project not Supported. The repository does not currently include a defined deployment pipeline, CI/CD workflow, or platform-specific deployment configuration.
+The repository does not currently include a defined deployment pipeline, CI/CD workflow, or platform-specific deployment configuration.
 
 ## Project Status
-EchoCampus has completed its core polishing phase and is highly optimized. 
+EchoCampus has reached a stable phase with core features implemented. 
 - **Core Architecture:** Global Chat and Live Feeds are powered by Supabase Realtime. Form submissions strictly use Next.js Server Actions with hardened RLS security.
-- **UI/UX:** A comprehensive unified premium dark-mode design system (featuring glassmorphism, beautiful custom SVG empty states, and responsive grids) has been successfully implemented across all Faculty and Student pages.
-- **Performance:** Implemented custom SWR hooks for all primary features, providing instant cached navigations and background revalidation synchronized with Supabase Realtime.
-- **Type Safety:** Strict TypeScript interfaces align perfectly with the Supabase schema to prevent any runtime UI crashes.
+- **UI/UX:** A unified dark-mode design system (featuring glassmorphism, custom empty states, and responsive grids) is implemented across all Faculty and Student pages.
+- **Performance:** Implemented custom SWR hooks for all primary features, providing fast cached navigations and background revalidation synchronized with Supabase Realtime.
+- **Type Safety:** Strict TypeScript interfaces align perfectly with the Supabase schema to reduce runtime errors.
 
 ## Contributing (Optional)
 No formal contributing guide is defined in the repository yet.
@@ -135,3 +132,4 @@ Built by **Harshit** — B.Tech CSE, Manav Rachna University
 - [LinkedIn](https://linkedin.com/in/harshitsinghal11)
 
 > _Feel free to reach out if you're building something similar or have questions about the implementation._
+

@@ -3,12 +3,11 @@ import { motion, Variants } from "framer-motion";
 import React from "react";
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 20, scale: 0.95 },
+  hidden: { opacity: 0, y: 15 },
   show: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: { type: "spring", stiffness: 300, damping: 24 }
+    transition: { type: "tween", ease: "easeOut", duration: 0.25 }
   }
 };
 

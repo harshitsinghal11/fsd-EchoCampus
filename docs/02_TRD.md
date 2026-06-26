@@ -80,7 +80,7 @@ public/
 - Complaint endpoints own server-side aggregation and upvote toggle logic.
 - Marketplace endpoints own server-side validation and owner-based sold updates.
 - Validation is split across route handlers, database constraints, RLS policies, and triggers.
-- API versioning, OpenAPI documentation, pagination contracts, and formal schema generation are not implemented. Project not Supported.
+- API versioning, OpenAPI documentation, pagination contracts, and formal schema generation are not implemented. 
 
 # State Management
 - UI state is local to each page or component through React hooks.
@@ -110,7 +110,8 @@ public/
 - Pagination, background jobs, image optimization pipelines, and server caching are not implemented.
 
 # Logging & Monitoring
-Project not Supported. The codebase currently relies on `console.error`, `console.log`, alerts, and simple inline messages. There is no centralized logging, metrics, tracing, or monitoring integration.
+The codebase currently relies on `console.error`, `console.log`, alerts, and simple inline messages. There is no centralized logging, metrics, tracing, or monitoring integration.
 
 # Deployment Strategy
-Project not Supported. The repository does not contain CI/CD workflows, container definitions, infrastructure-as-code, or platform-specific deployment configuration beyond standard Next.js project files and environment variable usage.
+The repository does not contain CI/CD workflows, container definitions, infrastructure-as-code, or platform-specific deployment configuration beyond standard Next.js project files and environment variable usage.
+

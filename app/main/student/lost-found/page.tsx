@@ -8,7 +8,7 @@ export default function LostFoundPage() {
   const [refreshKey, setRefreshKey] = useState(0);
 
  return (
-    <div className="min-h-[100dvh] p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-slate-950 text-slate-100">
+    <div className="w-full max-w-7xl mx-auto min-h-[100dvh] p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-slate-950 text-slate-100">
       
       {/* Page Title */}
       <div className="flex flex-col gap-1 md:gap-2">
