@@ -5,6 +5,7 @@ import { Send, Users } from 'lucide-react';
 import { useSessionCode } from '@/hooks/useSessionCode';
 import { supabase } from '@/lib/supabaseClient';
 import { toast } from 'sonner';
+import { broadcastChatMessageNotification } from '@/actions/chatActions';
 
 type Message = {
   id: string;
@@ -100,10 +101,8 @@ export default function AnonChat() {
       // Revert optimistic update
       setMessages((prev) => prev.filter((m) => m.id !== optimisticMessage.id));
     } else if (data) {
-      // We don't need to do anything here if Realtime is working, 
-      // but if Realtime is slow, the optimistic update handles the UI.
-      // We could update the ID to the real one to avoid duplicates if Realtime fires,
-      // but a simple approach is to let Realtime add the "real" one and we deduplicate.
+      // Fire chat push notification (cooldown is handled by the server action)
+      await broadcastChatMessageNotification(newMessageText);
     }
   }
 

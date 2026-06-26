@@ -167,52 +167,35 @@ self.addEventListener('notificationclick', (event) => {
 ```
 
 ### Step 8: Triggering Notifications from Server Actions
-Whenever a significant action happens (e.g., an Announcement is created), we trigger a push to all users.
+Whenever a significant action happens, we trigger a push to all users via our centralized utility.
 
-Inside `src/actions/announcements.ts`:
+Inside `src/utils/pushUtility.ts`:
 ```typescript
-import webpush from 'web-push';
+import { createSupabaseAdminClient } from "@/utils/supabaseAdmin";
+import webpush from "web-push";
 
-webpush.setVapidDetails(
-  'mailto:your-email@example.com',
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-  process.env.VAPID_PRIVATE_KEY!
-);
+// ... vapid setup
 
-export async function addAnnouncement(data: FormData) {
-  // 1. Insert announcement into Supabase...
-  
-  // 2. Fetch all subscriptions from the push_subscriptions table
-  const { data: subs } = await supabase.from('push_subscriptions').select('*');
-  
-  // 3. Send notifications in parallel
-  const payload = JSON.stringify({ 
-    title: 'New Announcement!', 
-    body: data.get('title'),
-    url: '/main/student/announcements'
-  });
-
-  await Promise.all(subs.map(async (sub) => {
-    try {
-      await webpush.sendNotification({
-        endpoint: sub.endpoint,
-        keys: { auth: sub.auth, p256dh: sub.p256dh }
-      }, payload);
-    } catch (e) {
-      // If error is 410 (Gone), the user unsubscribed. Delete it from DB.
-    }
-  }));
+export async function sendPushNotificationBroadcast(payloadObj: { title: string; body: string; url: string; }) {
+  // 1. Fetch subscriptions using Admin Client (bypassing RLS)
+  // 2. Iterate and await Promise.all(subs.map(...))
+  // 3. Catch 404/410 errors and delete stale subscriptions from the DB
 }
 ```
+
+We integrate this utility across all major features:
+- **Announcements** (`src/actions/announcementActions.ts`)
+- **Complaints** (`src/actions/complaintActions.ts`)
+- **Marketplace** (`src/actions/marketplaceActions.ts`)
+- **Lost & Found** (`src/actions/lostFoundActions.ts`)
+- **Anonymous Chat** (`src/actions/chatActions.ts`) - Uses a **15-minute smart cooldown** logic.
 
 ---
 
 ## Important Constraints & Best Practices
 
-1. **iOS Requirements:** On iPhones, Web Push is ONLY available if the user taps "Share" > "Add to Home Screen". You cannot even request permission in the standard Safari browser tab.
-2. **Notification Fatigue:** Do not send push notifications for global chat messages, as this will quickly annoy users. Restrict them to high-value events:
-   - Faculty Announcements
-   - Lost & Found Items
-   - Direct mention/replies (if implemented later)
-3. **Clean Up Dead Subscriptions:** Browsers routinely cycle push endpoints. If `webpush.sendNotification` throws a `410 Gone` error, you must delete that subscription row from your database to keep things fast.
+1. **Development Environment:** The Service Worker is explicitly disabled in `next.config.ts` when `process.env.NODE_ENV === "development"`. This prevents Next.js Turbopack from entering an infinite compilation loop when `public/sw.js` is updated. To test push notifications locally, you must run `npm run build && npm start`.
+2. **iOS Requirements:** On iPhones, Web Push is ONLY available if the user taps "Share" > "Add to Home Screen". You cannot request permission in the standard Safari browser tab.
+3. **Notification Fatigue (Chat Cooldown):** To prevent severe notification spam from the global Anonymous Chat, we implement a **15-minute debounce cooldown**. The server action checks the timestamp of the previous message and only broadcasts a push notification if the chat has been inactive for at least 15 minutes. 
+4. **Clean Up Dead Subscriptions:** The `pushUtility.ts` automatically deletes a subscription row from the database if `webpush.sendNotification` throws a `410 Gone` error.
 

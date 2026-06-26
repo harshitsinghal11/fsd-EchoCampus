@@ -105,6 +105,7 @@ VAPID_PRIVATE_KEY=
 ```bash
 npm run dev
 ```
+*Note: To prevent infinite compilation loops, the Service Worker (PWA) is disabled in development mode. If you need to test Push Notifications locally, run `npm run build && npm start` instead.*
 
 Open `http://localhost:3000` in your browser.
 

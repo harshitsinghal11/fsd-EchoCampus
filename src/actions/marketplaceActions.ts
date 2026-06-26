@@ -1,6 +1,7 @@
 "use server";
 
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
+import { sendPushNotificationBroadcast } from "@/utils/pushUtility";
 
 interface StudentProfileData {
   session_code: string | null;
@@ -66,6 +67,12 @@ export async function addMarketplaceItem(formData: {
     if (insertError) {
       return { error: insertError.message || "Failed to insert marketplace item" };
     }
+
+    await sendPushNotificationBroadcast({
+      title: "New Item in Marketplace",
+      body: formData.product_title,
+      url: "/main/student/marketplace"
+    });
 
     return { success: true };
 

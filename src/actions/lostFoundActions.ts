@@ -1,6 +1,7 @@
 "use server";
 
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
+import { sendPushNotificationBroadcast } from "@/utils/pushUtility";
 
 export async function addLostFoundItem(formData: {
   title: string;
@@ -33,6 +34,12 @@ export async function addLostFoundItem(formData: {
       }
       return { error: insertError.message || "Failed to report lost item" };
     }
+
+    await sendPushNotificationBroadcast({
+      title: "New Lost & Found Report",
+      body: formData.title,
+      url: "/main/student/lost-found"
+    });
 
     return { success: true };
 

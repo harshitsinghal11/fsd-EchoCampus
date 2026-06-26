@@ -1,6 +1,7 @@
 "use server";
 
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
+import { sendPushNotificationBroadcast } from "@/utils/pushUtility";
 
 export async function submitComplaint(formData: {
   complaint: string;
@@ -32,6 +33,12 @@ export async function submitComplaint(formData: {
       }
       return { error: insertError.message || "Failed to submit complaint" };
     }
+
+    await sendPushNotificationBroadcast({
+      title: "New Campus Complaint",
+      body: formData.complaint.length > 50 ? formData.complaint.substring(0, 50) + "..." : formData.complaint,
+      url: "/main/faculty/complaints"
+    });
 
     return { success: true };
 
