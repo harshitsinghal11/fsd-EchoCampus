@@ -44,3 +44,37 @@ export async function addLostFoundItem(formData: {
     return { error: message };
   }
 }
+
+export async function deleteLostFoundItem(id: string, imageUrl: string | null) {
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+      return { error: "Session expired. Please login again." };
+    }
+
+    if (imageUrl) {
+      const urlParts = imageUrl.split('/');
+      const fileName = urlParts[urlParts.length - 1];
+      if (fileName) {
+        const { error: storageError } = await supabase.storage.from('lost_found_images').remove([fileName]);
+        if (storageError) {
+          console.error("Failed to delete image:", storageError);
+        }
+      }
+    }
+
+    const { error: deleteError } = await supabase.from("lost_found").delete().eq("id", id).eq("user_id", user.id);
+
+    if (deleteError) {
+      return { error: deleteError.message || "Failed to delete item" };
+    }
+
+    return { success: true };
+
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Connection failed.";
+    return { error: message };
+  }
+}

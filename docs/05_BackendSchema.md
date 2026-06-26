@@ -94,7 +94,7 @@ public.complaint_box
 - `handle_auth_user_email_update()`: sync function for auth email changes
 
 # Storage Structure
-The repository does not implement Supabase Storage, Firebase Storage, or any other object storage workflow. Lost and found images are stored directly in `public.lost_found.image_url` as text data.
+The repository does not implement Supabase Storage or any other object storage workflow. Lost and found images are stored directly in `public.lost_found.image_url` as text data.
 
 # API Models
 - `GET /api/complaints` -> `{ complaints: [{ id, complaint, created_at, session_code, author_id, upvotes, current_user_has_upvoted }] }`

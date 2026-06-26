@@ -75,7 +75,7 @@ export default function MarketCreateForm() {
       setIsSubmitting(false);
     }
   }
-  const isPhoneInvalid = form.contact_info.length > 0 && !/^(?:\+\d{1,3}[- ]?)?\d{10}$/.test(form.contact_info);
+  const isPhoneInvalid = form.contact_info.length > 0 && form.contact_info.length !== 10;
   return (
     <form
       onSubmit={handleSubmit}
@@ -147,21 +147,20 @@ export default function MarketCreateForm() {
               <Phone className={`h-5 w-5 transition-colors ${isPhoneInvalid ? 'text-red-400' : 'text-slate-500 group-focus-within:text-purple-400'}`} />
             </div>
             <input
+              required
               type="tel"
               inputMode="numeric"
               placeholder="10-digit number"
               value={form.contact_info}
-              maxLength={15}
               className={`w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-200 hover:bg-slate-900/80 ${isPhoneInvalid
                 ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50"
                 : "border-slate-700/50 focus:ring-purple-500/50 focus:border-purple-500/50"
                 }`}
               onChange={(e) => {
-                let val = e.target.value.replace(/[^\d+]/g, "");
-                if (val.indexOf("+") > 0) {
-                  val = val.replace(/\+/g, "");
+                const val = e.target.value.replace(/\D/g, "");
+                if (val.length <= 10) {
+                  setForm({ ...form, contact_info: val });
                 }
-                setForm({ ...form, contact_info: val });
               }}
             />
           </div>

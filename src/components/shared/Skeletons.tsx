@@ -125,7 +125,7 @@ export function LostFoundSkeleton({ isWidget = false }: { isWidget?: boolean }) 
           {/* Image Thumbnail */}
           <div className={`
             bg-slate-700/50 shrink-0
-            ${isWidget ? 'rounded-lg w-16 h-16' : 'rounded-2xl w-full sm:w-40 md:w-48 h-48 sm:h-auto'}
+            ${isWidget ? 'rounded-lg w-16 h-16' : 'rounded-2xl w-full sm:w-40 md:w-48 h-48'}
           `}></div>
 
           {/* Content */}

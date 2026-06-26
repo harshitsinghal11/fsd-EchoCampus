@@ -23,6 +23,8 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
   const pathname = usePathname();
   const router = useRouter();
 
+  const logoHref = pathname.startsWith("/main/faculty") ? ROUTES.FACULTY.DASHBOARD : ROUTES.STUDENT.DASHBOARD;
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const handleLogout = async () => {
@@ -50,11 +52,11 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
 
             {/* Logo Container */}
             <div className="flex items-center">
-              <div className="shrink-0 flex items-center">
+              <Link href={logoHref} className="shrink-0 flex items-center hover:opacity-80 transition-opacity">
                 <span className="text-xl md:text-2xl font-extrabold text-white tracking-tight">
                   Echo<span className="text-teal-400">Campus</span>
                 </span>
-              </div>
+              </Link>
             </div>
 
             {/* Hamburger Menu Button */}
@@ -90,9 +92,11 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
         >
           {/* 1. Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-700/50">
-            <span className="text-xl font-extrabold text-white tracking-tight">
-              Echo<span className="text-teal-400">Campus</span>
-            </span>
+            <Link href={logoHref} onClick={toggleMenu} className="hover:opacity-80 transition-opacity">
+              <span className="text-xl font-extrabold text-white tracking-tight">
+                Echo<span className="text-teal-400">Campus</span>
+              </span>
+            </Link>
             <button
               onClick={toggleMenu}
               className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"

@@ -14,15 +14,17 @@ import {
 } from "@/lib/authProfile";
 import { supabase } from "@/lib/supabaseClient";
 import { ROUTES } from "@/lib/routes";
+import { verifyFacultyCode } from "./actions";
 
 export default function SignUpPage() {
   const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
   // Faculty specific fields
   const [isFaculty, setIsFaculty] = useState(false);
+  const [facultyCode, setFacultyCode] = useState("");
   const [department, setDepartment] = useState("");
   const [cabinNo, setCabinNo] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
@@ -77,6 +79,32 @@ export default function SignUpPage() {
     }
 
     setIsLoading(true);
+
+    if (isFaculty) {
+      if (!facultyCode.trim()) {
+        toast.error("Faculty Access Code is required.");
+        setIsLoading(false);
+        return;
+      }
+      if (phoneNo.length !== 10) {
+        toast.error("Phone number must be exactly 10 digits.");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const isValid = await verifyFacultyCode(facultyCode);
+        if (!isValid) {
+          toast.error("Invalid Faculty Access Code. Registration denied.");
+          setIsLoading(false);
+          return;
+        }
+      } catch (err) {
+        toast.error("Error verifying Faculty Code. Please try again later.");
+        setIsLoading(false);
+        return;
+      }
+    }
 
     try {
       const { data, error } = await supabase.auth.signUp({
@@ -137,6 +165,8 @@ export default function SignUpPage() {
       setIsLoading(false);
     }
   };
+
+  const isPhoneInvalid = isFaculty && phoneNo.length > 0 && phoneNo.length !== 10;
 
   return (
     <div className="min-h-[100dvh] w-full bg-slate-950 flex items-center justify-center p-4 sm:p-6 md:p-8">
@@ -236,76 +266,99 @@ export default function SignUpPage() {
 
             {/* Dynamic Faculty Fields */}
             {isFaculty && (
-               <div className="space-y-4 p-4 bg-slate-800/40 rounded-xl border border-slate-700/50 animate-in fade-in slide-in-from-top-4">
+              <div className="space-y-4 p-4 bg-slate-800/40 rounded-xl border border-slate-700/50 animate-in fade-in slide-in-from-top-4">
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-bold text-teal-400 uppercase tracking-wider">Faculty Access Code *</label>
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Lock className="h-4 w-4 text-teal-500/70" />
+                    </div>
+                    <input
+                      type="text"
+                      required
+                      value={facultyCode}
+                      onChange={(e) => setFacultyCode(e.target.value)}
+                      className="w-full pl-9 pr-3 py-2 bg-slate-900/50 border border-teal-500/30 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm transition-all hover:bg-slate-800/60 shadow-inner"
+                      placeholder="Enter secret code"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Department</label>
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Building className="h-4 w-4 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                    </div>
+                    <input
+                      type="text"
+                      required
+                      value={department}
+                      onChange={(e) => setDepartment(e.target.value)}
+                      className="w-full pl-9 pr-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm transition-all hover:bg-slate-800/60"
+                      placeholder="e.g. Computer Science"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Department</label>
+                    <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Cabin No.</label>
                     <div className="relative group">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Building className="h-4 w-4 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                        <MapPin className="h-4 w-4 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
                       </div>
                       <input
                         type="text"
                         required
-                        value={department}
-                        onChange={(e) => setDepartment(e.target.value)}
+                        value={cabinNo}
+                        onChange={(e) => setCabinNo(e.target.value)}
                         className="w-full pl-9 pr-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm transition-all hover:bg-slate-800/60"
-                        placeholder="e.g. Computer Science"
+                        placeholder="e.g. A-302"
                       />
                     </div>
                   </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                     <div className="space-y-1.5">
-                        <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Cabin No.</label>
-                        <div className="relative group">
-                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <MapPin className="h-4 w-4 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
-                          </div>
-                          <input
-                            type="text"
-                            required
-                            value={cabinNo}
-                            onChange={(e) => setCabinNo(e.target.value)}
-                            className="w-full pl-9 pr-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm transition-all hover:bg-slate-800/60"
-                            placeholder="e.g. A-302"
-                          />
-                        </div>
-                     </div>
-                     <div className="space-y-1.5">
-                        <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Experience</label>
-                        <div className="relative group">
-                          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <Briefcase className="h-4 w-4 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
-                          </div>
-                          <input
-                            type="number"
-                            required
-                            value={experience}
-                            onChange={(e) => setExperience(e.target.value)}
-                            className="w-full pl-9 pr-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm transition-all hover:bg-slate-800/60"
-                            placeholder="Years"
-                            min="0"
-                          />
-                        </div>
-                     </div>
-                  </div>
-
                   <div className="space-y-1.5">
-                    <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Phone</label>
+                    <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Experience</label>
                     <div className="relative group">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Phone className="h-4 w-4 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                        <Briefcase className="h-4 w-4 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
                       </div>
                       <input
-                        type="tel"
-                        value={phoneNo}
-                        onChange={(e) => setPhoneNo(e.target.value)}
+                        type="number"
+                        required
+                        value={experience}
+                        onChange={(e) => setExperience(e.target.value)}
                         className="w-full pl-9 pr-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm transition-all hover:bg-slate-800/60"
-                        placeholder="Optional"
+                        placeholder="Years"
+                        min="0"
                       />
                     </div>
                   </div>
-               </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Phone</label>
+                  <div className="relative group">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Phone className="h-4 w-4 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                    </div>
+                    <input
+                      required
+                      type="tel"
+                      value={phoneNo}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, "");
+                        if (val.length <= 10) {
+                          setPhoneNo(val);
+                        }
+                      }}
+                      className={`w-full pl-9 pr-3 py-2 bg-slate-900/50 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 text-sm transition-all hover:bg-slate-800/60 ${isPhoneInvalid ? 'border-red-500/50 focus:ring-red-500/50' : 'border-slate-700/50 focus:ring-teal-500/50'}`}
+                      placeholder="10-digit mobile number"
+                    />
+                  </div>
+                </div>
+              </div>
             )}
 
             <button

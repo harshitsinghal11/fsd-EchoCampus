@@ -81,7 +81,7 @@ export default function StudentProfilePage() {
   }
 
   return (
-    <div className="min-h-dvh bg-slate-950 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="w-full max-w-7xl mx-auto space-y-6 md:space-y-8 p-4 md:p-6 lg:p-8">
       <div className="max-w-4xl mx-auto">
 
         {/* Main Card */}

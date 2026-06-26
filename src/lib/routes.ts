@@ -22,6 +22,11 @@ export const ROUTES = {
     LOST_FOUND: "/main/faculty/lost-found",
     PROFILE: "/main/faculty/profile",
   },
+  SOCIAL: {
+    INSTAGRAM: "https://www.instagram.com/harshitsinghal11",
+    LINKEDIN: "https://www.linkedin.com/in/harshitsinghal11/",
+    GITHUB: "https://www.github.com/harshitsinghal11",
+  },
   LEGAL: {
     PRIVACY: "/privacy",
     TERMS: "/terms",

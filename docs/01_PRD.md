@@ -78,4 +78,4 @@ Campus communication and day-to-day utility workflows are often split across inf
 - Marketplace is unavailable to faculty and admin users because both routing and RLS restrict it to students.
 - Lost and found image data is stored directly as text in the database instead of a dedicated storage service.
 - Logging, monitoring, analytics, and deployment automation are not implemented in the repository.
-- The chat feature is available only on the student side and depends on Supabase Realtime instead of Firebase.
+- The chat feature is available only on the student side and depends on Supabase Realtime.
