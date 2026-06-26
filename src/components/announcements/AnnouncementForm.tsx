@@ -70,7 +70,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
             type="url"
             value={link}
             onChange={(e) => setLink(e.target.value)}
-            placeholder="forms.google.com/"
+            placeholder="https://www.example.com"
             className="w-full pl-10 p-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:bg-slate-900/80 focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 outline-none transition-all text-sm font-medium"
           />
         </div>
@@ -97,7 +97,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
         type="submit"
         className="w-full mt-2 bg-teal-600 hover:bg-teal-500 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-teal-900/20 hover:shadow-teal-900/40 transform hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group"
       >
-        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4"/> Publish Now</>}
+        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4" /> Publish Now</>}
       </button>
     </form>
   );

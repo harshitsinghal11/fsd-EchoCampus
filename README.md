@@ -14,6 +14,8 @@ EchoCampus is a campus web platform that centralizes common student and faculty 
 - Searchable faculty directory
 - Anonymous student chat powered by Supabase Realtime
 - Student and faculty profile pages
+- Installable Progressive Web App (PWA) functionality
+- Native Web Push Notifications (Desktop & Mobile)
 
 ## Tech Stack
 - Next.js 16
@@ -90,8 +92,13 @@ Create a local environment file and configure these values:
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-# Optional legacy fallback:
-# NEXT_PUBLIC_SUPABASE_ANON_KEY=
+
+# Faculty Secret Code
+FACULTY_SECRET_CODE=
+
+# VAPID Keys for Push Notifications
+NEXT_PUBLIC_VAPID_PUBLIC_KEY=
+VAPID_PRIVATE_KEY=
 ```
 
 ### Running Locally
@@ -112,8 +119,9 @@ Open `http://localhost:3000` in your browser.
 The repository does not currently include a defined deployment pipeline, CI/CD workflow, or platform-specific deployment configuration.
 
 ## Project Status
-EchoCampus has reached a stable phase with core features implemented. 
+EchoCampus has reached a stable production-ready phase with all core features fully implemented. 
 - **Core Architecture:** Global Chat and Live Feeds are powered by Supabase Realtime. Form submissions strictly use Next.js Server Actions with hardened RLS security.
+- **Progressive Web App:** Fully installable PWA with a custom Service Worker and Native Push Notifications wired directly into Supabase.
 - **UI/UX:** A unified dark-mode design system (featuring glassmorphism, custom empty states, and responsive grids) is implemented across all Faculty and Student pages.
 - **Performance:** Implemented custom SWR hooks for all primary features, providing fast cached navigations and background revalidation synchronized with Supabase Realtime.
 - **Type Safety:** Strict TypeScript interfaces align perfectly with the Supabase schema to reduce runtime errors.

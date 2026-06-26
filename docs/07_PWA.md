@@ -1,6 +1,6 @@
-# Progressive Web App (PWA) & Push Notifications Guide
+# Progressive Web App (PWA) & Push Notifications
 
-This document outlines the detailed, step-by-step technical implementation required to convert EchoCampus into an installable Progressive Web App (PWA) that supports native push notifications on Mobile (iOS/Android) and Desktop (Windows/Mac).
+This document outlines the detailed technical implementation that **is currently active** in the EchoCampus repository, converting it into an installable Progressive Web App (PWA) that supports native push notifications on Mobile (iOS/Android) and Desktop (Windows/Mac).
 
 ---
 

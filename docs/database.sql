@@ -295,3 +295,20 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER enforce_marketplace_limit
   BEFORE INSERT ON public.marketplace
   FOR EACH ROW EXECUTE FUNCTION public.check_marketplace_limit();
+
+-- 11. Push Notifications Table
+CREATE TABLE public.push_subscriptions (
+    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    user_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
+    endpoint TEXT NOT NULL,
+    p256dh TEXT NOT NULL,
+    auth TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    UNIQUE(user_id, endpoint)
+);
+
+-- RLS for push_subscriptions
+ALTER TABLE public.push_subscriptions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Users can insert their own subscriptions" ON public.push_subscriptions FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Authenticated users can select all subscriptions for dispatch" ON public.push_subscriptions FOR SELECT USING (auth.role() = 'authenticated');
+CREATE POLICY "Users can delete their own subscriptions" ON public.push_subscriptions FOR DELETE USING (auth.uid() = user_id);
