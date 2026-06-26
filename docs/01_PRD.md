@@ -76,6 +76,6 @@ Campus communication and day-to-day utility workflows are often split across inf
 # Constraints
 - A separate admin dashboard is not implemented.
 - Marketplace is unavailable to faculty and admin users because both routing and RLS restrict it to students.
-- Lost and found image data is stored directly as text in the database instead of a dedicated storage service.
+- Lost and found image data is securely uploaded to a dedicated Supabase Storage bucket (`lost_found_images`), and its public URL is referenced in the database.
 - Logging, monitoring, analytics, and deployment automation are not implemented in the repository.
 - The chat feature is available only on the student side and depends on Supabase Realtime.
