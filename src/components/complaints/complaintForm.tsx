@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, CheckCircle2, MessageSquare, Send, Loader2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, MessageSquare, Loader2 } from "lucide-react";
+import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { submitComplaint } from "@/actions/complaintActions";
@@ -48,7 +49,6 @@ export default function ComplaintForm() {
     <div className="bg-surface backdrop-blur-xl border border-border rounded-xl p-6">
       <div className="bg-primary/10 border border-primary/30 px-6 py-4 rounded-xl">
         <div className="flex items-center gap-3">
-          <MessageSquare className="w-6 h-6 text-primary" />
           <h2 className="text-xl font-semibold text-text-primary">Submit a Complaint</h2>
         </div>
         <p className="text-text-secondary text-sm mt-1">
@@ -79,25 +79,13 @@ export default function ComplaintForm() {
 
       </div>
 
-      <motion.button
+      <SubmitBtn
+        type="button"
         onClick={handleSubmit}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.95 }}
         disabled={loading || !complaint.trim()}
-        className="w-full bg-button-primary hover:bg-primary-hover border-transparent disabled:opacity-50 disabled:cursor-not-allowed text-background font-medium py-3 px-6 rounded-lg transition-all mt-2 duration-200 flex items-center justify-center gap-2"
-      >
-        {loading ? (
-          <>
-            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            <span>Submitting...</span>
-          </>
-        ) : (
-          <>
-            <Send className="w-5 h-5 text-primary" />
-            <span>Submit</span>
-          </>
-        )}
-      </motion.button>
+        isSubmitting={loading}
+        label="Submit"
+      />
     </div>
   );
 }

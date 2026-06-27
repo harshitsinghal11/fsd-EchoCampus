@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Send, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
+import { SubmitBtn } from '@/components/shared/SubmitBtn';
 import { useSessionCode } from '@/hooks/useSessionCode';
 import { supabase } from '@/lib/supabaseClient';
 import { toast } from 'sonner';
@@ -206,15 +207,13 @@ export default function AnonChat() {
               className="h-12 flex-1 rounded-2xl border border-border bg-surface-hover px-4 text-sm text-text-primary placeholder:text-text-disabled focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/20 sm:h-14 sm:px-5 sm:text-base"
             />
 
-            <button
-              aria-label="Send message"
-              type="submit"
+            <SubmitBtn
               disabled={!text.trim()}
-              className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-2xl border border-primary/40 bg-primary/10 px-4 font-medium text-text-primary transition-colors hover:bg-primary/10 disabled:cursor-not-allowed disabled:border-border disabled:bg-surface-hover disabled:text-text-disabled sm:h-14 sm:px-6"
-            >
-              <Send className="h-4 w-4 text-primary" />
-              <span className="hidden sm:inline">Send</span>
-            </button>
+              label="Send"
+              fullWidth={false}
+              className="h-12 sm:h-14 shrink-0"
+              aria-label="Send message"
+            />
           </div>
         </form>
       </div>

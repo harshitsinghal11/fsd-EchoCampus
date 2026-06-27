@@ -116,7 +116,7 @@ export default function LostFoundList({
               group overflow-hidden transition-all duration-300 w-full
               ${!showSearch
                   ? 'bg-surface hover:bg-surface-hover/80 rounded-xl p-3 flex items-center gap-3 border border-transparent hover:border-border cursor-pointer'
-                  : 'bg-surface backdrop-blur-xl rounded-2xl p-6 md:p-2 flex flex-col sm:flex-row gap-5 md:gap-6 border border-border shadow-xl hover:bg-surface-hover hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20'
+                  : 'bg-surface backdrop-blur-xl rounded-2xl p-6 md:p-2 flex flex-col sm:flex-row gap-5 md:gap-6 border border-border shadow-xl hover:bg-surface-hover hover:border-primary/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:bg-surface-hover/40'
                 }
             `}
             >
@@ -133,7 +133,7 @@ export default function LostFoundList({
                     fill
                     unoptimized
                     sizes={!showSearch ? "64px" : "(max-width: 768px) 100vw, 192px"}
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover  transition-duration-500"
                   />
                 ) : (
                   <Camera className={`text-text-disabled ${!showSearch ? 'w-6 h-6' : 'w-10 h-10'}`} />
@@ -193,9 +193,9 @@ export default function LostFoundList({
                       <div className="mt-0 pt-4 border-t border-border flex justify-end">
                         <button
                           onClick={() => handleDelete(item.id, item.image_url)}
-                          className="flex items-center gap-2 px-4 py-2 bg-danger/10 hover:bg-danger/20 border border-danger/20 text-danger hover:text-danger text-xs font-bold rounded-xl transition-all active:scale-95 group/btn"
+                          className="flex items-center gap-2 px-4 py-2 bg-danger/10 hover:bg-danger/20 border border-danger/20 text-danger hover:text-danger text-xs font-bold rounded-xl transition-all group/btn"
                         >
-                          <Trash2 className="w-3.5 h-3.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                          <Trash2 className="w-3.5 h-3.5" />
                           Found / Delete
                         </button>
                       </div>
@@ -206,7 +206,7 @@ export default function LostFoundList({
 
               {/* Widget Mode: Chevron for "Go" indication */}
               {!showSearch && (
-                <ArrowRight className="shrink-0 w-4 h-4 text-text-disabled group-hover:text-primary group-hover:translate-x-1 transition-all mr-1" />
+                <ArrowRight className="shrink-0 w-4 h-4 text-text-disabled group-hover:text-primary transition-all mr-1" />
               )}
 
             </MotionItem>

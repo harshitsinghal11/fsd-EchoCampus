@@ -29,7 +29,7 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
           key={item.id}
           className={`border w-full flex flex-col ${isWidget
             ? "bg-surface-hover/60 p-4 rounded-xl border-border hover:bg-surface-hover"
-            : "relative overflow-hidden bg-surface backdrop-blur-xl p-6 md:p-8 rounded-2xl border-border hover:bg-surface-hover hover:shadow-2xl hover:shadow-primary/20 group shadow-xl"
+            : "relative overflow-hidden bg-surface backdrop-blur-xl p-6 md:p-8 rounded-2xl border-border hover:bg-surface-hover hover:border-primary/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:bg-surface-hover/40 group shadow-xl"
             }`}
         >
           <div className="flex flex-col gap-1 w-full">

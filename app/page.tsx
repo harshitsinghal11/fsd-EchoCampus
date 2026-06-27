@@ -33,9 +33,9 @@ export default function Home() {
         <div className="flex gap-4">
           <Link
             href={ROUTES.AUTH.LOGIN}
-            className="flex items-center gap-2 px-8 py-4 bg-button-primary text-text-primary font-bold rounded-xl hover:-translate-y-0.5 transition-all duration-200 shadow-lg shadow-primary/20 hover:shadow-primary/40 group"
+            className="flex items-center gap-2 px-8 py-4 bg-button-primary text-text-primary font-bold rounded-xl transition-all duration-200 shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] group"
           >
-            Get Started <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+            Get Started <ArrowRight className="w-5 h-5 " />
           </Link>
         </div>
       </main>

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import { usePathname } from "next/navigation";
@@ -22,6 +22,17 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
 
   const logoHref = pathname.startsWith("/main/faculty") ? ROUTES.FACULTY.DASHBOARD : ROUTES.STUDENT.DASHBOARD;
 
@@ -66,9 +77,9 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
                 className="inline-flex items-center justify-center p-2.5 rounded-xl text-text-secondary hover:text-text-primary hover:bg-surface-hover/80 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-input-focus/50 z-50 group"
               >
                 {isMenuOpen ? (
-                  <X className="h-6 w-6 transform transition-transform duration-300 group-hover:rotate-90" />
+                  <X className="h-6 w-6 " />
                 ) : (
-                  <Menu className="h-6 w-6 transform transition-transform duration-300 group-hover:scale-110" />
+                  <Menu className="h-6 w-6 " />
                 )}
               </button>
             </div>
@@ -88,7 +99,7 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
 
         {/* Slide-out Panel */}
         <div
-          className={`absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-surface-hover border-l border-border shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+          className={`absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-surface-hover border-l border-border shadow-2xl transition-duration-300 ease-in-out flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
         >
           {/* 1. Header */}
           <div className="flex items-center justify-between p-6 border-b border-border">
@@ -105,8 +116,8 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
             </button>
           </div>
 
-          {/* 2. Scrollable Links Area */}
-          <div className="flex-1 overflow-y-auto py-6 px-4">
+          {/* 2. Links Area */}
+          <div className="flex-1 py-6 px-4">
             <nav className="space-y-2">
               {navLinks.map((link, index) => {
                 const IconComponent = link.icon;
@@ -125,8 +136,7 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
                     `}
                     style={{
                       animationDelay: isMenuOpen ? `${index * 50}ms` : '0ms',
-                      opacity: isMenuOpen ? 1 : 0,
-                      transform: isMenuOpen ? 'translateY(0)' : 'translateY(10px)',
+                      transform: isMenuOpen ? 'translateX(0)' : 'translateX(20px)',
                       transition: 'all 0.3s ease-out'
                     }}
                   >
@@ -146,7 +156,7 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
           <div className="p-6 border-t border-border bg-surface">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center justify-center px-4 py-3.5 rounded-xl font-semibold text-sm md:text-base text-danger bg-danger/10 border border-danger/20 hover:bg-danger/20 hover:border-danger/40 hover:shadow-lg hover:shadow-danger/20 active:scale-95 transition-all duration-200 group"
+              className="w-full flex items-center justify-center px-4 py-3.5 rounded-xl font-semibold text-sm md:text-base text-danger bg-danger/10 border border-danger/20 hover:bg-danger/20 hover:border-danger/40 hover:shadow-lg hover:shadow-danger/20 transition-all duration-200 group"
             >
               <LogOut className="w-5 h-5 mr-2" />
               Sign Out

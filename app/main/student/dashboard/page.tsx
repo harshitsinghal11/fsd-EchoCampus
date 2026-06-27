@@ -29,7 +29,7 @@ export default function StudentDashboard() {
         <div className="flex items-center gap-3">
           <Link
             href={ROUTES.STUDENT.CHAT}
-            className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 hover:border-primary/50 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 hover:border-primary/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all"
           >
             <MessageSquare className="w-4 h-4 text-primary" />
             Global Chat
@@ -61,7 +61,7 @@ export default function StudentDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary transition-colors"
             >
               View All
-              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 " />
             </Link>
           </div>
           <AnnouncementList isWidget={true} />
@@ -81,7 +81,7 @@ export default function StudentDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors"
             >
               Browse Market
-              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 " />
             </Link>
           </div>
           <MarketplaceList isWidget={true} />
@@ -101,7 +101,7 @@ export default function StudentDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary transition-colors"
             >
               View All
-              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 " />
             </Link>
           </div>
           <ComplaintList isWidget={true} />

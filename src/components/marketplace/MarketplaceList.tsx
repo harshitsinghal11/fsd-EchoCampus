@@ -52,7 +52,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
           className={`relative overflow-hidden rounded-2xl p-5 md:p-6 border transition-all duration-300 ${
             item.is_sold 
               ? "bg-surface border-border opacity-75 grayscale-30" 
-              : "bg-surface backdrop-blur-xl border-border shadow-xl hover:bg-surface-hover hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20 group"
+              : "bg-surface backdrop-blur-xl border-border shadow-xl hover:bg-surface-hover hover:border-primary/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:bg-surface-hover/40 group"
           }`}
         >
           <div className="flex justify-between items-start gap-3">
@@ -97,7 +97,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
           {!item.is_sold && currentUserEmail && item.owner_email === currentUserEmail && (
             <button
               onClick={() => markSold(item.id)}
-              className="mt-5 w-full bg-primary/10 hover:bg-primary/10 text-primary border border-primary/30 font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-sm hover:shadow-lg hover:shadow-primary/20 active:scale-95"
+              className="mt-5 w-full bg-primary/10 hover:bg-primary/10 text-primary border border-primary/30 font-medium px-4 py-2.5 rounded-xl transition-all duration-200 text-sm hover:shadow-lg hover:shadow-primary/20 "
             >
               Mark as Sold
             </button>

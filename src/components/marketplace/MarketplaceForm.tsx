@@ -5,8 +5,8 @@ import {
   IndianRupee,
   Mail,
   Phone,
-  PlusCircle
 } from 'lucide-react';
+import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import React, { useState } from "react";
 import { useUserEmail } from "@/hooks/useUserEmail";
 import { useRouter } from "next/navigation";
@@ -183,30 +183,16 @@ export default function MarketCreateForm() {
       </div>
 
       {/* Submit Button */}
-      <motion.button
-        type="submit"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.95 }}
+      <SubmitBtn
         disabled={
           !form.product_title ||
           !form.price ||
           form.contact_info.length !== 10 ||
           isSubmitting
         }
-        className="w-full mt-2 bg-button-primary hover:bg-primary-hover text-text-primary py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-input-focus focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center gap-2"
-      >
-        {isSubmitting ? (
-          <>
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-            Publishing...
-          </>
-        ) : (
-          <>
-            <PlusCircle className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
-            Publish Listing
-          </>
-        )}
-      </motion.button>
+        isSubmitting={isSubmitting}
+        label="Post"
+      />
     </form>
   );
 }

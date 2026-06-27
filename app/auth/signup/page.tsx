@@ -364,7 +364,7 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-2 md:mt-4 bg-button-primary text-text-primary py-3 md:py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-primary/20 hover:shadow-primary/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-input-focus focus:ring-offset-2 focus:ring-offset-background disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group"
+              className="w-full mt-2 md:mt-4 bg-button-primary text-text-primary py-3 md:py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-input-focus focus:ring-offset-2 focus:ring-offset-background disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group"
             >
               <span className="flex items-center justify-center">
                 {isLoading ? (
@@ -375,7 +375,7 @@ export default function SignUpPage() {
                 ) : (
                   <>
                     Create Account
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-200" />
+                    <ArrowRight className="ml-2 h-5 w-5 " />
                   </>
                 )}
               </span>

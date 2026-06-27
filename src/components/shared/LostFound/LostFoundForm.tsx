@@ -213,7 +213,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
 
       <button
         disabled={loading || isPhoneInvalid}
-        className="w-full mt-2 bg-button-primary hover:bg-primary-hover text-text-primary py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-primary/20 hover:shadow-primary/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-input-focus focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 group"
+        className="w-full mt-2 bg-button-primary hover:bg-primary-hover text-text-primary py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-input-focus focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 group"
       >
         {loading ? (
           <>

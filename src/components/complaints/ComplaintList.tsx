@@ -102,7 +102,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
           {items.map((c) => (
             <MotionItem
               key={c.id}
-              className={`bg-surface backdrop-blur-xl border border-border rounded-xl hover:bg-surface-hover/60 transition-all duration-200 ${isWidget ? 'p-4' : 'p-4'}`}
+              className={`bg-surface backdrop-blur-xl border border-border rounded-xl hover:bg-surface-hover/40 hover:border-primary/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all duration-300 ${isWidget ? 'p-4' : 'p-4'}`}
             >
               <div className="flex items-start gap-4">
                 <div className="flex-1">

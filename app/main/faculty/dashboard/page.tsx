@@ -55,7 +55,7 @@ export default function FacultyDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary transition-colors"
             >
               View All
-              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 " />
             </Link>
           </div>
           {/* Reusable Component in Widget Mode */}
@@ -76,7 +76,7 @@ export default function FacultyDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors"
             >
               Manage
-              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 " />
             </Link>
           </div>
           {/* Reusable Component in Widget Mode */}
@@ -101,7 +101,7 @@ export default function FacultyDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors"
             >
               View all 
-              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 " />
             </Link>
           </div>
           {/* Reusable Component (Search hidden) */}
