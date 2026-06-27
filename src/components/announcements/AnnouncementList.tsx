@@ -1,9 +1,11 @@
 "use client";
+import { useState, useMemo } from "react";
 import { User, ExternalLink } from "lucide-react";
 import { MotionList } from "@/components/shared/MotionList";
 import { MotionItem } from "@/components/shared/MotionItem";
 import { useAnnouncements } from "@/hooks/data/useAnnouncements";
-import { EmptyAnnouncements } from "@/components/shared/EmptyStates";
+import { EmptyAnnouncements, EmptySearch } from "@/components/shared/EmptyStates";
+import { SearchBar } from "@/components/shared/SearchBar";
 
 interface AnnouncementListProps {
   isWidget?: boolean;
@@ -11,6 +13,17 @@ interface AnnouncementListProps {
 
 export default function AnnouncementList({ isWidget = false }: AnnouncementListProps) {
   const { items, isLoading } = useAnnouncements(isWidget);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const displayItems = useMemo(() => {
+    if (!searchTerm) return items;
+    const lower = searchTerm.toLowerCase();
+    return items.filter(
+      (item) =>
+        item.title.toLowerCase().includes(lower) ||
+        item.content.toLowerCase().includes(lower)
+    );
+  }, [items, searchTerm]);
 
   if (isLoading) {
     return (
@@ -21,10 +34,23 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
   }
 
   return (
-    <MotionList className="space-y-4 pr-2 custom-scrollbar h-full overflow-y-auto w-full">
-      {items.length === 0 && <EmptyAnnouncements isWidget={isWidget} />}
+    <div className="flex flex-col h-full w-full">
+      {!isWidget && (
+        <div className="mb-6">
+          <SearchBar 
+            value={searchTerm}
+            onChange={setSearchTerm}
+            placeholder="Search announcements..."
+            className="w-full max-w-md"
+          />
+        </div>
+      )}
 
-      {items.map((item) => (
+      <MotionList className="space-y-4 pr-2 custom-scrollbar h-full overflow-y-auto w-full">
+        {items.length === 0 && <EmptyAnnouncements isWidget={isWidget} />}
+        {items.length > 0 && displayItems.length === 0 && <EmptySearch searchTerm={searchTerm} />}
+
+        {displayItems.map((item) => (
         <MotionItem
           key={item.id}
           className={`border w-full flex flex-col ${isWidget
@@ -68,5 +94,6 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
         </MotionItem>
       ))}
     </MotionList>
+    </div>
   );
 }

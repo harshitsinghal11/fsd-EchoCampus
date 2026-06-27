@@ -21,18 +21,6 @@ export default function StudentAnnouncementsPage() {
           </div>
         </div>
 
-        {/* 2. Toolbar */}
-        <div className="flex gap-3">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
-            <input
-              type="text"
-              placeholder="Search updates..."
-              className="w-full pl-9 pr-4 py-2.5 bg-surface border border-border rounded-lg text-sm text-text-primary placeholder-text-muted outline-none focus:ring-2 focus:ring-input-focus/50 focus:border-transparent transition-all shadow-sm"
-            />
-          </div>
-        </div>
-
         {/* 3. The Feed */}
         <div>
           <Suspense fallback={<AnnouncementSkeleton />}>

@@ -1,14 +1,15 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { MapPin, Phone, Calendar, Search, Camera, Trash2, ArrowRight } from "lucide-react";
+import { MapPin, Phone, Calendar, Camera, Trash2, ArrowRight, Search } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { LostFoundSkeleton } from "@/components/shared/Skeletons";
 import { MotionList } from "@/components/shared/MotionList";
 import { MotionItem } from "@/components/shared/MotionItem";
 import { useLostFound } from "@/hooks/data/useLostFound";
-import { EmptyLostFound } from "@/components/shared/EmptyStates";
+import { EmptyLostFound, EmptySearch } from "@/components/shared/EmptyStates";
+import { SearchBar } from "@/components/shared/SearchBar";
 import { deleteLostFoundItem } from "@/actions/lostFoundActions";
 
 interface LostFoundListProps {
@@ -72,19 +73,14 @@ export default function LostFoundList({
   return (
     <div className={`space-y-6 ${!showSearch ? 'h-full flex flex-col' : ''}`}>
 
-      {/* --- SEARCH BAR (Only if showSearch is true) --- */}
+      {/* --- SEARCH BAR --- */}
       {showSearch && (
-        <div className="relative group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-disabled group-focus-within:text-primary transition-colors" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search lost items..."
-            aria-label="Search lost and found items"
-            className="w-full pl-11 pr-4 py-3.5 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled outline-none focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 shadow-lg transition-all hover:bg-surface-hover"
-          />
-        </div>
+        <SearchBar
+          value={searchTerm}
+          onChange={setSearchTerm}
+          placeholder="Search lost items..."
+          className="w-full"
+        />
       )}
 
       {/* --- LOADING STATE --- */}
@@ -99,11 +95,7 @@ export default function LostFoundList({
 
       {/* --- NO SEARCH MATCHES --- */}
       {!isLoading && showSearch && items.length > 0 && displayItems.length === 0 && (
-        <div className="flex flex-col w-full items-center justify-center text-center py-16 bg-surface rounded-2xl border border-dashed border-border text-text-disabled">
-          <Search className="w-12 h-12 mb-3 opacity-30 text-primary" />
-          <p className="font-medium text-sm text-text-muted">No matching items.</p>
-          <p className="text-xs text-text-disabled mt-1">Try different keywords or clear the search box.</p>
-        </div>
+        <EmptySearch searchTerm={searchTerm} />
       )}
 
       {/* --- LIST LAYOUT --- */}
@@ -116,7 +108,7 @@ export default function LostFoundList({
               group overflow-hidden transition-all duration-300 w-full
               ${!showSearch
                   ? 'bg-surface hover:bg-surface-hover/80 rounded-xl p-3 flex items-center gap-3 border border-transparent hover:border-border cursor-pointer'
-                  : 'bg-surface backdrop-blur-xl rounded-2xl p-6 md:p-2 flex flex-col sm:flex-row gap-5 md:gap-6 border border-border shadow-xl hover:bg-surface-hover hover:border-primary/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:bg-surface-hover/40'
+                  : 'bg-surface backdrop-blur-xl rounded-xl p-4 flex flex-col sm:flex-row gap-4 border border-border shadow-md hover:bg-surface-hover hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 hover:bg-surface-hover/40'
                 }
             `}
             >
@@ -124,7 +116,7 @@ export default function LostFoundList({
               {/* 1. IMAGE THUMBNAIL */}
               <div className={`
               bg-surface-hover shrink-0 overflow-hidden border border-border flex items-center justify-center relative
-              ${!showSearch ? 'rounded-lg w-16 h-16' : 'rounded-2xl w-full sm:w-40 md:w-48 h-48'}
+              ${!showSearch ? 'rounded-lg w-16 h-16' : 'rounded-xl w-full sm:w-28 h-40 sm:h-28'}
             `}>
                 {item.image_url ? (
                   <Image
@@ -132,11 +124,11 @@ export default function LostFoundList({
                     alt="Item"
                     fill
                     unoptimized
-                    sizes={!showSearch ? "64px" : "(max-width: 768px) 100vw, 192px"}
-                    className="object-cover  transition-duration-500"
+                    sizes={!showSearch ? "64px" : "(max-width: 768px) 100vw, 112px"}
+                    className="object-cover transition-duration-500"
                   />
                 ) : (
-                  <Camera className={`text-text-disabled ${!showSearch ? 'w-6 h-6' : 'w-10 h-10'}`} />
+                  <Camera className={`text-text-disabled ${!showSearch ? 'w-6 h-6' : 'w-8 h-8'}`} />
                 )}
               </div>
 
@@ -173,24 +165,24 @@ export default function LostFoundList({
                 {/* Full Details (Full Page Only) */}
                 {showSearch && (
                   <>
-                    <div className="flex flex-wrap gap-2 mb-3 mt-1">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-surface text-text-secondary border border-border">
-                        <MapPin className="w-3.5 h-3.5 text-primary" />
+                    <div className="flex flex-wrap gap-2 mb-2 mt-0.5">
+                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-bold bg-surface text-text-secondary border border-border">
+                        <MapPin className="w-3 h-3 text-primary" />
                         {item.location_found}
                       </span>
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-success/10 text-primary border border-primary/30">
-                        <Phone className="w-3.5 h-3.5" />
+                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-bold bg-surface text-text-secondary border border-border">
+                        <Phone className="w-3 h-3 text-primary" />
                         {item.contact_info}
                       </span>
                     </div>
 
-                    <p className="text-text-muted text-sm leading-relaxed line-clamp-2 mb-4">
+                    <p className="text-text-muted text-xs md:text-sm leading-relaxed line-clamp-2 mb-2">
                       {item.description || "No additional description."}
                     </p>
 
                     {/* Action Footer */}
                     {currentUserId === item.user_id && (
-                      <div className="mt-0 pt-4 border-t border-border flex justify-end">
+                      <div className="mt-auto pt-3 border-t border-border/50 flex justify-end">
                         <button
                           onClick={() => handleDelete(item.id, item.image_url)}
                           className="flex items-center gap-2 px-4 py-2 bg-danger/10 hover:bg-danger/20 border border-danger/20 text-danger hover:text-danger text-xs font-bold rounded-xl transition-all group/btn"

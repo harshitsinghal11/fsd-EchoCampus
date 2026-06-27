@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { ShoppingBag, MessageSquare, Megaphone, Camera, Users } from "lucide-react";
+import { ShoppingBag, MessageSquare, Megaphone, Camera, Users, Search } from "lucide-react";
 
 interface EmptyStateProps {
   title: string;
@@ -123,6 +123,19 @@ export function EmptyDirectory({ isWidget = false }: { isWidget?: boolean }) {
       description="No faculty members match your search criteria or the directory is empty."
       isWidget={isWidget}
       icon={Users}
+      blobColor="bg-text-muted"
+      iconColor="text-text-secondary"
+    />
+  );
+}
+
+export function EmptySearch({ searchTerm }: { searchTerm: string }) {
+  return (
+    <BaseEmptyState
+      title="No results found"
+      description={`We couldn't find anything matching "${searchTerm}". Try adjusting your keywords or clearing the search.`}
+      isWidget={false}
+      icon={Search}
       blobColor="bg-text-muted"
       iconColor="text-text-secondary"
     />

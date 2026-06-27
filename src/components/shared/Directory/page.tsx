@@ -1,9 +1,10 @@
 "use client";
 import { useState } from 'react';
-import { Search, Mail, Phone, BookOpen, Briefcase, ChevronRight, BookUser, ChevronDown } from 'lucide-react';
+import { Mail, Phone, BookOpen, Briefcase, ChevronRight, BookUser, ChevronDown } from 'lucide-react';
 import { useDirectory } from '@/hooks/data/useDirectory';
-import { EmptyDirectory } from '@/components/shared/EmptyStates';
+import { EmptyDirectory, EmptySearch } from '@/components/shared/EmptyStates';
 import { DirectorySkeleton } from '@/components/shared/Skeletons';
+import { SearchBar } from '@/components/shared/SearchBar';
 
 export default function Directory() {
   const { items: facultyList, isLoading } = useDirectory();
@@ -37,16 +38,12 @@ export default function Directory() {
 
       {/* Search and Filter Section */}
       <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-surface backdrop-blur-xl border border-border p-6 rounded-2xl">
-        <div className="relative w-full sm:w-96 group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-disabled group-focus-within:text-primary transition-colors" />
-          <input
-            type="text"
-            placeholder="Search faculty by name or email..."
-            className="w-full bg-surface border border-border rounded-xl py-3 pl-12 pr-4 text-text-primary placeholder:text-text-disabled focus:outline-none focus:ring-2 focus:ring-input-focus/50 transition-all"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
+        <SearchBar
+          value={searchTerm}
+          onChange={setSearchTerm}
+          placeholder="Search faculty by name or email..."
+          className="w-full sm:w-96"
+        />
 
         <div className="relative w-full sm:w-64">
           <select
@@ -66,8 +63,10 @@ export default function Directory() {
 
       {isLoading ? (
         <DirectorySkeleton />
-      ) : facultyList.length === 0 || filteredFaculty.length === 0 ? (
+      ) : facultyList.length === 0 ? (
         <EmptyDirectory />
+      ) : filteredFaculty.length === 0 ? (
+        <EmptySearch searchTerm={searchTerm} />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {filteredFaculty.map((faculty) => (
