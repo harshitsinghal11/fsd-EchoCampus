@@ -102,7 +102,7 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
           className={`absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-surface-hover border-l border-border shadow-2xl transition-duration-300 ease-in-out flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
         >
           {/* 1. Header */}
-          <div className="flex items-center justify-between p-6 border-b border-border">
+          <div className="flex items-center justify-between p-5 border-b border-border shrink-0">
             <Link href={logoHref} onClick={toggleMenu} className="hover:opacity-80 transition-opacity">
               <span className="text-xl font-extrabold text-text-primary tracking-tight">
                 Echo<span className="text-primary">Campus</span>
@@ -116,9 +116,9 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
             </button>
           </div>
 
-          {/* 2. Links Area */}
-          <div className="flex-1 py-6 px-4">
-            <nav className="space-y-2">
+          {/* 2. Links Area (No Scroll) */}
+          <div className="flex-1 py-4 px-4 flex flex-col justify-center">
+            <nav className="space-y-1">
               {navLinks.map((link, index) => {
                 const IconComponent = link.icon;
                 const isActive = pathname === link.href;
@@ -128,7 +128,7 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
                     key={link.name}
                     href={link.href}
                     onClick={toggleMenu}
-                    className={`group flex items-center px-4 py-3.5 rounded-xl text-sm md:text-base font-medium transition-all duration-200 
+                    className={`group flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 
                       ${isActive
                         ? "bg-primary/20 text-primary border border-primary/30 shadow-inner"
                         : "text-text-secondary hover:bg-surface-hover hover:text-text-primary border border-transparent"
@@ -153,10 +153,10 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
           </div>
 
           {/* 3. Footer (Logout) - Pinned to bottom */}
-          <div className="p-6 border-t border-border bg-surface">
+          <div className="p-5 border-t border-border bg-surface shrink-0">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center justify-center px-4 py-3.5 rounded-xl font-semibold text-sm md:text-base text-danger bg-danger/10 border border-danger/20 hover:bg-danger/20 hover:border-danger/40 hover:shadow-lg hover:shadow-danger/20 transition-all duration-200 group"
+              className="w-full flex items-center justify-center px-4 py-3 rounded-xl font-semibold text-sm text-danger bg-danger/10 border border-danger/20 hover:bg-danger/20 hover:border-danger/40 hover:shadow-lg hover:shadow-danger/20 transition-all duration-200 group"
             >
               <LogOut className="w-5 h-5 mr-2" />
               Sign Out

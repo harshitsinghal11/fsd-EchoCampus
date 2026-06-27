@@ -73,64 +73,56 @@ export default function Directory() {
           {filteredFaculty.map((faculty) => (
             <div
               key={faculty.id}
-              className="bg-surface backdrop-blur-xl border border-border rounded-2xl p-6 hover:bg-surface-hover"
+              className="group bg-surface backdrop-blur-xl border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 hover:bg-surface-hover/40"
             >
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="text-xl font-bold text-text-primary group-hover:text-primary transition-colors">
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg font-bold text-text-primary group-hover:text-primary transition-colors truncate">
                     {faculty.name}
                   </h3>
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-primary/10 text-primary border border-primary/20 mt-2">
-                    <BookOpen className="w-3.5 h-3.5" />
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-primary/10 text-primary border border-primary/20 mt-1">
                     {faculty.department}
                   </span>
                 </div>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-1.5">
                 <a
                   href={`mailto:${faculty.email}`}
-                  className="flex items-center gap-3 text-sm text-text-muted hover:text-text-primary transition-colors p-2 -mx-2 rounded-lg hover:bg-surface-hover"
+                  className="flex items-center gap-2.5 text-sm text-text-muted hover:text-text-primary transition-colors py-1 px-1.5 -mx-1.5 rounded-md hover:bg-surface-hover"
                 >
-                  <div className="bg-surface p-1.5 rounded-md">
-                    <Mail className="w-4 h-4 text-primary" />
-                  </div>
+                  <Mail className="w-4 h-4 text-text-disabled shrink-0" />
                   <span className="truncate">{faculty.email}</span>
                 </a>
 
                 {faculty.phone_no && (
                   <a
                     href={`tel:${faculty.phone_no}`}
-                    className="flex items-center gap-3 text-sm text-text-muted hover:text-text-primary transition-colors p-2 -mx-2 rounded-lg hover:bg-surface-hover"
+                    className="flex items-center gap-2.5 text-sm text-text-muted hover:text-text-primary transition-colors py-1 px-1.5 -mx-1.5 rounded-md hover:bg-surface-hover"
                   >
-                    <div className="bg-surface p-1.5 rounded-md">
-                      <Phone className="w-4 h-4 text-success" />
-                    </div>
+                    <Phone className="w-4 h-4 text-text-disabled shrink-0" />
                     <span>{faculty.phone_no}</span>
                   </a>
                 )}
-
-                {(faculty.cabin_no || faculty.experience !== null) && (
-                  <div className="flex items-center gap-4 pt-4 mt-1 border-t border-border">
-                    {faculty.cabin_no && (
-                      <div className="flex flex-col">
-                        <span className="text-[10px] uppercase tracking-wider text-text-disabled font-bold mb-1">Room No:</span>
-                        <span className="text-sm text-text-secondary font-medium">{faculty.cabin_no}</span>
-                      </div>
-                    )}
-
-                    {faculty.experience !== null && faculty.experience !== undefined && (
-                      <div className="flex flex-col ml-auto text-right">
-                        <span className="text-[10px] uppercase tracking-wider text-text-disabled font-bold mb-1 flex items-center gap-1 justify-end">
-                          <Briefcase className="w-3 h-3" />
-                          Experience
-                        </span>
-                        <span className="text-sm text-text-secondary font-medium">{faculty.experience} Years</span>
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
+
+              {(faculty.cabin_no || faculty.experience !== null) && (
+                <div className="flex items-center justify-between pt-3 mt-3 border-t border-border/60">
+                  {faculty.cabin_no && (
+                    <div className="flex flex-col">
+                      <span className="text-[10px] uppercase tracking-wider text-text-disabled font-bold">Room</span>
+                      <span className="text-sm text-text-secondary font-medium">{faculty.cabin_no}</span>
+                    </div>
+                  )}
+
+                  {faculty.experience !== null && faculty.experience !== undefined && (
+                    <div className="flex flex-col text-right">
+                      <span className="text-[10px] uppercase tracking-wider text-text-disabled font-bold">Experience</span>
+                      <span className="text-sm text-text-secondary font-medium">{faculty.experience} Yrs</span>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ))}
         </div>

@@ -26,7 +26,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
     setUpvoting(id);
 
     try {
-      const res = await fetch("/api/complaints/upvote", { 
+      const res = await fetch("/api/complaints/upvote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ complaintId: id })
@@ -69,7 +69,6 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
         {!isWidget && (
           <div className="mb-4">
             <h1 className="text-2xl font-bold text-text-primary flex items-center gap-3">
-              <MessageSquare className="w-5 h-5 text-primary" />
               Live Complaints
             </h1>
             <div className="h-5 bg-surface-hover rounded-md w-48 mt-2 animate-pulse"></div>
@@ -86,7 +85,6 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
       {!isWidget && (
         <div className="mb-4">
           <h1 className="text-2xl font-bold text-text-primary flex items-center gap-3">
-            <MessageSquare className="w-5 h-5 text-primary" />
             Live Complaints
           </h1>
           <p className="text-text-secondary mt-2">
@@ -107,7 +105,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
               <div className="flex items-start gap-4">
                 <div className="flex-1">
                   <p className={`text-text-secondary font-medium leading-relaxed ${isWidget ? 'text-sm line-clamp-2' : 'text-lg'}`}>
-                    &quot;{c.complaint}&quot;
+                    {c.complaint}
                   </p>
                   <div className="flex items-center gap-2 mt-2 text-xs text-text-muted">
                     <Clock className="w-3 h-3" />

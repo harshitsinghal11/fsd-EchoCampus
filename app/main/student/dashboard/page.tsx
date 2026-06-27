@@ -31,14 +31,12 @@ export default function StudentDashboard() {
             href={ROUTES.STUDENT.CHAT}
             className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 hover:border-primary/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all"
           >
-            <MessageSquare className="w-4 h-4 text-primary" />
             Global Chat
           </Link>
           <Link
             href={ROUTES.STUDENT.DIRECTORY}
             className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 hover:border-primary/50 hover:shadow-[0_0_15px_rgba(20,184,166,0.2)] transition-all"
           >
-            <BookUser className="w-4 h-4 text-primary" />
             Directory
           </Link>
         </div>
@@ -51,9 +49,7 @@ export default function StudentDashboard() {
         <section className="lg:col-span-3 bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-border shadow-xl">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-              <div className="p-2 md:p-2.5 bg-primary/10 rounded-lg md:rounded-xl">
-                <Megaphone className="w-4 h-4 md:w-5 md:h-5 text-primary" />
-              </div>
+              
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">Latest Announcements</h2>
             </div>
             <Link
@@ -61,7 +57,7 @@ export default function StudentDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary transition-colors"
             >
               View All
-              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 " />
+              
             </Link>
           </div>
           <AnnouncementList isWidget={true} />
@@ -71,9 +67,7 @@ export default function StudentDashboard() {
         <section className="lg:col-span-2 bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-border shadow-xl flex flex-col min-h-[350px] md:min-h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-              <div className="p-2 md:p-2.5 bg-primary/20 rounded-lg md:rounded-xl">
-                <ShoppingBag className="w-4 h-4 md:w-5 md:h-5 text-primary" />
-              </div>
+              
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">Newest Listings</h2>
             </div>
             <Link
@@ -81,7 +75,7 @@ export default function StudentDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors"
             >
               Browse Market
-              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 " />
+              
             </Link>
           </div>
           <MarketplaceList isWidget={true} />
@@ -91,9 +85,7 @@ export default function StudentDashboard() {
         <section className="bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-border shadow-xl flex flex-col min-h-[350px] md:min-h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-              <div className="p-2 md:p-2.5 bg-primary/10 rounded-lg md:rounded-xl">
-                <AlertTriangle className="w-4 h-4 md:w-5 md:h-5 text-primary" />
-              </div>
+              
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">Recent Complaints</h2>
             </div>
             <Link
@@ -101,7 +93,7 @@ export default function StudentDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary transition-colors"
             >
               View All
-              <ArrowRight className="w-3 h-3 md:w-4 md:h-4 " />
+              
             </Link>
           </div>
           <ComplaintList isWidget={true} />
@@ -111,9 +103,7 @@ export default function StudentDashboard() {
         <section className="lg:col-span-3 bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-border shadow-xl">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-              <div className="p-2 md:p-2.5 bg-primary/20 rounded-lg md:rounded-xl">
-                <Camera className="w-4 h-4 md:w-5 md:h-5 text-primary" />
-              </div>
+              
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">Recent Lost & Found</h2>
             </div>
             <Link
@@ -121,7 +111,7 @@ export default function StudentDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors"
             >
               View All
-              <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
+              
             </Link>
           </div>
           <LostFoundList showSearch={false} />

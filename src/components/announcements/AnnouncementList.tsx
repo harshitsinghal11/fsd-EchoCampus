@@ -29,38 +29,38 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
           key={item.id}
           className={`border w-full flex flex-col ${isWidget
             ? "bg-surface-hover/60 p-4 rounded-xl border-border hover:bg-surface-hover"
-            : "relative overflow-hidden bg-surface backdrop-blur-xl p-6 md:p-8 rounded-2xl border-border hover:bg-surface-hover hover:border-primary/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:bg-surface-hover/40 group shadow-xl"
+            : "group relative bg-surface backdrop-blur-xl p-7 rounded-2xl border-border hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 hover:bg-surface-hover/40 transition-all duration-300"
             }`}
         >
-          <div className="flex flex-col gap-1 w-full">
-            <h4 className={`font-bold text-text-primary group-hover:text-primary transition-colors ${isWidget ? "text-sm line-clamp-1" : "text-lg md:text-xl mb-1"}`}>
-              {item.title}
-            </h4>
+          <div className="flex flex-col gap-2 w-full">
+            <div className="flex items-start justify-between gap-4">
+              <h4 className={`font-bold text-text-primary group-hover:text-primary transition-colors flex-1 ${isWidget ? "text-sm line-clamp-1" : "text-lg md:text-xl"}`}>
+                {item.title}
+              </h4>
 
-            <p className={`text-text-muted ${isWidget ? "text-xs line-clamp-2 mt-1" : "text-sm md:text-base leading-relaxed line-clamp-3"}`}>
-              {item.content}
-            </p>
-
-            {item.link && (
-              <div className={`flex ${isWidget ? "mt-2" : "mt-4"}`}>
+              {item.link && (
                 <a
                   href={item.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-1.5 font-medium text-primary hover:text-primary transition-colors ${isWidget ? "text-[10px] md:text-xs" : "text-xs md:text-sm bg-primary/10 px-3 py-2 rounded-lg border border-primary/20 hover:bg-primary/10"
+                  className={`shrink-0 inline-flex items-center gap-1.5 font-medium text-primary hover:text-primary-light transition-colors ${isWidget ? "text-[10px] md:text-xs" : "text-xs font-semibold bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20 hover:bg-primary/20"
                     }`}
                 >
-                  <ExternalLink className={isWidget ? "w-3 h-3" : "w-4 h-4"} />
-                  {isWidget ? "Open Link" : "View Attachment / Link"}
+                  <ExternalLink className={isWidget ? "w-3 h-3" : "w-3.5 h-3.5"} />
+                  {isWidget ? "Open Link" : "View Link"}
                 </a>
-              </div>
-            )}
+              )}
+            </div>
+
+            <p className={`text-text-muted ${isWidget ? "text-xs line-clamp-2" : "text-sm md:text-base leading-relaxed whitespace-pre-wrap"}`}>
+              {item.content}
+            </p>
 
             {!isWidget && (
-              <div className="mt-5 pt-4 border-t border-border text-xs md:text-sm text-text-secondary space-y-2.5 flex flex-col justify-end grow">
-                <div className="flex items-center gap-2">
-                  <User className="w-4 h-4 text-text-disabled shrink-0" />
-                  <span className="truncate font-medium">{item.users?.full_name || "Faculty"}</span>
+              <div className="mt-2 pt-3 border-t border-border/60 text-xs text-text-secondary flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <User className="w-3.5 h-3.5 text-text-disabled shrink-0" />
+                  <span className="font-medium">{item.users?.full_name || "Faculty"}</span>
                 </div>
               </div>
             )}
