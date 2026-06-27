@@ -45,7 +45,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
 
       {/* 1. Title Input */}
       <div>
-        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wide mb-1.5">
+        <label className="block text-xs font-bold text-text-secondary uppercase tracking-wide mb-1.5">
           Subject / Title
         </label>
         <input
@@ -53,32 +53,32 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g. Exam Schedule Update"
-          className="w-full p-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:bg-slate-900/80 focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 outline-none transition-all text-sm font-medium"
+          className="w-full p-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:bg-surface-hover focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 outline-none transition-all text-sm font-medium"
         />
       </div>
 
       {/* 2. Link Input (NEW) */}
       <div>
-        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wide mb-1.5">
-          Attachment Link <span className="text-slate-500 font-normal lowercase">(optional)</span>
+        <label className="block text-xs font-bold text-text-secondary uppercase tracking-wide mb-1.5">
+          Attachment Link <span className="text-text-disabled font-normal lowercase">(optional)</span>
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <LinkIcon className="h-4 w-4 text-slate-500" />
+            <LinkIcon className="h-4 w-4 text-text-disabled" />
           </div>
           <input
             type="url"
             value={link}
             onChange={(e) => setLink(e.target.value)}
             placeholder="https://www.example.com"
-            className="w-full pl-10 p-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:bg-slate-900/80 focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 outline-none transition-all text-sm font-medium"
+            className="w-full pl-10 p-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:bg-surface-hover focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 outline-none transition-all text-sm font-medium"
           />
         </div>
       </div>
 
       {/* 3. Content Textarea */}
       <div>
-        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wide mb-1.5">
+        <label className="block text-xs font-bold text-text-secondary uppercase tracking-wide mb-1.5">
           Details
         </label>
         <textarea
@@ -87,7 +87,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
           onChange={(e) => setContent(e.target.value)}
           placeholder="Type your announcement content here..."
           rows={5}
-          className="w-full p-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:bg-slate-900/80 focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 outline-none transition-all text-sm resize-none"
+          className="w-full p-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:bg-surface-hover focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 outline-none transition-all text-sm resize-none"
         />
       </div>
 
@@ -95,7 +95,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
       <button
         disabled={loading}
         type="submit"
-        className="w-full mt-2 bg-teal-600 hover:bg-teal-500 text-white font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-teal-900/20 hover:shadow-teal-900/40 transform hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group"
+        className="w-full mt-2 bg-button-primary hover:bg-primary-hover text-text-primary font-bold py-3.5 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/40 transform hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none group"
       >
         {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <><Send className="w-4 h-4" /> Publish Now</>}
       </button>

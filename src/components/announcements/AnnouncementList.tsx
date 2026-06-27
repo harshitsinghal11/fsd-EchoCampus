@@ -15,7 +15,7 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
   if (isLoading) {
     return (
       <div className={`flex flex-col w-full ${isWidget ? "py-10" : "py-20"}`}>
-        <p className="text-center text-slate-500 animate-pulse">Loading announcements...</p>
+        <p className="text-center text-text-disabled animate-pulse">Loading announcements...</p>
       </div>
     );
   }
@@ -28,16 +28,16 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
         <MotionItem
           key={item.id}
           className={`border w-full flex flex-col ${isWidget
-            ? "bg-slate-800/60 p-4 rounded-xl border-slate-700/50 hover:bg-slate-700/50"
-            : "relative overflow-hidden bg-slate-800/40 backdrop-blur-xl p-6 md:p-8 rounded-2xl border-slate-700/50 hover:bg-slate-800/60 hover:shadow-2xl hover:shadow-blue-900/10 group shadow-xl"
+            ? "bg-surface-hover/60 p-4 rounded-xl border-border hover:bg-surface-hover"
+            : "relative overflow-hidden bg-surface backdrop-blur-xl p-6 md:p-8 rounded-2xl border-border hover:bg-surface-hover hover:shadow-2xl hover:shadow-primary/20 group shadow-xl"
             }`}
         >
           <div className="flex flex-col gap-1 w-full">
-            <h4 className={`font-bold text-white group-hover:text-blue-300 transition-colors ${isWidget ? "text-sm line-clamp-1" : "text-lg md:text-xl mb-1"}`}>
+            <h4 className={`font-bold text-text-primary group-hover:text-primary transition-colors ${isWidget ? "text-sm line-clamp-1" : "text-lg md:text-xl mb-1"}`}>
               {item.title}
             </h4>
 
-            <p className={`text-slate-400 ${isWidget ? "text-xs line-clamp-2 mt-1" : "text-sm md:text-base leading-relaxed line-clamp-3"}`}>
+            <p className={`text-text-muted ${isWidget ? "text-xs line-clamp-2 mt-1" : "text-sm md:text-base leading-relaxed line-clamp-3"}`}>
               {item.content}
             </p>
 
@@ -47,7 +47,7 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
                   href={item.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-1.5 font-medium text-blue-400 hover:text-blue-300 transition-colors ${isWidget ? "text-[10px] md:text-xs" : "text-xs md:text-sm bg-blue-500/10 px-3 py-2 rounded-lg border border-blue-500/20 hover:bg-blue-500/20"
+                  className={`inline-flex items-center gap-1.5 font-medium text-primary hover:text-primary transition-colors ${isWidget ? "text-[10px] md:text-xs" : "text-xs md:text-sm bg-primary/10 px-3 py-2 rounded-lg border border-primary/20 hover:bg-primary/10"
                     }`}
                 >
                   <ExternalLink className={isWidget ? "w-3 h-3" : "w-4 h-4"} />
@@ -57,9 +57,9 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
             )}
 
             {!isWidget && (
-              <div className="mt-5 pt-4 border-t border-slate-700/50 text-xs md:text-sm text-slate-300 space-y-2.5 flex flex-col justify-end grow">
+              <div className="mt-5 pt-4 border-t border-border text-xs md:text-sm text-text-secondary space-y-2.5 flex flex-col justify-end grow">
                 <div className="flex items-center gap-2">
-                  <User className="w-4 h-4 text-slate-500 shrink-0" />
+                  <User className="w-4 h-4 text-text-disabled shrink-0" />
                   <span className="truncate font-medium">{item.users?.full_name || "Faculty"}</span>
                 </div>
               </div>

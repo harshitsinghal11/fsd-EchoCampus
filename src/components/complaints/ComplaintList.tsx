@@ -65,14 +65,14 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
 
   if (isLoading) {
     return (
-      <div className={`flex-1 flex flex-col overflow-y-auto ${isWidget ? '' : 'bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6'}`}>
+      <div className={`flex-1 flex flex-col overflow-y-auto ${isWidget ? '' : 'bg-surface backdrop-blur-xl border border-border rounded-xl p-6'}`}>
         {!isWidget && (
           <div className="mb-4">
-            <h1 className="text-2xl font-bold text-white flex items-center gap-3">
-              <MessageSquare className="w-5 h-5 text-orange-400" />
+            <h1 className="text-2xl font-bold text-text-primary flex items-center gap-3">
+              <MessageSquare className="w-5 h-5 text-primary" />
               Live Complaints
             </h1>
-            <div className="h-5 bg-slate-700/50 rounded-md w-48 mt-2 animate-pulse"></div>
+            <div className="h-5 bg-surface-hover rounded-md w-48 mt-2 animate-pulse"></div>
           </div>
         )}
         <ComplaintSkeleton isWidget={isWidget} />
@@ -81,15 +81,15 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
   }
 
   return (
-    <div className={`flex-1 flex flex-col overflow-y-auto ${isWidget ? '' : 'bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl p-6'}`}>
+    <div className={`flex-1 flex flex-col overflow-y-auto ${isWidget ? '' : 'bg-surface backdrop-blur-xl border border-border rounded-xl p-6'}`}>
 
       {!isWidget && (
         <div className="mb-4">
-          <h1 className="text-2xl font-bold text-white flex items-center gap-3">
-            <MessageSquare className="w-5 h-5 text-orange-400" />
+          <h1 className="text-2xl font-bold text-text-primary flex items-center gap-3">
+            <MessageSquare className="w-5 h-5 text-primary" />
             Live Complaints
           </h1>
-          <p className="text-slate-300 mt-2">
+          <p className="text-text-secondary mt-2">
             {items.length} {items.length === 1 ? 'complaint' : 'complaints'} from the community
           </p>
         </div>
@@ -102,14 +102,14 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
           {items.map((c) => (
             <MotionItem
               key={c.id}
-              className={`bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-xl hover:bg-slate-700/60 transition-all duration-200 ${isWidget ? 'p-4' : 'p-4'}`}
+              className={`bg-surface backdrop-blur-xl border border-border rounded-xl hover:bg-surface-hover/60 transition-all duration-200 ${isWidget ? 'p-4' : 'p-4'}`}
             >
               <div className="flex items-start gap-4">
                 <div className="flex-1">
-                  <p className={`text-slate-300 font-medium leading-relaxed ${isWidget ? 'text-sm line-clamp-2' : 'text-lg'}`}>
+                  <p className={`text-text-secondary font-medium leading-relaxed ${isWidget ? 'text-sm line-clamp-2' : 'text-lg'}`}>
                     &quot;{c.complaint}&quot;
                   </p>
-                  <div className="flex items-center gap-2 mt-2 text-xs text-slate-400">
+                  <div className="flex items-center gap-2 mt-2 text-xs text-text-muted">
                     <Clock className="w-3 h-3" />
                     <span>{formatDate(c.created_at)}</span>
                   </div>
@@ -119,14 +119,14 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
                   onClick={() => upvote(c.id)}
                   disabled={upvoting === c.id}
                   className={`flex items-center gap-1 px-2 py-1.5 rounded-md border transition-colors disabled:opacity-50 group ${c.current_user_has_upvoted
-                    ? "bg-orange-500/20 border-orange-500/30"
-                    : "bg-transparent border-slate-700/50 hover:bg-orange-500/10 hover:border-orange-500/30"
+                    ? "bg-primary/10 border-primary/30"
+                    : "bg-transparent border-border hover:bg-primary/10 hover:border-primary/30"
                     } ${isWidget ? '' : 'flex-col min-w-[60px]'}`}
                 >
-                  <span className={`text-sm font-bold ${c.current_user_has_upvoted ? 'text-white' : 'text-slate-300 group-hover:text-white'} ${upvoting === c.id ? 'animate-pulse' : ''}`}>
+                  <span className={`text-sm font-bold ${c.current_user_has_upvoted ? 'text-text-primary' : 'text-text-secondary group-hover:text-text-primary'} ${upvoting === c.id ? 'animate-pulse' : ''}`}>
                     {c.upvotes}
                   </span>
-                  <ThumbsUp className={`w-3.5 h-3.5 ${c.current_user_has_upvoted ? "text-orange-400" : "text-slate-400 group-hover:text-orange-400"} ${upvoting === c.id ? 'text-orange-400' : ''}`} />
+                  <ThumbsUp className={`w-3.5 h-3.5 ${c.current_user_has_upvoted ? "text-primary" : "text-text-muted group-hover:text-primary"} ${upvoting === c.id ? 'text-primary' : ''}`} />
                 </button>
               </div>
             </MotionItem>

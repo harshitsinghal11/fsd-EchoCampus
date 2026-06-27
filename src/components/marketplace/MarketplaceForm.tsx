@@ -79,21 +79,21 @@ export default function MarketCreateForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-[1.5rem] md:rounded-3xl shadow-2xl p-6 md:p-8 space-y-5"
+      className="bg-surface backdrop-blur-xl border border-border rounded-[1.5rem] md:rounded-3xl shadow-2xl p-6 md:p-8 space-y-5"
     >
 
       {/* Title Input */}
       <div className="space-y-1.5">
-        <label className="block text-sm font-semibold text-slate-300">Product Title</label>
+        <label className="block text-sm font-semibold text-text-secondary">Product Title</label>
         <div className="relative group">
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <Tag className="h-5 w-5 text-slate-500 group-focus-within:text-purple-400 transition-colors" />
+            <Tag className="h-5 w-5 text-text-disabled group-focus-within:text-primary transition-colors" />
           </div>
           <input
             placeholder="e.g., Engineering Graphics Textbook"
             required
             value={form.product_title}
-            className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-200 hover:bg-slate-900/80"
+            className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 transition-all duration-200 hover:bg-surface-hover"
             onChange={(e) => setForm({ ...form, product_title: e.target.value })}
           />
         </div>
@@ -101,16 +101,16 @@ export default function MarketCreateForm() {
 
       {/* Description Input */}
       <div className="space-y-1.5">
-        <label className="block text-sm font-semibold text-slate-300">Description</label>
+        <label className="block text-sm font-semibold text-text-secondary">Description</label>
         <div className="relative group">
           <div className="absolute top-3.5 left-0 pl-4 flex pointer-events-none">
-            <AlignLeft className="h-5 w-5 text-slate-500 group-focus-within:text-purple-400 transition-colors" />
+            <AlignLeft className="h-5 w-5 text-text-disabled group-focus-within:text-primary transition-colors" />
           </div>
           <textarea
             placeholder="Condition, edition, features..."
             value={form.description}
             rows={3}
-            className="w-full pl-11 pr-4 py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-200 hover:bg-slate-900/80 resize-none"
+            className="w-full pl-11 pr-4 py-3.5 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 transition-all duration-200 hover:bg-surface-hover resize-none"
             onChange={(e) => setForm({ ...form, description: e.target.value })}
           />
         </div>
@@ -120,17 +120,17 @@ export default function MarketCreateForm() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Price Input */}
         <div className="space-y-1.5">
-          <label className="block text-sm font-semibold text-slate-300">Price</label>
+          <label className="block text-sm font-semibold text-text-secondary">Price</label>
           <div className="relative group">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <IndianRupee className="h-5 w-5 text-slate-500 group-focus-within:text-purple-400 transition-colors" />
+              <IndianRupee className="h-5 w-5 text-text-disabled group-focus-within:text-primary transition-colors" />
             </div>
             <input
               type="text"
               inputMode="numeric"
               placeholder="Amount"
               value={form.price}
-              className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all duration-200 hover:bg-slate-900/80"
+              className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 transition-all duration-200 hover:bg-surface-hover"
               onChange={(e) => {
                 const digitsOnly = e.target.value.replace(/\D/g, "");
                 if (digitsOnly.length <= 6) setForm({ ...form, price: digitsOnly });
@@ -141,10 +141,10 @@ export default function MarketCreateForm() {
 
         {/* Contact No Input */}
         <div className="space-y-1.5">
-          <label className="block text-sm font-semibold text-slate-300">Contact Number</label>
+          <label className="block text-sm font-semibold text-text-secondary">Contact Number</label>
           <div className="relative group">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Phone className={`h-5 w-5 transition-colors ${isPhoneInvalid ? 'text-red-400' : 'text-slate-500 group-focus-within:text-purple-400'}`} />
+              <Phone className={`h-5 w-5 transition-colors ${isPhoneInvalid ? 'text-danger' : 'text-text-disabled group-focus-within:text-primary'}`} />
             </div>
             <input
               required
@@ -152,9 +152,9 @@ export default function MarketCreateForm() {
               inputMode="numeric"
               placeholder="10-digit number"
               value={form.contact_info}
-              className={`w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/50 border rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 transition-all duration-200 hover:bg-slate-900/80 ${isPhoneInvalid
-                ? "border-red-500/50 focus:ring-red-500/50 focus:border-red-500/50"
-                : "border-slate-700/50 focus:ring-purple-500/50 focus:border-purple-500/50"
+              className={`w-full pl-11 pr-4 py-3 md:py-3.5 bg-surface border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus:ring-2 transition-all duration-200 hover:bg-surface-hover ${isPhoneInvalid
+                ? "border-danger/50 focus:ring-danger/50 focus:border-danger/50"
+                : "border-border focus:ring-input-focus/50 focus:border-primary/50"
                 }`}
               onChange={(e) => {
                 const val = e.target.value.replace(/\D/g, "");
@@ -168,13 +168,13 @@ export default function MarketCreateForm() {
 
         {/* Email Input (Disabled) */}
         <div className="space-y-1.5 md:col-span-2">
-          <label className="block text-sm font-semibold text-slate-400">Campus Email (Locked)</label>
+          <label className="block text-sm font-semibold text-text-muted">Campus Email (Locked)</label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <Mail className="h-5 w-5 text-slate-600" />
+              <Mail className="h-5 w-5 text-text-disabled" />
             </div>
             <input
-              className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-slate-900/30 border border-slate-700/30 rounded-xl text-slate-500 cursor-not-allowed select-none"
+              className="w-full pl-11 pr-4 py-3 md:py-3.5 bg-surface border border-border rounded-xl text-text-disabled cursor-not-allowed select-none"
               value={userEmail || "Loading email..."}
               disabled
             />
@@ -193,7 +193,7 @@ export default function MarketCreateForm() {
           form.contact_info.length !== 10 ||
           isSubmitting
         }
-        className="w-full mt-2 bg-purple-600 hover:bg-purple-500 text-white py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-purple-900/20 hover:shadow-purple-900/40 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center gap-2"
+        className="w-full mt-2 bg-button-primary hover:bg-primary-hover text-text-primary py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-input-focus focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed group flex items-center justify-center gap-2"
       >
         {isSubmitting ? (
           <>

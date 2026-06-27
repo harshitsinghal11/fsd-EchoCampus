@@ -99,7 +99,7 @@ export function NotificationManager() {
     <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50">
       <button
         onClick={subscribe}
-        className="flex items-center gap-2 px-4 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl shadow-lg shadow-teal-900/20 hover:-translate-y-1 transition-all group"
+        className="flex items-center gap-2 px-4 py-3 bg-button-primary hover:bg-primary-hover text-text-primary rounded-xl shadow-lg shadow-primary/20 hover:-translate-y-1 transition-all group"
       >
         <Bell className="w-4 h-4 group-hover:rotate-12 transition-transform" />
         <span className="text-sm font-bold">Enable Notifications</span>

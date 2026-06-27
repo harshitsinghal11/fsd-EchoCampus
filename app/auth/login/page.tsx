@@ -97,18 +97,18 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-[100dvh] w-full bg-slate-950 flex items-center justify-center p-4 sm:p-6 md:p-8">
+    <div className="min-h-[100dvh] w-full bg-background flex items-center justify-center p-4 sm:p-6 md:p-8">
 
       <div className="relative w-full max-w-md">
         {/* Glassmorphism Card matching the Dashboard */}
-        <div className="bg-slate-900/50 backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl shadow-2xl border border-slate-700/50 p-6 sm:p-8">
+        <div className="bg-surface backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl shadow-2xl border border-border p-6 sm:p-8">
 
           {/* Header */}
           <div className="text-center mb-6">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-white mb-2 md:mb-3 tracking-tight">
-              Echo<span className="text-teal-400">Campus</span>
+            <h1 className="text-3xl md:text-4xl font-extrabold text-text-primary mb-2 md:mb-3 tracking-tight">
+              Echo<span className="text-primary">Campus</span>
             </h1>
-            <p className="text-base md:text-lg text-slate-400 font-medium tracking-wide">
+            <p className="text-base md:text-lg text-text-muted font-medium tracking-wide">
               Meet. Learn. Build.
             </p>
           </div>
@@ -117,12 +117,12 @@ export default function Login() {
 
             {/* Email Input */}
             <div className="space-y-1.5 md:space-y-2">
-              <label htmlFor="email" className="block text-sm font-semibold text-slate-300">
+              <label htmlFor="email" className="block text-sm font-semibold text-text-secondary">
                 Email Address
               </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                  <Mail className="h-5 w-5 text-text-disabled group-focus-within:text-primary transition-colors" />
                 </div>
                 <input
                   id="email"
@@ -130,7 +130,7 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-11 pr-4 py-2.5 md:py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-800/60"
+                  className="w-full pl-11 pr-4 py-2.5 md:py-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 transition-all duration-200 hover:bg-surface-hover"
                   placeholder="Enter your email"
                 />
               </div>
@@ -138,12 +138,12 @@ export default function Login() {
 
             {/* Password Input */}
             <div className="space-y-1.5 md:space-y-2">
-              <label htmlFor="password" className="block text-sm font-semibold text-slate-300">
+              <label htmlFor="password" className="block text-sm font-semibold text-text-secondary">
                 Password
               </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-teal-400 transition-colors" />
+                  <Lock className="h-5 w-5 text-text-disabled group-focus-within:text-primary transition-colors" />
                 </div>
                 <input
                   id="password"
@@ -151,13 +151,13 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-11 pr-12 py-2.5 md:py-3 bg-slate-900/50 border border-slate-700/50 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-teal-500/50 transition-all duration-200 hover:bg-slate-800/60"
+                  className="w-full pl-11 pr-12 py-2.5 md:py-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 transition-all duration-200 hover:bg-surface-hover"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-500 hover:text-slate-300 transition-colors duration-200"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-text-disabled hover:text-text-secondary transition-colors duration-200"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -172,7 +172,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-2 md:mt-4 bg-gradient-to-r from-teal-600 to-emerald-600 text-white py-3 md:py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-teal-900/20 hover:shadow-teal-900/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group"
+              className="w-full mt-2 md:mt-4 bg-button-primary text-text-primary py-3 md:py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-primary/20 hover:shadow-primary/40 transform hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-input-focus focus:ring-offset-2 focus:ring-offset-background disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group"
             >
               <span className="flex items-center justify-center">
                 {isLoading ? (
@@ -191,9 +191,9 @@ export default function Login() {
           </form>
 
           {/* Footer Link */}
-          <p className="mt-5 md:mt-6 text-center text-sm text-slate-400">
+          <p className="mt-5 md:mt-6 text-center text-sm text-text-muted">
             New here?{" "}
-            <Link href={ROUTES.AUTH.SIGNUP} className="font-semibold text-teal-400 hover:text-teal-300 transition-colors">
+            <Link href={ROUTES.AUTH.SIGNUP} className="font-semibold text-primary hover:text-primary-light transition-colors">
               Create a student account
             </Link>
           </p>

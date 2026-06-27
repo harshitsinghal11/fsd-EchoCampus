@@ -9,7 +9,7 @@ export default function MainLayout({
 }) {
   return (
     <ProtectedRoute>
-      <div className="flex min-h-dvh flex-col bg-slate-950">
+      <div className="flex min-h-dvh flex-col bg-background">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

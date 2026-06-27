@@ -62,9 +62,9 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        <p className="mt-4 text-gray-500 font-medium">Verifying Access...</p>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <p className="mt-4 text-text-disabled font-medium">Verifying Access...</p>
       </div>
     );
   }

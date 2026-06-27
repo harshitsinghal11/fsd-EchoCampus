@@ -15,7 +15,7 @@ export default function MainLayout({
 
   return (
     <ProtectedRoute>
-      <div className="flex min-h-dvh flex-col bg-slate-950">
+      <div className="flex min-h-dvh flex-col bg-background">
         <Navbar />
         
         {/* We use a ternary operator to give the chat page its strict layout, 

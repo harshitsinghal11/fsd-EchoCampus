@@ -46,15 +46,15 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
   return (
     <>
       {/* --- TOP NAVBAR --- */}
-      <nav className="bg-slate-900/70 backdrop-blur-xl border-b border-slate-700/50 sticky top-0 z-50 shadow-lg shadow-black/20">
+      <nav className="bg-surface backdrop-blur-xl border-b border-border sticky top-0 z-50 shadow-lg shadow-black/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 md:h-20">
 
             {/* Logo Container */}
             <div className="flex items-center">
               <Link href={logoHref} className="shrink-0 flex items-center hover:opacity-80 transition-opacity">
-                <span className="text-xl md:text-2xl font-extrabold text-white tracking-tight">
-                  Echo<span className="text-teal-400">Campus</span>
+                <span className="text-xl md:text-2xl font-extrabold text-text-primary tracking-tight">
+                  Echo<span className="text-primary">Campus</span>
                 </span>
               </Link>
             </div>
@@ -63,7 +63,7 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
             <div className="flex items-center">
               <button
                 onClick={toggleMenu}
-                className="inline-flex items-center justify-center p-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500/50 z-50 group"
+                className="inline-flex items-center justify-center p-2.5 rounded-xl text-text-secondary hover:text-text-primary hover:bg-surface-hover/80 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-input-focus/50 z-50 group"
               >
                 {isMenuOpen ? (
                   <X className="h-6 w-6 transform transition-transform duration-300 group-hover:rotate-90" />
@@ -88,18 +88,18 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
 
         {/* Slide-out Panel */}
         <div
-          className={`absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-slate-900 border-l border-slate-700/50 shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+          className={`absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-surface-hover border-l border-border shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
         >
           {/* 1. Header */}
-          <div className="flex items-center justify-between p-6 border-b border-slate-700/50">
+          <div className="flex items-center justify-between p-6 border-b border-border">
             <Link href={logoHref} onClick={toggleMenu} className="hover:opacity-80 transition-opacity">
-              <span className="text-xl font-extrabold text-white tracking-tight">
-                Echo<span className="text-teal-400">Campus</span>
+              <span className="text-xl font-extrabold text-text-primary tracking-tight">
+                Echo<span className="text-primary">Campus</span>
               </span>
             </Link>
             <button
               onClick={toggleMenu}
-              className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+              className="p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-hover transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -119,8 +119,8 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
                     onClick={toggleMenu}
                     className={`group flex items-center px-4 py-3.5 rounded-xl text-sm md:text-base font-medium transition-all duration-200 
                       ${isActive
-                        ? "bg-teal-500/20 text-teal-400 border border-teal-500/30 shadow-inner"
-                        : "text-slate-300 hover:bg-slate-800/60 hover:text-white border border-transparent"
+                        ? "bg-primary/20 text-primary border border-primary/30 shadow-inner"
+                        : "text-text-secondary hover:bg-surface-hover hover:text-text-primary border border-transparent"
                       }
                     `}
                     style={{
@@ -132,7 +132,7 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
                   >
                     <IconComponent
                       className={`w-5 h-5 mr-3 transition-colors 
-                        ${isActive ? "text-teal-400" : "text-slate-500 group-hover:text-slate-300"}
+                        ${isActive ? "text-primary" : "text-text-disabled group-hover:text-text-secondary"}
                       `}
                     />
                     <span className="flex-1">{link.name}</span>
@@ -143,10 +143,10 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
           </div>
 
           {/* 3. Footer (Logout) - Pinned to bottom */}
-          <div className="p-6 border-t border-slate-700/50 bg-slate-900/50">
+          <div className="p-6 border-t border-border bg-surface">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center justify-center px-4 py-3.5 rounded-xl font-semibold text-sm md:text-base text-red-400 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/40 hover:shadow-lg hover:shadow-red-900/20 active:scale-95 transition-all duration-200 group"
+              className="w-full flex items-center justify-center px-4 py-3.5 rounded-xl font-semibold text-sm md:text-base text-danger bg-danger/10 border border-danger/20 hover:bg-danger/20 hover:border-danger/40 hover:shadow-lg hover:shadow-danger/20 active:scale-95 transition-all duration-200 group"
             >
               <LogOut className="w-5 h-5 mr-2" />
               Sign Out

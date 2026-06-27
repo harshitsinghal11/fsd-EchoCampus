@@ -108,19 +108,19 @@ export default function AnonChat() {
 
   return (
     <div className="relative flex-1 h-full w-full min-h-0">
-      <div className="absolute inset-0 flex flex-col overflow-hidden bg-slate-950 text-slate-100">
+      <div className="absolute inset-0 flex flex-col overflow-hidden bg-background text-text-primary">
         
         {/* Messages Scrollable Area */}
         <div className="flex-1 overflow-y-auto px-3 py-4 sm:px-5 sm:py-5 lg:px-8">
           <div className="flex min-h-full flex-col gap-5">
             {messages.length === 0 ? (
               <div className="flex flex-1 items-center justify-center py-10">
-                <div className="mx-auto max-w-md rounded-3xl border border-slate-800 bg-slate-900/70 px-8 py-10 text-center shadow-2xl shadow-black/20">
-                  <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-slate-700 bg-slate-800/80">
-                    <Users className="h-8 w-8 text-slate-400" />
+                <div className="mx-auto max-w-md rounded-3xl border border-border bg-surface px-8 py-10 text-center shadow-2xl shadow-black/20">
+                  <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-surface-hover/80">
+                    <Users className="h-8 w-8 text-text-muted" />
                   </div>
-                  <h2 className="text-xl font-semibold text-white">No messages yet</h2>
-                  <p className="mt-2 text-sm leading-6 text-slate-400">
+                  <h2 className="text-xl font-semibold text-text-primary">No messages yet</h2>
+                  <p className="mt-2 text-sm leading-6 text-text-muted">
                     Start the room with a question, a study update, or a quick campus check-in.
                   </p>
                 </div>
@@ -151,7 +151,7 @@ export default function AnonChat() {
                   <React.Fragment key={m.id}>
                     {showDateHeader && (
                       <div className="flex justify-center my-4">
-                        <span className="bg-slate-800/80 text-slate-400 text-[11px] uppercase tracking-wider font-semibold px-3 py-1 rounded-full border border-slate-700/50">
+                        <span className="bg-surface-hover/80 text-text-muted text-[11px] uppercase tracking-wider font-semibold px-3 py-1 rounded-full border border-border">
                           {displayDate}
                         </span>
                       </div>
@@ -159,21 +159,21 @@ export default function AnonChat() {
                     <div className={`flex w-full ${isOwn ? 'justify-end' : 'justify-start'} mb-1`}>
                       <div className="flex max-w-[min(86%,42rem)] flex-col">
                         <div className={`mb-1 flex items-baseline px-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
-                          <span className={`text-[10px] font-mono font-bold uppercase tracking-[0.16em] ${isOwn ? 'text-blue-300' : 'text-slate-400'}`}>
+                          <span className={`text-[10px] font-mono font-bold uppercase tracking-[0.16em] ${isOwn ? 'text-primary' : 'text-text-muted'}`}>
                             {m.random_code}
                           </span>
                         </div>
 
                         <div className={`relative rounded-3xl px-3.5 py-2.5 pb-6 shadow-lg shadow-black/10 transition-colors sm:px-4 sm:pb-7 ${
                             isOwn
-                              ? 'rounded-br-md border border-blue-500/30 bg-blue-500/20 text-white'
-                              : 'rounded-bl-md border border-slate-700/80 bg-slate-900/75 text-slate-100'
+                              ? 'rounded-br-md border border-primary/30 bg-primary/10 text-text-primary'
+                              : 'rounded-bl-md border border-border/80 bg-surface-hover/75 text-text-primary'
                           }`}
                         >
                           <p className="whitespace-pre-wrap wrap-break-word text-sm leading-relaxed sm:text-[15px]">
                             {m.message}
                           </p>
-                          <div className={`absolute bottom-1.5 right-3 text-[9px] sm:text-[10px] font-medium tracking-wide ${isOwn ? 'text-blue-200/70' : 'text-slate-400/70'}`}>
+                          <div className={`absolute bottom-1.5 right-3 text-[9px] sm:text-[10px] font-medium tracking-wide ${isOwn ? 'text-primary/70' : 'text-text-muted/70'}`}>
                             {m.created_at
                               ? msgDateObj.toLocaleTimeString('en-US', {
                                   hour: 'numeric',
@@ -195,7 +195,7 @@ export default function AnonChat() {
 
         <form
           onSubmit={handleSend}
-          className="shrink-0 border-t border-slate-800 bg-slate-950/90 px-3 py-3 backdrop-blur-xl sm:px-5 sm:py-4 lg:px-8"
+          className="shrink-0 border-t border-border bg-background/90 px-3 py-3 backdrop-blur-xl sm:px-5 sm:py-4 lg:px-8"
         >
           <div className="flex items-center gap-2 sm:gap-3">
             <input
@@ -203,16 +203,16 @@ export default function AnonChat() {
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="Write something respectful..."
-              className="h-12 flex-1 rounded-2xl border border-slate-700 bg-slate-900/80 px-4 text-sm text-slate-100 placeholder:text-slate-500 focus:border-blue-500/60 focus:outline-none focus:ring-2 focus:ring-blue-500/20 sm:h-14 sm:px-5 sm:text-base"
+              className="h-12 flex-1 rounded-2xl border border-border bg-surface-hover px-4 text-sm text-text-primary placeholder:text-text-disabled focus:border-primary/60 focus:outline-none focus:ring-2 focus:ring-primary/20 sm:h-14 sm:px-5 sm:text-base"
             />
 
             <button
               aria-label="Send message"
               type="submit"
               disabled={!text.trim()}
-              className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-2xl border border-blue-500/40 bg-blue-500/15 px-4 font-medium text-white transition-colors hover:bg-blue-500/25 disabled:cursor-not-allowed disabled:border-slate-700 disabled:bg-slate-900 disabled:text-slate-500 sm:h-14 sm:px-6"
+              className="inline-flex h-12 shrink-0 items-center justify-center gap-2 rounded-2xl border border-primary/40 bg-primary/10 px-4 font-medium text-text-primary transition-colors hover:bg-primary/10 disabled:cursor-not-allowed disabled:border-border disabled:bg-surface-hover disabled:text-text-disabled sm:h-14 sm:px-6"
             >
-              <Send className="h-4 w-4 text-blue-300" />
+              <Send className="h-4 w-4 text-primary" />
               <span className="hidden sm:inline">Send</span>
             </button>
           </div>

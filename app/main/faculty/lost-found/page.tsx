@@ -12,11 +12,11 @@ export default function LostFoundPage() {
       
       {/* Page Title */}
       <div className="flex flex-col gap-1 md:gap-2">
-         <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-white flex items-center gap-3">
-            <Search className="w-7 h-7 md:w-8 md:h-8 text-teal-400" />
+         <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-text-primary flex items-center gap-3">
+            <Search className="w-7 h-7 md:w-8 md:h-8 text-primary" />
             Lost & Found
          </h1>
-         <p className="text-sm md:text-base text-slate-400 font-medium">Report and find lost items across the campus.</p>
+         <p className="text-sm md:text-base text-text-muted font-medium">Report and find lost items across the campus.</p>
       </div>
 
       {/* MAIN CONTENT GRID */}

@@ -5,9 +5,9 @@ export const metadata = {
 export default function TermsPage() {
   return (
     <div className="min-h-screen">
-    <main className="max-w-4xl mx-auto px-6 py-12 text-white">
+    <main className="max-w-4xl mx-auto px-6 py-12 text-text-primary">
       <h1 className="text-3xl font-bold mb-6">Terms of Service</h1>
-      <div className="space-y-4 text-sm leading-6 text-gray-50">
+      <div className="space-y-4 text-sm leading-6 text-text-primary">
         <p>
           EchoCampus is intended for respectful campus use. Users are
           responsible for content they post, including marketplace and
