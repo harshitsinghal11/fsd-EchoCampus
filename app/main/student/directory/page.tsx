@@ -1,4 +1,4 @@
-import DirectoryList from "@/components/shared/Directory/page";
+import DirectoryList from "@/components/directory/page";
 
 export default function StudentDirectoryPage() {
   return (

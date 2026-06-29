@@ -78,9 +78,9 @@ public/
 - APIs are implemented as local Next.js route handlers under `app/api`.
 - Endpoints return JSON objects and use standard HTTP status codes such as `200`, `201`, `400`, `401`, `403`, `429`, and `500`.
 - Complaint endpoints own server-side aggregation and upvote toggle logic.
-- Marketplace endpoints own server-side validation and owner-based sold updates.
+- Marketplace creation and validation use Server Actions, while owner-based sold updates are handled via client-side Supabase calls.
 - Validation is split across route handlers, database constraints, RLS policies, and triggers.
-- API versioning, OpenAPI documentation, pagination contracts, and formal schema generation are not implemented. 
+- API versioning, OpenAPI documentation, pagination contracts, and formal schema generation are not implemented. w
 
 # State Management
 - UI state is local to each page or component through React hooks.

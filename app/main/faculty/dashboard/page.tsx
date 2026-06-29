@@ -4,7 +4,7 @@ import { Megaphone, BookUser, Camera, ArrowRight, AlertTriangle, LayoutDashboard
 
 import ComplaintList from "@/components/complaints/ComplaintList";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
-import LostFoundList from "@/components/shared/LostFound/LostFoundList";
+import LostFoundList from "@/components/lost-found/LostFoundList";
 
 export const metadata = {
   title: "Faculty Dashboard",

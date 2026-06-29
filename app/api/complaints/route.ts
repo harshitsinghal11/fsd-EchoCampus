@@ -94,48 +94,6 @@ export async function GET() {
   return NextResponse.json({ complaints });
 }
 
-// POST: Create Complaint
-export async function POST(req: Request) {
-  try {
-    const supabase = await createSupabaseServerClient();
-
-    // 1. Authenticate
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const body = (await req.json()) as { complaint?: unknown; isAnonymous?: unknown };
-    const { complaint, isAnonymous } = body;
-
-    if (!complaint || typeof complaint !== 'string') {
-      return NextResponse.json({ error: "Invalid complaint content" }, { status: 400 });
-    }
-
-    // 2. Insert
-    const { error: insertError } = await supabase
-      .from("complaint_box")
-      .insert({
-        user_id: user.id,
-        content: complaint,
-        is_anonymous: !!isAnonymous // Ensure boolean
-      });
-
-    if (insertError) {
-      if (insertError.message.includes("Weekly limit reached!")) {
-        return NextResponse.json({ error: "Weekly limit reached! You can only submit 1 complaint per week." }, { status: 429 });
-      }
-      return NextResponse.json({ error: insertError.message }, { status: 500 });
-    }
-
-    return NextResponse.json({ success: true });
-
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Internal server error";
-    return NextResponse.json({ error: message }, { status: 500 });
-  }
-}
-
 // Updated Types to reflect Supabase returns
 type ComplaintRow = {
   id: string;

@@ -4,7 +4,7 @@ import { Megaphone, ShoppingBag, MessageSquare, AlertTriangle, Camera, ArrowRigh
 import AnnouncementList from "@/components/announcements/AnnouncementList";
 import MarketplaceList from "@/components/marketplace/MarketplaceList";
 import ComplaintList from "@/components/complaints/ComplaintList";
-import LostFoundList from "@/components/shared/LostFound/LostFoundList";
+import LostFoundList from "@/components/lost-found/LostFoundList";
 
 export const metadata = {
   title: "Dashboard",
@@ -49,7 +49,7 @@ export default function StudentDashboard() {
         <section className="lg:col-span-3 bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-border shadow-xl">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-              
+
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">Latest Announcements</h2>
             </div>
             <Link
@@ -57,7 +57,7 @@ export default function StudentDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary transition-colors"
             >
               View All
-              
+
             </Link>
           </div>
           <AnnouncementList isWidget={true} />
@@ -67,7 +67,7 @@ export default function StudentDashboard() {
         <section className="lg:col-span-2 bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-border shadow-xl flex flex-col min-h-[350px] md:min-h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-              
+
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">Newest Listings</h2>
             </div>
             <Link
@@ -75,7 +75,7 @@ export default function StudentDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors"
             >
               Browse Market
-              
+
             </Link>
           </div>
           <MarketplaceList isWidget={true} />
@@ -85,7 +85,7 @@ export default function StudentDashboard() {
         <section className="bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-border shadow-xl flex flex-col min-h-[350px] md:min-h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-              
+
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">Recent Complaints</h2>
             </div>
             <Link
@@ -93,7 +93,7 @@ export default function StudentDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary transition-colors"
             >
               View All
-              
+
             </Link>
           </div>
           <ComplaintList isWidget={true} />
@@ -103,7 +103,7 @@ export default function StudentDashboard() {
         <section className="lg:col-span-3 bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-border shadow-xl">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-              
+
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">Recent Lost & Found</h2>
             </div>
             <Link
@@ -111,7 +111,7 @@ export default function StudentDashboard() {
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors"
             >
               View All
-              
+
             </Link>
           </div>
           <LostFoundList showSearch={false} />

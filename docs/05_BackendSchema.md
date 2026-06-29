@@ -98,12 +98,14 @@ The repository implements Supabase Storage for object storage workflows. Lost an
 
 # API Models
 - `GET /api/complaints` -> `{ complaints: [{ id, complaint, created_at, session_code, author_id, upvotes, current_user_has_upvoted }] }`
-- `POST /api/complaints` body -> `{ complaint: string, isAnonymous: boolean }`
 - `POST /api/complaints/upvote` body -> `{ complaintId: string }`
 - `POST /api/complaints/upvote` response -> `{ message, added, current_user_has_upvoted }`
-- `GET /api/marketplace` -> `{ listings: [{ id, owner_id, owner_name, owner_email, product_title, description, price, contact_info, is_sold, created_at }] }`
-- `POST /api/marketplace` body -> `{ product_title, description, price, owner_name, contact_info }`
-- `POST /api/marketplace/sold` body -> `{ id: string }`
+
+# Server Actions
+- `submitComplaint(formData: { complaint: string, isAnonymous: boolean })`
+- `addMarketplaceItem(formData: { product_title, description, price, contact_info, image_url? })`
+- `addAnnouncement(formData: { title, content, link? })`
+- `addLostFoundItem(formData: { title, description, location, contact_info, image_url, type })`
 
 # Audit Strategy
 The repository does not implement audit tables, change history, moderation logs, or actor-based event tracking.

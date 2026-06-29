@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import LostFoundForm from "@/components/shared/LostFound/LostFoundForm";
-import LostFoundList from "@/components/shared/LostFound/LostFoundList";
+import LostFoundForm from "@/components/lost-found/LostFoundForm";
+import LostFoundList from "@/components/lost-found/LostFoundList";
 import { Search } from "lucide-react";
 
 export default function LostFoundPage() {
