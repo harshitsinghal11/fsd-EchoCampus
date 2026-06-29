@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
-import { Megaphone, BookUser, Camera, ArrowRight, AlertTriangle, LayoutDashboard } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
 
 import ComplaintList from "@/components/complaints/ComplaintList";
 import AnnouncementList from "@/components/announcements/AnnouncementList";

@@ -1,8 +1,12 @@
 import AnnouncementForm from "@/components/announcements/AnnouncementForm";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
 import { AnnouncementSkeleton } from "@/components/shared/Skeletons";
-import { Megaphone, Activity, Radio } from "lucide-react";
+import { Megaphone } from "lucide-react";
 import { Suspense } from "react";
+
+export const metadata = {
+  title: "Announcements",
+};
 
 export default function AdminAnnouncementsPage() {
    return (

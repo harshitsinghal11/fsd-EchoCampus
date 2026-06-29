@@ -6,6 +6,10 @@ import Footer from "@/components/Footer/FooterStudent";
 import { ROUTES } from "@/lib/routes";
 import CheckAuthRedirect from "@/components/CheckAuthRedirect";
 
+export const metadata = {
+  title: "Home",
+};
+
 export default function Home() {
   return (
     <div className="min-h-[100dvh] bg-background flex flex-col font-sans">

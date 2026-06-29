@@ -7,9 +7,7 @@ import {
   Phone, 
   Briefcase, 
   MapPin, 
-  Award, 
-  ArrowLeft,
-  LogOut
+  Award
 } from "lucide-react";
 import { ProfileSkeleton } from '@/components/shared/Skeletons';
 import ProfileActions from '@/components/shared/ProfileActions';

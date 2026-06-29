@@ -1,6 +1,10 @@
 import { MessageSquare } from "lucide-react";
 import ComplaintList from "@/components/complaints/ComplaintList";
 
+export const metadata = {
+  title: "Complaints",
+};
+
 export default function FacultyComplaintsPage() {
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6 md:space-y-8 p-4 md:p-6 lg:p-8">

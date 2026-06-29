@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabaseClient';
 import { MarketplaceItem } from '@/types/marketplace';
 import { useEffect } from 'react';
 
-const fetcher = async ([url, limit]: [string, number | undefined]) => {
+const fetcher = async ([_key, limit]: [string, number | undefined]) => {
   let query = supabase
     .from("marketplace")
     .select(`*`)
@@ -20,7 +20,7 @@ export function useMarketplace(isWidget: boolean = false, customLimit?: number) 
   const limit = isWidget ? 3 : customLimit;
   const key = ['marketplace', limit];
 
-  const { data, error, isLoading, mutate } = useSWR<MarketplaceItem[]>(key, fetcher as any);
+  const { data, error, isLoading, mutate } = useSWR<MarketplaceItem[], Error, [string, number | undefined]>(key as [string, number | undefined], fetcher);
 
   useEffect(() => {
     const channel = supabase

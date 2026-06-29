@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabaseClient";
-import { Send, Loader2, Link as LinkIcon, Type, AlignLeft } from "lucide-react";
+// import { supabase } from "@/lib/supabaseClient";
+import { Link as LinkIcon, Type, AlignLeft } from "lucide-react";
 import { toast } from "sonner";
 import { addAnnouncement } from "@/actions/announcementActions";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";

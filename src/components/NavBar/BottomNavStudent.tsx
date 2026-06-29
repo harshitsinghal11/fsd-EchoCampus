@@ -1,13 +1,12 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Home, MessageSquare, BookUser, Store, MoreHorizontal, BellRing, Mic, ShieldAlert, User } from "lucide-react";
 import { ROUTES } from "@/lib/routes";
 
 export default function BottomNavStudent() {
   const pathname = usePathname();
-  const router = useRouter();
   const [showMore, setShowMore] = useState(false);
 
   const navItems = [

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import { Announcement } from '@/types/announcements';
 
-const fetcher = async ([url, limit, searchTerm]: [string, number | undefined, string]) => {
+const fetcher = async ([_key, limit, searchTerm]: [string, number | undefined, string]) => {
   let query = supabase
     .from("announcements")
     .select(`*, users ( full_name )`)
@@ -19,7 +19,7 @@ const fetcher = async ([url, limit, searchTerm]: [string, number | undefined, st
   if (error) throw error;
   
   // Format data correctly due to Supabase returning arrays for joins sometimes
-  return (data || []).map((item: any) => ({
+  return (data || []).map((item) => ({
     ...item,
     users: Array.isArray(item.users) ? item.users[0] : item.users
   })) as Announcement[];
@@ -29,7 +29,7 @@ export function useAnnouncements(isWidget: boolean = false, searchTerm: string =
   const limit = isWidget ? 3 : customLimit;
   const key = ['announcements', limit, searchTerm];
 
-  const { data, error, isLoading, mutate } = useSWR<Announcement[]>(key, fetcher as any);
+  const { data, error, isLoading, mutate } = useSWR<Announcement[], Error, [string, number | undefined, string]>(key as [string, number | undefined, string], fetcher);
 
   useEffect(() => {
     const channel = supabase

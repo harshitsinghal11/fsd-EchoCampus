@@ -39,7 +39,7 @@ export default function NotFound() {
         </h1>
 
         <p className="text-text-muted mb-10 text-base leading-relaxed max-w-md mx-auto">
-          Sorry, we couldn't find the page you're looking for. It might have been moved, deleted, or never existed in the first place.
+          Sorry, we couldn&apos;t find the page you&apos;re looking for. It might have been moved, deleted, or never existed in the first place.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

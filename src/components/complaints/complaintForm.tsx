@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, CheckCircle2, MessageSquare, Loader2, AlignLeft } from "lucide-react";
+import { AlignLeft } from "lucide-react";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import { toast } from "sonner";
 import { submitComplaint } from "@/actions/complaintActions";
@@ -12,7 +12,6 @@ import { FormTextarea } from "@/components/shared/ui/FormTextarea";
 export default function ComplaintForm() {
   const router = useRouter();
   const [complaint, setComplaint] = useState("");
-  const [isAnonymous, setIsAnonymous] = useState(true);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit() {
@@ -26,7 +25,7 @@ export default function ComplaintForm() {
     try {
       const result = await submitComplaint({
         complaint: complaint.trim(),
-        isAnonymous,
+        isAnonymous: true,
       });
 
       if (result.error) {
@@ -37,6 +36,7 @@ export default function ComplaintForm() {
         router.refresh();
       }
     } catch (error) {
+      console.error(error);
       toast.error("Network error. Please try again.");
     } finally {
       setLoading(false);

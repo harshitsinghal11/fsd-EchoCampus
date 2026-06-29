@@ -3,6 +3,10 @@ import { AnnouncementSkeleton } from "@/components/shared/Skeletons";
 import { Megaphone, Search } from "lucide-react";
 import { Suspense } from "react";
 
+export const metadata = {
+  title: "Announcements",
+};
+
 export default function StudentAnnouncementsPage() {
   return (
     <div className="w-full max-w-7xl mx-auto min-h-screen p-4 sm:p-6 md:p-8">

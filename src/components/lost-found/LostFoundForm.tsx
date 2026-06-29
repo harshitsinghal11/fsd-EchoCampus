@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { Loader2, X, UploadCloud, Search, MapPin, Phone, AlignLeft, Camera } from "lucide-react";
+import { X, UploadCloud, Search, MapPin, Phone, AlignLeft } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { addLostFoundItem } from "@/actions/lostFoundActions";
