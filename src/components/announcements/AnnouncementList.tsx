@@ -6,24 +6,19 @@ import { MotionItem } from "@/components/shared/MotionItem";
 import { useAnnouncements } from "@/hooks/data/useAnnouncements";
 import { EmptyAnnouncements, EmptySearch } from "@/components/shared/EmptyStates";
 import { SearchBar } from "@/components/shared/SearchBar";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface AnnouncementListProps {
   isWidget?: boolean;
 }
 
 export default function AnnouncementList({ isWidget = false }: AnnouncementListProps) {
-  const { items, isLoading } = useAnnouncements(isWidget);
+  const [limit, setLimit] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const { items, isLoading } = useAnnouncements(isWidget, debouncedSearchTerm, isWidget ? undefined : limit);
 
-  const displayItems = useMemo(() => {
-    if (!searchTerm) return items;
-    const lower = searchTerm.toLowerCase();
-    return items.filter(
-      (item) =>
-        item.title.toLowerCase().includes(lower) ||
-        item.content.toLowerCase().includes(lower)
-    );
-  }, [items, searchTerm]);
+  const displayItems = items;
 
   if (isLoading) {
     return (
@@ -94,6 +89,18 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
         </MotionItem>
       ))}
     </MotionList>
+
+      {/* --- LOAD MORE BUTTON --- */}
+      {!isWidget && items.length === limit && displayItems.length > 0 && !searchTerm && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={() => setLimit((prev) => prev + 10)}
+            className="px-6 py-2.5 bg-surface border border-border rounded-xl text-text-primary hover:bg-surface-hover hover:border-primary/50 transition-all text-sm font-semibold shadow-sm hover:shadow-md"
+          >
+            Load More
+          </button>
+        </div>
+      )}
     </div>
   );
 }

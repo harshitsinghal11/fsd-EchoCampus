@@ -10,6 +10,7 @@ import { MotionItem } from "@/components/shared/MotionItem";
 import { useMarketplace } from "@/hooks/data/useMarketplace";
 import { EmptyMarketplace, EmptySearch } from "@/components/shared/EmptyStates";
 import { SearchBar } from "@/components/shared/SearchBar";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface MarketListProps {
   currentUserEmail?: string;
@@ -17,12 +18,14 @@ interface MarketListProps {
 }
 
 export default function MarketList({ currentUserEmail, isWidget = false }: MarketListProps) {
-  const { items, isLoading, mutate } = useMarketplace(isWidget);
+  const [limit, setLimit] = useState(10);
+  const { items, isLoading, mutate } = useMarketplace(isWidget, isWidget ? undefined : limit);
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   const displayItems = useMemo(() => {
     if (isWidget) return items;
-    const q = searchTerm.trim().toLowerCase();
+    const q = debouncedSearchTerm.trim().toLowerCase();
     if (!q) return items;
     return items.filter((item) => {
       const hay = [
@@ -34,7 +37,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
         .toLowerCase();
       return hay.includes(q);
     });
-  }, [items, searchTerm, isWidget]);
+  }, [items, debouncedSearchTerm, isWidget]);
 
   async function markSold(id: string) {
     if (!confirm("Are you sure you want to mark this item as sold?")) return;
@@ -157,6 +160,18 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
             </MotionItem>
           ))}
         </MotionList>
+      )}
+
+      {/* --- LOAD MORE BUTTON --- */}
+      {!isWidget && items.length === limit && displayItems.length > 0 && !searchTerm && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={() => setLimit((prev) => prev + 10)}
+            className="px-6 py-2.5 bg-surface border border-border rounded-xl text-text-primary hover:bg-surface-hover hover:border-primary/50 transition-all text-sm font-semibold shadow-sm hover:shadow-md"
+          >
+            Load More
+          </button>
+        </div>
       )}
     </div>
   );

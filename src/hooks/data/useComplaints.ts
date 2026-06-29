@@ -2,25 +2,21 @@ import useSWR from 'swr';
 import { supabase } from '@/lib/supabaseClient';
 import { useEffect } from 'react';
 
-type Complaint = {
-  id: string;
-  complaint: string;
-  created_at: string;
-  upvotes: number;
-  current_user_has_upvoted?: boolean;
-};
+import { Complaint } from '@/types/complaints';
 
-const fetcher = async () => {
-  const res = await fetch("/api/complaints");
+const fetcher = async ([url, limit]: [string, number | undefined]) => {
+  const urlWithParams = limit ? `${url}?limit=${limit}` : url;
+  const res = await fetch(urlWithParams);
   if (!res.ok) throw new Error("Failed to load complaints");
   const json = await res.json();
   return (json.complaints as Complaint[]) || [];
 };
 
-export function useComplaints(isWidget: boolean = false) {
-  const limit = isWidget ? 3 : undefined;
-  
-  const { data, error, isLoading, mutate } = useSWR<Complaint[]>('/api/complaints', fetcher);
+export function useComplaints(isWidget: boolean = false, customLimit?: number) {
+  const limit = isWidget ? 3 : customLimit;
+  const key = ['/api/complaints', limit];
+
+  const { data, error, isLoading, mutate } = useSWR<Complaint[]>(key, fetcher as any);
 
   useEffect(() => {
     const channel = supabase

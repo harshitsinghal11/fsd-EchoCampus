@@ -2,14 +2,18 @@ import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
 
 // GET: Fetch Complaints
-export async function GET() {
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const limitParam = url.searchParams.get("limit");
+  const limit = limitParam ? parseInt(limitParam) : null;
+
   const supabase = await createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   const currentUserId = user?.id || null;
 
   // 2. Build Query
   // We fetch global count, AND specific upvotes by this user to check "has_upvoted"
-  const query = supabase
+  let query = supabase
     .from("complaint_box")
     .select(`
       id, 
@@ -20,6 +24,10 @@ export async function GET() {
       complaint_upvotes(count)
     `)
     .order("created_at", { ascending: false });
+
+  if (limit) {
+    query = query.limit(limit);
+  }
 
   // If a user is logged in, we verify if they upvoted each complaint
   // We do this by a separate query or by fetching their specific vote id in the main query.

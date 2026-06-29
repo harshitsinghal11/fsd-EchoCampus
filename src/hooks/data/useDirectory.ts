@@ -1,23 +1,9 @@
 import useSWR from 'swr';
 import { supabase } from '@/lib/supabaseClient';
-import { Faculty } from '@/types/faculty';
+import { Faculty, FacultyProfileData, DirectoryUser } from '@/types/faculty';
 
-interface FacultyProfileData {
-  department: string | null;
-  phone_no: string | null;
-  cabin_no: string | null;
-  experience_years: number | null;
-}
-
-interface DirectoryUser {
-  id: string;
-  email: string;
-  full_name: string | null;
-  faculty_profiles: FacultyProfileData | FacultyProfileData[] | null;
-}
-
-const fetcher = async () => {
-  const { data, error } = await supabase
+const fetcher = async ([_, searchTerm]: [string, string]) => {
+  let query = supabase
     .from('users')
     .select(`
       id,
@@ -32,6 +18,12 @@ const fetcher = async () => {
     `)
     .eq('role', 'admin')
     .order('full_name', { ascending: true });
+
+  if (searchTerm) {
+    query = query.ilike('full_name', `%${searchTerm}%`);
+  }
+
+  const { data, error } = await query;
 
   if (error) throw error;
 
@@ -52,8 +44,8 @@ const fetcher = async () => {
   return formattedData;
 };
 
-export function useDirectory() {
-  const { data, error, isLoading, mutate } = useSWR<Faculty[]>('directory', fetcher);
+export function useDirectory(searchTerm: string = "") {
+  const { data, error, isLoading, mutate } = useSWR<Faculty[]>(['directory', searchTerm], fetcher);
 
   // Directory changes rarely, but we can setup caching nicely
   return {

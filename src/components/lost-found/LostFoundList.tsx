@@ -11,6 +11,7 @@ import { useLostFound } from "@/hooks/data/useLostFound";
 import { EmptyLostFound, EmptySearch } from "@/components/shared/EmptyStates";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { deleteLostFoundItem } from "@/actions/lostFoundActions";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface LostFoundListProps {
   refreshTrigger?: number;
@@ -22,26 +23,14 @@ export default function LostFoundList({
   showSearch = true
 }: LostFoundListProps) {
 
-  const { items, isLoading, mutate } = useLostFound(!showSearch);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [limit, setLimit] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  const displayItems = useMemo(() => {
-    if (!showSearch) return items;
-    const q = searchTerm.trim().toLowerCase();
-    if (!q) return items;
-    return items.filter((item) => {
-      const hay = [
-        item.title,
-        item.description ?? "",
-        item.location_found,
-        item.contact_info,
-      ]
-        .join(" ")
-        .toLowerCase();
-      return hay.includes(q);
-    });
-  }, [items, searchTerm, showSearch]);
+  const { items, isLoading, mutate } = useLostFound(!showSearch, debouncedSearchTerm, !showSearch ? undefined : limit);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+
+  const displayItems = items;
 
   useEffect(() => {
     async function fetchUser() {
@@ -208,6 +197,18 @@ export default function LostFoundList({
             </MotionItem>
           ))}
         </MotionList>
+      )}
+
+      {/* --- LOAD MORE BUTTON --- */}
+      {showSearch && items.length === limit && displayItems.length > 0 && !searchTerm && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={() => setLimit((prev) => prev + 10)}
+            className="px-6 py-2.5 bg-surface border border-border rounded-xl text-text-primary hover:bg-surface-hover hover:border-primary/50 transition-all text-sm font-semibold shadow-sm hover:shadow-md"
+          >
+            Load More
+          </button>
+        </div>
       )}
     </div>
   );

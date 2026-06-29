@@ -156,6 +156,15 @@ export default function AnonChat() {
           </div>
         </div>
 
+        {/* Desktop Online Indicator Overlay */}
+        <div className="hidden md:flex absolute top-4 right-6 items-center gap-2 bg-surface/80 backdrop-blur-md border border-border px-4 py-2 rounded-full shadow-lg z-20 pointer-events-none">
+          <span className="relative flex h-2.5 w-2.5 items-center justify-center">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+          </span>
+          <span className="font-semibold text-text-primary text-sm tracking-wide">{onlineCount} Online</span>
+        </div>
+
         {/* Messages Scrollable Area */}
         <div className="flex-1 overflow-y-auto px-3 py-4 sm:px-5 sm:py-5 lg:px-8">
           <div className="flex min-h-full flex-col gap-5">

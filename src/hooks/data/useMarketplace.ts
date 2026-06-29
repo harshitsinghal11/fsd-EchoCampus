@@ -3,10 +3,10 @@ import { supabase } from '@/lib/supabaseClient';
 import { MarketplaceItem } from '@/types/marketplace';
 import { useEffect } from 'react';
 
-const fetcher = async (url: string, limit?: number) => {
+const fetcher = async ([url, limit]: [string, number | undefined]) => {
   let query = supabase
     .from("marketplace")
-    .select("*")
+    .select(`*`)
     .order("created_at", { ascending: false });
 
   if (limit) query = query.limit(limit);
@@ -16,12 +16,11 @@ const fetcher = async (url: string, limit?: number) => {
   return data as MarketplaceItem[];
 };
 
-export function useMarketplace(isWidget: boolean = false) {
-  const limit = isWidget ? 4 : undefined;
-  // Use a stable key based on the limit
+export function useMarketplace(isWidget: boolean = false, customLimit?: number) {
+  const limit = isWidget ? 3 : customLimit;
   const key = ['marketplace', limit];
-  
-  const { data, error, isLoading, mutate } = useSWR<MarketplaceItem[]>(key, ([url, limit]: [string, number | undefined]) => fetcher(url, limit));
+
+  const { data, error, isLoading, mutate } = useSWR<MarketplaceItem[]>(key, fetcher as any);
 
   useEffect(() => {
     const channel = supabase

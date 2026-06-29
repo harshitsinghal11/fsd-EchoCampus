@@ -2,24 +2,18 @@ import useSWR from 'swr';
 import { supabase } from '@/lib/supabaseClient';
 import { useEffect } from 'react';
 
-type Announcement = {
-  id: string;
-  title: string;
-  content: string;
-  link: string | null;
-  created_at: string;
-  users?: {
-    full_name?: string;
-  } | null;
-};
+import { Announcement } from '@/types/announcements';
 
-const fetcher = async (url: string, limit?: number) => {
+const fetcher = async ([url, limit, searchTerm]: [string, number | undefined, string]) => {
   let query = supabase
     .from("announcements")
     .select(`*, users ( full_name )`)
     .order("created_at", { ascending: false });
 
   if (limit) query = query.limit(limit);
+  if (searchTerm) {
+    query = query.or(`title.ilike.%${searchTerm}%,content.ilike.%${searchTerm}%`);
+  }
 
   const { data, error } = await query;
   if (error) throw error;
@@ -31,11 +25,11 @@ const fetcher = async (url: string, limit?: number) => {
   })) as Announcement[];
 };
 
-export function useAnnouncements(isWidget: boolean = false) {
-  const limit = isWidget ? 3 : undefined;
-  const key = ['announcements', limit];
+export function useAnnouncements(isWidget: boolean = false, searchTerm: string = "", customLimit?: number) {
+  const limit = isWidget ? 3 : customLimit;
+  const key = ['announcements', limit, searchTerm];
 
-  const { data, error, isLoading, mutate } = useSWR<Announcement[]>(key, ([url, limit]: [string, number | undefined]) => fetcher(url, limit));
+  const { data, error, isLoading, mutate } = useSWR<Announcement[]>(key, fetcher as any);
 
   useEffect(() => {
     const channel = supabase

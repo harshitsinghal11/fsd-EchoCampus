@@ -2,35 +2,29 @@ import useSWR from 'swr';
 import { supabase } from '@/lib/supabaseClient';
 import { useEffect } from 'react';
 
-export interface LostFoundItem {
-  id: string;
-  user_id: string;
-  title: string;
-  description: string | null;
-  location_found: string;
-  contact_info: string;
-  image_url: string | null;
-  created_at: string;
-}
+import { LostFoundItem } from '@/types/lost-found';
 
-const fetcher = async (url: string, limit?: number) => {
+const fetcher = async ([url, limit, searchTerm]: [string, number | undefined, string]) => {
   let query = supabase
     .from("lost_found")
     .select("*")
     .order("created_at", { ascending: false });
 
   if (limit) query = query.limit(limit);
+  if (searchTerm) {
+    query = query.or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
+  }
 
   const { data, error } = await query;
   if (error) throw error;
   return data as LostFoundItem[];
 };
 
-export function useLostFound(isWidget: boolean = false) {
-  const limit = isWidget ? 3 : undefined;
-  const key = ['lost_found', limit];
+export function useLostFound(isWidget: boolean = false, searchTerm: string = "", customLimit?: number) {
+  const limit = isWidget ? 3 : customLimit;
+  const key = ['lost_found', limit, searchTerm];
 
-  const { data, error, isLoading, mutate } = useSWR<LostFoundItem[]>(key, ([url, limit]: [string, number | undefined]) => fetcher(url, limit));
+  const { data, error, isLoading, mutate } = useSWR<LostFoundItem[]>(key, fetcher as any);
 
   useEffect(() => {
     const channel = supabase

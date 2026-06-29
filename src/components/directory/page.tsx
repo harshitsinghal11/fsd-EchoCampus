@@ -2,23 +2,22 @@
 import { useState } from 'react';
 import { Mail, Phone, BookOpen, Briefcase, ChevronRight, BookUser, ChevronDown } from 'lucide-react';
 import { useDirectory } from '@/hooks/data/useDirectory';
+import { useDebounce } from '@/hooks/useDebounce';
 import { EmptyDirectory, EmptySearch } from '@/components/shared/EmptyStates';
 import { DirectorySkeleton } from '@/components/shared/Skeletons';
 import { SearchBar } from '@/components/shared/SearchBar';
 
 export default function Directory() {
-  const { items: facultyList, isLoading } = useDirectory();
   const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const { items: facultyList, isLoading } = useDirectory(debouncedSearchTerm);
   const [selectedDepartment, setSelectedDepartment] = useState('All');
 
   // Derive departments dynamically from fetched data
   const departments = ['All', ...Array.from(new Set(facultyList.map(f => f.department)))].filter(Boolean);
 
   const filteredFaculty = facultyList.filter(faculty => {
-    const matchesSearch = faculty.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      faculty.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDept = selectedDepartment === 'All' || faculty.department === selectedDepartment;
-    return matchesSearch && matchesDept;
+    return selectedDepartment === 'All' || faculty.department === selectedDepartment;
   });
 
   return (

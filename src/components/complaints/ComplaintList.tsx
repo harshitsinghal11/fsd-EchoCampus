@@ -19,7 +19,8 @@ interface ComplaintListProps {
 }
 
 export default function ComplaintList({ isWidget = false }: ComplaintListProps) {
-  const { items, isLoading, mutate } = useComplaints(isWidget);
+  const [limit, setLimit] = useState(10);
+  const { items, isLoading, mutate } = useComplaints(isWidget, isWidget ? undefined : limit);
   const [upvoting, setUpvoting] = useState<string | null>(null);
 
   async function upvote(id: string) {
@@ -130,6 +131,18 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
             </MotionItem>
           ))}
         </MotionList>
+      )}
+
+      {/* --- LOAD MORE BUTTON --- */}
+      {!isWidget && items.length === limit && (
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={() => setLimit((prev) => prev + 10)}
+            className="px-6 py-2.5 bg-surface border border-border rounded-xl text-text-primary hover:bg-surface-hover hover:border-primary/50 transition-all text-sm font-semibold shadow-sm hover:shadow-md"
+          >
+            Load More
+          </button>
+        </div>
       )}
     </div>
   );
