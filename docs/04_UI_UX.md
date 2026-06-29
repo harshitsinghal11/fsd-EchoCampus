@@ -68,11 +68,11 @@
 - Signup page: full name, email, password, faculty checkbox, inline success/error messaging
 - Student dashboard: announcement widget, marketplace widget, complaint widget, quick actions, lost and found widget
 - Student announcements page: full announcement feed with search input UI
-- Student chat page: full-height anonymous message feed and send bar
+- Student chat page: full-height anonymous message feed with sticky mobile header (live presence counter and back navigation) and send bar
 - Student complaint page: complaint list and complaint submission form side by side on larger screens
 - Student directory page: searchable and filterable faculty directory
-- Student lost and found page: searchable feed plus sticky report form
-- Student marketplace page: marketplace feed plus sticky create form
+- Student lost and found page: searchable feed using glassmorphism cards (timestamp positioned top-right above images) plus sticky report form
+- Student marketplace page: marketplace feed using structured glassmorphism cards (Indian currency formatting) plus sticky create form
 - Student profile page: email, anonymous code, role label, joined date
 - Faculty dashboard: complaints widget, announcements widget, lost items widget, quick navigation
 - Faculty announcements page: live feed plus sticky publish form

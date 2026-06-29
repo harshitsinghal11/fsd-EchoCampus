@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Users } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Users, ArrowLeft } from 'lucide-react';
 import { SubmitBtn } from '@/components/shared/SubmitBtn';
 import { useSessionCode } from '@/hooks/useSessionCode';
 import { supabase } from '@/lib/supabaseClient';
@@ -19,8 +20,10 @@ type Message = {
 export default function AnonChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [text, setText] = useState('');
+  const [onlineCount, setOnlineCount] = useState(1);
   const sessionCode = useSessionCode();
   const endRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
   const isOwnMessage = (code: string) => code === sessionCode;
 
@@ -43,9 +46,15 @@ export default function AnonChat() {
 
     fetchMessages();
 
-    // 2. Subscribe to realtime updates
-    const channel = supabase
-      .channel('public:chat_messages')
+    // 2. Subscribe to realtime updates and presence
+    const channel = supabase.channel('public:chat_messages');
+
+    channel
+      .on('presence', { event: 'sync' }, () => {
+        const state = channel.presenceState();
+        const activeUsers = Object.keys(state).length;
+        setOnlineCount(activeUsers === 0 ? 1 : activeUsers);
+      })
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'chat_messages' },
@@ -54,22 +63,26 @@ export default function AnonChat() {
           setMessages((prev) => {
             // 1. If already exists by exact ID, ignore
             if (prev.some(m => m.id === newMsg.id)) return prev;
-            
+
             // 2. Find a matching pending optimistic message
             const pendingIndex = prev.findIndex(m => m.pending && m.random_code === newMsg.random_code && m.message === newMsg.message);
-            
+
             if (pendingIndex !== -1) {
               const newArr = [...prev];
               newArr[pendingIndex] = newMsg;
               return newArr;
             }
-            
+
             // 3. Otherwise, just append
             return [...prev, newMsg];
           });
         }
       )
-      .subscribe();
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          await channel.track({ online_at: new Date().toISOString() });
+        }
+      });
 
     return () => {
       supabase.removeChannel(channel);
@@ -85,7 +98,7 @@ export default function AnonChat() {
     if (!text.trim() || !sessionCode) return;
 
     const newMessageText = text.trim();
-    
+
     // Create an optimistic message object
     const optimisticMessage: Message = {
       id: crypto.randomUUID(), // temp id
@@ -101,7 +114,7 @@ export default function AnonChat() {
     };
 
     setText('');
-    
+
     // Optimistic update
     setMessages((prev) => [...prev, optimisticMessage]);
 
@@ -115,7 +128,7 @@ export default function AnonChat() {
     } else if (data) {
       // Ensure the optimistic message is updated with the real DB data in case the realtime event missed it
       setMessages((prev) => prev.map((m) => m.id === optimisticMessage.id ? (data as Message) : m));
-      
+
       // Fire chat push notification (cooldown is handled by the server action)
       await broadcastChatMessageNotification(newMessageText);
     }
@@ -124,7 +137,25 @@ export default function AnonChat() {
   return (
     <div className="relative flex-1 h-full w-full min-h-0">
       <div className="absolute inset-0 flex flex-col overflow-hidden bg-background text-text-primary">
-        
+
+        {/* Mobile Header with Back Button */}
+        <div className="md:hidden flex items-center px-4 py-3 border-b border-border bg-background/90 backdrop-blur-xl shrink-0 z-10 relative h-14">
+          <button
+            onClick={() => router.back()}
+            className="absolute left-4 p-1.5 rounded-full bg-surface border border-border hover:bg-surface-hover text-text-secondary transition-colors shadow-sm"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+
+          <div className="flex-1 flex justify-center items-center gap-2">
+            <span className="relative flex h-2.5 w-2.5 items-center justify-center">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+            </span>
+            <span className="font-semibold text-text-primary text-sm tracking-wide">{onlineCount} Online</span>
+          </div>
+        </div>
+
         {/* Messages Scrollable Area */}
         <div className="flex-1 overflow-y-auto px-3 py-4 sm:px-5 sm:py-5 lg:px-8">
           <div className="flex min-h-full flex-col gap-5">
@@ -143,12 +174,12 @@ export default function AnonChat() {
             ) : (
               messages.map((m, index) => {
                 const isOwn = isOwnMessage(m.random_code);
-                
+
                 // Determine if we need to show a date header
                 const msgDateObj = m.created_at ? new Date(m.created_at) : new Date();
                 const messageDate = msgDateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-                const prevMessageDate = index > 0 && messages[index - 1].created_at 
-                  ? new Date(messages[index - 1].created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) 
+                const prevMessageDate = index > 0 && messages[index - 1].created_at
+                  ? new Date(messages[index - 1].created_at).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
                   : null;
                 const showDateHeader = messageDate !== prevMessageDate;
 
@@ -157,7 +188,7 @@ export default function AnonChat() {
                 const yesterdayObj = new Date();
                 yesterdayObj.setDate(yesterdayObj.getDate() - 1);
                 const yesterday = yesterdayObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
-                
+
                 let displayDate = messageDate;
                 if (messageDate === today) displayDate = 'Today';
                 else if (messageDate === yesterday) displayDate = 'Yesterday';
@@ -179,10 +210,9 @@ export default function AnonChat() {
                           </span>
                         </div>
 
-                        <div className={`relative rounded-3xl px-3.5 py-2.5 pb-6 shadow-lg shadow-black/10 transition-colors sm:px-4 sm:pb-7 ${
-                            isOwn
-                              ? 'rounded-br-md border border-primary/30 bg-primary/10 text-text-primary'
-                              : 'rounded-bl-md border border-border/80 bg-surface-hover/75 text-text-primary'
+                        <div className={`relative rounded-3xl px-3.5 py-2.5 pb-6 shadow-lg shadow-black/10 transition-colors sm:px-4 sm:pb-7 ${isOwn
+                          ? 'rounded-br-md border border-primary/30 bg-primary/10 text-text-primary'
+                          : 'rounded-bl-md border border-border/80 bg-surface-hover/75 text-text-primary'
                           }`}
                         >
                           <p className="whitespace-pre-wrap wrap-break-word text-sm leading-relaxed sm:text-[15px]">
@@ -191,10 +221,10 @@ export default function AnonChat() {
                           <div className={`absolute bottom-1.5 right-3 text-[9px] sm:text-[10px] font-medium tracking-wide ${isOwn ? 'text-primary/70' : 'text-text-muted/70'}`}>
                             {m.created_at
                               ? msgDateObj.toLocaleTimeString('en-US', {
-                                  hour: 'numeric',
-                                  minute: '2-digit',
-                                  hour12: true,
-                                })
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true,
+                              })
                               : 'Sending...'}
                           </div>
                         </div>

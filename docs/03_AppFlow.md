@@ -37,7 +37,7 @@ EchoCampus has a public entry flow and two protected application areas. Students
 - Direct Supabase feature flow: browser client -> `useSWR` custom hook -> cache hit/miss -> Supabase JS -> RLS-protected tables -> SWR cache update -> UI render
 - API-backed feature flow: browser -> `useSWR` custom hook -> Next.js route handler -> Supabase server client -> Postgres -> JSON response -> SWR cache update -> UI render
 - Realtime data flow: browser -> Supabase realtime channel -> `postgres_changes` event -> SWR `mutate()` -> immediate UI re-render
-- Chat flow: browser -> Supabase client -> Postgres `chat_messages` table -> realtime channel subscription -> UI render
+- Chat flow: browser -> Supabase client -> Postgres `chat_messages` table -> realtime channel subscription -> UI render. Features optimistic UI updates (deduplicated via `pending` flags) and live online user counters powered by Supabase `presenceState()` syncing.
 
 # Error Handling Flow
 - Missing or expired authenticated session redirects the user to `/auth/login`.
