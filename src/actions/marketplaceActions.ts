@@ -18,6 +18,7 @@ export async function addMarketplaceItem(formData: {
   description: string;
   price: number;
   contact_info: string;
+  image_url?: string;
 }) {
   try {
     const supabase = await createSupabaseServerClient();
@@ -61,6 +62,7 @@ export async function addMarketplaceItem(formData: {
       owner_name: ownerName,
       contact_info: formData.contact_info,
       owner_email: user.email,
+      image_url: formData.image_url || null,
       is_sold: false,
     });
 

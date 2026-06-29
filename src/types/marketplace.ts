@@ -9,4 +9,5 @@ export type MarketplaceItem = {
   contact_info: string;  // Added to DB
   is_sold: boolean;      // Matches DB
   created_at: string;    // Matches DB
+  image_url?: string;    // Added for UI display
 };

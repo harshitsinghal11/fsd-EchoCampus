@@ -5,7 +5,11 @@ import {
   IndianRupee,
   Mail,
   Phone,
+  Camera,
+  X
 } from 'lucide-react';
+import Image from "next/image";
+import { supabase } from "@/lib/supabaseClient";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import React, { useState } from "react";
 import { useUserEmail } from "@/hooks/useUserEmail";
@@ -26,7 +30,23 @@ export default function MarketCreateForm() {
     description: "",
     price: "",
     contact_info: "",
+    image_url: "",
   });
+
+  const [fileToUpload, setFileToUpload] = useState<File | null>(null);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 200 * 1024) {
+      toast.error("Image too large! Please select an image under 200KB.");
+      return;
+    }
+
+    setFileToUpload(file);
+    setForm({ ...form, image_url: URL.createObjectURL(file) });
+  };
 
   // Added React.FormEvent type to fix the 'e' error
   async function handleSubmit(e: React.FormEvent) {
@@ -43,6 +63,26 @@ export default function MarketCreateForm() {
     setIsSubmitting(true);
 
     try {
+      let finalImageUrl = "";
+      if (fileToUpload) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const fileExt = fileToUpload.name.split('.').pop();
+          const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+
+          const { error: uploadError } = await supabase.storage
+            .from('marketplace_images')
+            .upload(fileName, fileToUpload);
+
+          if (uploadError) throw uploadError;
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('marketplace_images')
+            .getPublicUrl(fileName);
+
+          finalImageUrl = publicUrl;
+        }
+      }
 
       const parsedPrice = Number(form.price);
 
@@ -50,7 +90,8 @@ export default function MarketCreateForm() {
         product_title: form.product_title,
         description: form.description,
         price: parsedPrice,
-        contact_info: form.contact_info
+        contact_info: form.contact_info,
+        image_url: finalImageUrl
       });
 
       if (result.error) {
@@ -64,7 +105,9 @@ export default function MarketCreateForm() {
         description: "",
         price: "",
         contact_info: "",
+        image_url: "",
       });
+      setFileToUpload(null);
 
       router.refresh();
 
@@ -81,6 +124,51 @@ export default function MarketCreateForm() {
       onSubmit={handleSubmit}
       className="bg-surface backdrop-blur-xl border border-border rounded-[1.5rem] md:rounded-3xl shadow-2xl p-6 md:p-8 space-y-5"
     >
+
+      {/* Image Upload / Preview Area */}
+      <div className="w-full space-y-1.5">
+        <label className="block text-sm font-semibold text-text-secondary">Item Photo</label>
+        {form.image_url ? (
+          <div className="relative w-full h-48 rounded-xl overflow-hidden border border-border group">
+            <Image
+              src={form.image_url}
+              alt="Preview"
+              fill
+              unoptimized
+              sizes="(max-width: 768px) 100vw, 640px"
+              className="object-cover"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                setForm({ ...form, image_url: "" });
+                setFileToUpload(null);
+              }}
+              className="absolute top-2 right-2 bg-surface-hover backdrop-blur text-text-secondary p-1.5 rounded-full hover:bg-danger/20 hover:text-danger transition-all shadow-sm"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        ) : (
+          <label className="flex flex-col items-center justify-center w-full h-32 md:h-40 border-2 border-dashed border-border rounded-xl cursor-pointer hover:bg-surface-hover hover:border-primary/50 transition-all group relative overflow-hidden bg-surface">
+            <div className="flex flex-col items-center justify-center pt-5 pb-6">
+              <div className="p-3 bg-surface-hover rounded-full mb-3 group-hover:scale-110 transition-transform">
+                <Camera className="w-6 h-6 text-text-disabled group-hover:text-primary transition-colors" />
+              </div>
+              <p className="text-sm font-medium text-text-secondary">
+                Tap to upload photo
+              </p>
+              <p className="text-xs text-text-muted mt-1">PNG, JPG up to 200KB</p>
+            </div>
+            <input
+              type="file"
+              className="hidden"
+              accept="image/*"
+              onChange={handleImageUpload}
+            />
+          </label>
+        )}
+      </div>
 
       {/* Title Input */}
       <div className="space-y-1.5">

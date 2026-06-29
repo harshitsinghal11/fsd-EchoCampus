@@ -13,6 +13,7 @@ type Message = {
   random_code: string;
   message: string;
   created_at: string;
+  pending?: boolean;
 };
 
 export default function AnonChat() {
@@ -51,10 +52,19 @@ export default function AnonChat() {
         (payload) => {
           const newMsg = payload.new as Message;
           setMessages((prev) => {
-            // Deduplicate in case optimistic update already added it
-            if (prev.some(m => m.id === newMsg.id || (m.random_code === newMsg.random_code && m.message === newMsg.message && new Date(newMsg.created_at).getTime() - new Date(m.created_at).getTime() < 5000))) {
-              return prev.map(m => m.message === newMsg.message && m.random_code === newMsg.random_code ? newMsg : m);
+            // 1. If already exists by exact ID, ignore
+            if (prev.some(m => m.id === newMsg.id)) return prev;
+            
+            // 2. Find a matching pending optimistic message
+            const pendingIndex = prev.findIndex(m => m.pending && m.random_code === newMsg.random_code && m.message === newMsg.message);
+            
+            if (pendingIndex !== -1) {
+              const newArr = [...prev];
+              newArr[pendingIndex] = newMsg;
+              return newArr;
             }
+            
+            // 3. Otherwise, just append
             return [...prev, newMsg];
           });
         }
@@ -82,6 +92,7 @@ export default function AnonChat() {
       random_code: sessionCode,
       message: newMessageText,
       created_at: new Date().toISOString(),
+      pending: true,
     };
 
     const payload = {
@@ -102,6 +113,9 @@ export default function AnonChat() {
       // Revert optimistic update
       setMessages((prev) => prev.filter((m) => m.id !== optimisticMessage.id));
     } else if (data) {
+      // Ensure the optimistic message is updated with the real DB data in case the realtime event missed it
+      setMessages((prev) => prev.map((m) => m.id === optimisticMessage.id ? (data as Message) : m));
+      
       // Fire chat push notification (cooldown is handled by the server action)
       await broadcastChatMessageNotification(newMessageText);
     }
