@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/NavBar/NavBarStudent";
+import BottomNavStudent from "@/components/NavBar/BottomNavStudent";
 import Footer from "@/components/Footer/FooterStudent";
 
 export default function MainLayout({
@@ -15,7 +16,7 @@ export default function MainLayout({
 
   return (
     <ProtectedRoute>
-      <div className="flex min-h-dvh flex-col bg-background">
+      <div className="flex min-h-dvh flex-col bg-background pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0">
         <Navbar />
         
         {/* We use a ternary operator to give the chat page its strict layout, 
@@ -31,6 +32,7 @@ export default function MainLayout({
         </main>
 
         {!isChatRoute && <Footer />}
+        <BottomNavStudent />
       </div>
     </ProtectedRoute>
   );

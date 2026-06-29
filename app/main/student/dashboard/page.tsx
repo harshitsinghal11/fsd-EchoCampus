@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
-import { Megaphone, ShoppingBag, MessageSquare, AlertTriangle, Camera, ArrowRight, BookUser, LayoutDashboard } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
 import MarketplaceList from "@/components/marketplace/MarketplaceList";
 import ComplaintList from "@/components/complaints/ComplaintList";

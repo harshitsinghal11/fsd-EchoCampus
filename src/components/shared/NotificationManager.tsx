@@ -65,7 +65,7 @@ export function NotificationManager() {
       }
 
       const registration = await navigator.serviceWorker.ready;
-      
+
       const publicVapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
       if (!publicVapidKey) throw new Error("VAPID key not configured");
 
@@ -76,7 +76,7 @@ export function NotificationManager() {
 
       const payload = JSON.parse(JSON.stringify(subscription));
       const res = await savePushSubscription(payload);
-      
+
       if (res.error) {
         toast.error("Failed to save subscription: " + res.error);
       } else {
@@ -96,13 +96,13 @@ export function NotificationManager() {
   if (isSubscribed) return null; // Hide if already subscribed
 
   return (
-    <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50">
+    <div className="fixed bottom-20 left-4 md:bottom-8 md:left-8 z-50">
       <button
         onClick={subscribe}
-        className="flex items-center gap-2 px-4 py-3 bg-button-primary hover:bg-primary-hover text-text-primary rounded-xl shadow-lg shadow-primary/20 transition-all group"
+        className="px-3 py-3 bg-button-primary hover:bg-primary-hover text-text-primary rounded-xl shadow-lg shadow-primary/20 transition-all group"
       >
-        <Bell className="w-4 h-4 " />
-        <span className="text-sm font-bold">Enable Notifications</span>
+        <Bell className="w-5 h-5" />
+        <span className="text-sm font-bold"></span>
       </button>
     </div>
   );

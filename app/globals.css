@@ -1,37 +1,59 @@
 @import "tailwindcss";
 
 :root {
-  --background: #09090b; /* zinc-950 */
-  --foreground: #fafafa; /* zinc-50 */
+  --background: #09090b;
+  /* zinc-950 */
+  --foreground: #fafafa;
+  /* zinc-50 */
 }
 
 @theme inline {
-  --color-background: #09090b; /* zinc-950 */
-  --color-surface: rgba(24, 24, 27, 0.6); /* zinc-900/60 */
-  --color-surface-hover: rgba(39, 39, 42, 0.6); /* zinc-800/60 */
-  --color-border: #27272a; /* zinc-800 */
-  
-  --color-text-primary: #fafafa; /* zinc-50 */
-  --color-text-secondary: #d4d4d8; /* zinc-300 */
-  --color-text-muted: #a1a1aa; /* zinc-400 */
-  --color-text-disabled: #71717a; /* zinc-500 */
-  
-  --color-primary: #10b981; /* emerald-500 */
-  --color-primary-hover: #059669; /* emerald-600 */
-  --color-primary-light: #34d399; /* emerald-400 */
-  
-  --color-button-primary: #10b981; /* emerald-500 */
-  --color-button-secondary: rgba(39, 39, 42, 0.6); /* zinc-800/60 */
+  --color-background: #09090b;
+  /* zinc-950 */
+  --color-surface: rgba(24, 24, 27, 0.6);
+  /* zinc-900/60 */
+  --color-surface-hover: rgba(39, 39, 42, 0.6);
+  /* zinc-800/60 */
+  --color-border: #27272a;
+  /* zinc-800 */
+
+  --color-text-primary: #fafafa;
+  /* zinc-50 */
+  --color-text-secondary: #d4d4d8;
+  /* zinc-300 */
+  --color-text-muted: #a1a1aa;
+  /* zinc-400 */
+  --color-text-disabled: #71717a;
+  /* zinc-500 */
+
+  --color-primary: #10b981;
+  /* emerald-500 */
+  --color-primary-hover: #059669;
+  /* emerald-600 */
+  --color-primary-light: #34d399;
+  /* emerald-400 */
+
+  --color-button-primary: #10b981;
+  /* emerald-500 */
+  --color-button-secondary: rgba(39, 39, 42, 0.6);
+  /* zinc-800/60 */
   --color-button-ghost: transparent;
-  
-  --color-input-background: rgba(24, 24, 27, 0.6); /* zinc-900/60 */
-  --color-input-border: #27272a; /* zinc-800 */
-  --color-input-focus: #10b981; /* emerald-500 */
-  
-  --color-success: #10b981; /* emerald-500 */
-  --color-warning: #f59e0b; /* amber-500 */
-  --color-danger: #ef4444; /* red-500 */
-  --color-info: #0ea5e9; /* sky-500 */
+
+  --color-input-background: rgba(24, 24, 27, 0.6);
+  /* zinc-900/60 */
+  --color-input-border: #27272a;
+  /* zinc-800 */
+  --color-input-focus: #10b981;
+  /* emerald-500 */
+
+  --color-success: #10b981;
+  /* emerald-500 */
+  --color-warning: #f59e0b;
+  /* amber-500 */
+  --color-danger: #ef4444;
+  /* red-500 */
+  --color-info: #0ea5e9;
+  /* sky-500 */
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);

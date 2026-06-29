@@ -8,8 +8,10 @@ import {
   Shield,
   Calendar,
   ArrowLeft,
+  LogOut,
 } from "lucide-react";
 import { ProfileSkeleton } from '@/components/shared/Skeletons';
+import ProfileActions from '@/components/shared/ProfileActions';
 import { toast } from 'sonner';
 
 export default function StudentProfilePage() {
@@ -175,16 +177,8 @@ export default function StudentProfilePage() {
 
             </div>
 
-            {/* Back Button */}
-            <div className="mt-10 pt-8 border-t border-border flex justify-end">
-              <button
-                onClick={() => router.push('/main/student/dashboard')}
-                className="group flex items-center gap-2 px-6 py-3 rounded-xl font-medium text-text-primary bg-surface-hover hover:bg-button-primary border border-border hover:border-primary transition-all shadow-sm"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Dashboard
-              </button>
-            </div>
+            {/* Action Buttons */}
+            <ProfileActions dashboardRoute="/main/student/dashboard" />
 
           </div>
         </div>

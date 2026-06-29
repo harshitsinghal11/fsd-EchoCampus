@@ -38,26 +38,10 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const handleLogout = async () => {
-    // 1. Supabase Sign Out
-    await supabase.auth.signOut();
-
-    // 2. Clear Local Storage
-    sessionStorage.removeItem('userSessionCode');
-    sessionStorage.removeItem('userRole');
-    sessionStorage.removeItem('userEmail');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userEmail');
-
-    // 3. Close Menu & Redirect
-    setIsMenuOpen(false);
-    router.push(ROUTES.AUTH.LOGIN);
-  };
-
   return (
     <>
       {/* --- TOP NAVBAR --- */}
-      <nav className="bg-surface backdrop-blur-xl border-b border-border sticky top-0 z-50 shadow-lg shadow-black/20">
+      <nav className="hidden md:block bg-surface backdrop-blur-xl border-b border-border sticky top-0 z-50 shadow-lg shadow-black/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 md:h-20">
 
@@ -150,17 +134,6 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
                 );
               })}
             </nav>
-          </div>
-
-          {/* 3. Footer (Logout) - Pinned to bottom */}
-          <div className="p-5 border-t border-border bg-surface shrink-0">
-            <button
-              onClick={handleLogout}
-              className="w-full flex items-center justify-center px-4 py-3 rounded-xl font-semibold text-sm text-danger bg-danger/10 border border-danger/20 hover:bg-danger/20 hover:border-danger/40 hover:shadow-lg hover:shadow-danger/20 transition-all duration-200 group"
-            >
-              <LogOut className="w-5 h-5 mr-2" />
-              Sign Out
-            </button>
           </div>
 
         </div>

@@ -4,10 +4,12 @@ import {
 } from "lucide-react";
 import Footer from "@/components/Footer/FooterStudent";
 import { ROUTES } from "@/lib/routes";
+import CheckAuthRedirect from "@/components/CheckAuthRedirect";
 
 export default function Home() {
   return (
     <div className="min-h-[100dvh] bg-background flex flex-col font-sans">
+      <CheckAuthRedirect />
 
       {/* 1. NAVBAR */}
       <nav className="p-6 flex justify-between items-center max-w-7xl mx-auto w-full">
