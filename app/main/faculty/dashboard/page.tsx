@@ -27,7 +27,7 @@ export default function FacultyDashboard() {
         </div>
 
         {/* Top Right Action Buttons */}
-        <div className="flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-3">
           <Link
             href={ROUTES.FACULTY.DIRECTORY}
             className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 hover:border-primary/50 hover:shadow-[0_0_15px_rgba(20,184,166,0.2)] transition-all"

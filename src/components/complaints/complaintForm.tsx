@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, CheckCircle2, MessageSquare, Loader2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, MessageSquare, Loader2, AlignLeft } from "lucide-react";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import { toast } from "sonner";
 import { submitComplaint } from "@/actions/complaintActions";
@@ -47,19 +47,12 @@ export default function ComplaintForm() {
   const maxChars = 500;
 
   return (
-    <GlassCard className="p-6 space-y-4">
-      <div className="bg-primary/10 border border-primary/30 px-6 py-4 rounded-xl">
-        <div className="flex items-center gap-3">
-          <h2 className="text-xl font-semibold text-text-primary">Submit a Complaint</h2>
-        </div>
-        <p className="text-text-secondary text-sm mt-1">
-          We value your feedback and will review your complaint promptly
-        </p>
-      </div>
-
-      <div className="mt-4">
+    <GlassCard className="p-6 md:p-8 space-y-5">
+      <div className="space-y-5">
         <FormTextarea
           id="complaint"
+          label="Complaint Details"
+          icon={AlignLeft}
           value={complaint}
           onChange={(e) => setComplaint(e.target.value)}
           placeholder="Please provide detailed information about your complaint..."
@@ -81,7 +74,7 @@ export default function ComplaintForm() {
         onClick={handleSubmit}
         disabled={loading || !complaint.trim()}
         isSubmitting={loading}
-        label="Submit"
+        label="Submit Complaint"
       />
     </GlassCard>
   );

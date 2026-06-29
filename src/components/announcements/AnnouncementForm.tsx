@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
-import { Send, Loader2, Link as LinkIcon } from "lucide-react";
+import { Send, Loader2, Link as LinkIcon, Type, AlignLeft } from "lucide-react";
 import { toast } from "sonner";
 import { addAnnouncement } from "@/actions/announcementActions";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
@@ -45,11 +45,12 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
   }
 
   return (
-    <GlassCard className="p-6">
-      <form onSubmit={handleSubmit} className="space-y-4">
+    <GlassCard className="p-6 md:p-8 space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-5">
         {/* 1. Title Input */}
         <FormInput
           label="Subject / Title"
+          icon={Type}
           required
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -69,6 +70,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
         {/* 3. Content Textarea */}
         <FormTextarea
           label="Details"
+          icon={AlignLeft}
           required
           value={content}
           onChange={(e) => setContent(e.target.value)}
