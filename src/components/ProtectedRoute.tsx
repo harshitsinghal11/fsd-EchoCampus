@@ -24,21 +24,26 @@ export default function ProtectedRoute({ children }: { children: React.ReactNode
         return;
       }
 
-      // 2. Check Role from users table
-      const userId = session.user.id;
-      const { data: userData, error } = await supabase
-        .from('users')
-        .select('role')
-        .eq('id', userId)
-        .single();
+      // 2. Check Role (Prefer JWT metadata, fallback to DB)
+      let userRole = session.user.user_metadata?.role as AppRole | undefined;
 
-      if (error || !userData) {
-        await supabase.auth.signOut();
-        router.push('/auth/login');
-        return;
+      if (!userRole) {
+        const userId = session.user.id;
+        const { data: userData, error } = await supabase
+          .from('users')
+          .select('role')
+          .eq('id', userId)
+          .single();
+
+        if (error || !userData) {
+          console.error("Error fetching user role:", error);
+          await supabase.auth.signOut();
+          router.push('/auth/login');
+          return;
+        }
+        userRole = userData.role as AppRole;
       }
 
-      const userRole = userData.role as AppRole;
       const isFacultyLike = userRole === 'faculty' || userRole === 'admin';
 
       // RULE A: Student trying to enter Faculty area

@@ -47,7 +47,11 @@ export async function middleware(request: NextRequest) {
   if (!user && path.startsWith("/main")) {
     url.pathname = "/auth/login";
     url.searchParams.set("next", path);
-    return NextResponse.redirect(url);
+    const redirectResponse = NextResponse.redirect(url);
+    response.cookies.getAll().forEach(cookie => {
+        redirectResponse.cookies.set(cookie.name, cookie.value);
+    });
+    return redirectResponse;
   }
 
   // RULE 2: If Logged in, Check ROLE in the 'users' table
@@ -67,7 +71,11 @@ export async function middleware(request: NextRequest) {
 
     if (!userRole) {
       url.pathname = "/auth/login";
-      return NextResponse.redirect(url);
+      const redirectResponse = NextResponse.redirect(url);
+      response.cookies.getAll().forEach(cookie => {
+          redirectResponse.cookies.set(cookie.name, cookie.value);
+      });
+      return redirectResponse;
     }
 
     const isFacultyLike = userRole === "faculty" || userRole === "admin";
@@ -77,13 +85,21 @@ export async function middleware(request: NextRequest) {
     // A. STUDENT trying to access FACULTY pages -> Kick to Student Dashboard
     if (!isFacultyLike && path.startsWith("/main/faculty")) {
       url.pathname = "/main/student/dashboard";
-      return NextResponse.redirect(url);
+      const redirectResponse = NextResponse.redirect(url);
+      response.cookies.getAll().forEach(cookie => {
+          redirectResponse.cookies.set(cookie.name, cookie.value);
+      });
+      return redirectResponse;
     }
 
     // B. FACULTY/ADMIN trying to access STUDENT pages -> Kick to Faculty dashboard
     if (isFacultyLike && path.startsWith("/main/student")) {
       url.pathname = "/main/faculty/dashboard";
-      return NextResponse.redirect(url);
+      const redirectResponse = NextResponse.redirect(url);
+      response.cookies.getAll().forEach(cookie => {
+          redirectResponse.cookies.set(cookie.name, cookie.value);
+      });
+      return redirectResponse;
     }
   }
 
