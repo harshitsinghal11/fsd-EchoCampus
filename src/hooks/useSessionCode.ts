@@ -1,9 +1,12 @@
 // hooks/useSessionCode.ts
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 
 export function useSessionCode() {
-  return useMemo(() => {
-    if (typeof window === "undefined") return null;
-    return sessionStorage.getItem("userSessionCode");
+  const [code, setCode] = useState<string | null>(null);
+
+  useEffect(() => {
+    setCode(sessionStorage.getItem("userSessionCode"));
   }, []);
+
+  return code;
 }

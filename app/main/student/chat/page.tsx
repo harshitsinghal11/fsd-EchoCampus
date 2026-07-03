@@ -33,14 +33,14 @@ export default function AnonChat() {
       const { data, error } = await supabase
         .from('chat_messages')
         .select('*')
-        .order('created_at', { ascending: true })
+        .order('created_at', { ascending: false })
         .limit(500);
 
       if (error) {
         toast.error('Failed to load messages');
         console.error('Error fetching messages:', error);
       } else if (data) {
-        setMessages(data as Message[]);
+        setMessages((data as Message[]).reverse());
       }
     };
 
@@ -224,11 +224,11 @@ export default function AnonChat() {
                           : 'rounded-bl-md border border-border/80 bg-surface-hover/75 text-text-primary'
                           }`}
                         >
-                          <p className="whitespace-pre-wrap wrap-break-word text-sm leading-relaxed sm:text-[15px]">
+                          <p className="whitespace-pre-wrap break-words text-sm leading-relaxed sm:text-[15px]">
                             {m.message}
                           </p>
                           <div className={`absolute bottom-1.5 right-3 text-[9px] sm:text-[10px] font-medium tracking-wide ${isOwn ? 'text-primary/70' : 'text-text-muted/70'}`}>
-                            {m.created_at
+                            {!m.pending
                               ? msgDateObj.toLocaleTimeString('en-US', {
                                 hour: 'numeric',
                                 minute: '2-digit',
