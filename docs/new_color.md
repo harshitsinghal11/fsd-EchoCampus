@@ -1,5 +1,4 @@
-# EchoCampus UI Color System v2
-
+# EchoCampus UI Color System
 ## Design Philosophy
 
 EchoCampus should feel like one cohesive product rather than multiple

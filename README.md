@@ -72,7 +72,7 @@ README.md
 - [04_UI_UX.md](docs/04_UI_UX.md)
 - [05_BackendSchema.md](docs/05_BackendSchema.md)
 - [06_Auth.md](docs/06_Auth.md)
-- [colors.md](docs/colors.md)
+- [colors.md](docs/new_color.md)
 
 ## Getting Started
 
