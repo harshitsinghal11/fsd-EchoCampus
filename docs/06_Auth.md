@@ -36,12 +36,12 @@ To prevent authenticated users from repeatedly viewing the login and signup form
 1. It first checks `sessionStorage` for an existing `userRole`. If found, it routes them directly to their respective dashboard.
 2. As a fallback, it queries `supabase.auth.getSession()` natively in case `sessionStorage` was cleared but the browser cookie/local storage persists.
 
-## 6. Route Protection (Middleware)
-Once inside the `/main/*` area, a Next.js Edge Middleware actively monitors their session. 
-- **Optimized Performance:** The middleware reads the user's role directly from their encrypted JWT `user_metadata` instead of querying the database on every page load. (If missing in older accounts, it gracefully falls back to a DB query).
-- If a student tries to manually type `/main/faculty/dashboard` into their URL bar, the middleware detects their `'student'` role and kicks them out. 
-- Similarly, faculty cannot access student routes like the Marketplace or Global Chat.
+## 6. Route Protection (Middleware & Layouts)
+Once inside the `/main/*` area, route protection is strictly enforced via two un-bypassable server layers:
+
+1. **Next.js Edge Middleware:** Actively monitors the session on every request. It reads the user's role directly from their encrypted JWT `user_metadata` instead of querying the database on every page load.
+2. **Server-Component Layout Checks:** The root layout files (`app/main/faculty/layout.tsx` and `app/main/student/layout.tsx`) perform a strict Server-Side Role check during rendering. 
 
 **Why this structure?**
-It provides an fast routing experience (zero DB hits for role verification) while ensuring role boundaries are strictly enforced across the portal.
+By performing these checks entirely on the Node/Edge servers before any HTML is sent to the browser, we removed the need for client-side loading spinners (like a `ProtectedRoute.tsx` wrapper). This provides an instantaneous routing experience while ensuring role boundaries are strictly enforced.
 

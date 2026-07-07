@@ -2,6 +2,13 @@
 
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
 import { sendPushNotificationBroadcast } from "@/utils/pushUtility";
+import { z } from "zod";
+
+const announcementSchema = z.object({
+  title: z.string().min(5, "Title must be at least 5 characters").max(100, "Title is too long"),
+  content: z.string().min(10, "Content must be at least 10 characters").max(2000, "Content is too long"),
+  link: z.string().url("Invalid URL").optional().or(z.literal("")),
+});
 
 export async function addAnnouncement(formData: {
   title: string;
@@ -10,6 +17,11 @@ export async function addAnnouncement(formData: {
 }) {
   try {
     const supabase = await createSupabaseServerClient();
+    const parsed = announcementSchema.safeParse(formData);
+    if (!parsed.success) {
+      return { error: parsed.error.issues[0].message };
+    }
+
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (authError || !user) {
@@ -18,9 +30,9 @@ export async function addAnnouncement(formData: {
 
     // Insert Announcement
     const { error: postError } = await supabase.from("announcements").insert({
-      title: formData.title,
-      content: formData.content,
-      link: formData.link || null, // If empty string, save as NULL
+      title: parsed.data.title,
+      content: parsed.data.content,
+      link: parsed.data.link || null, // If empty string, save as NULL
       author_id: user.id,
     });
 
@@ -29,11 +41,11 @@ export async function addAnnouncement(formData: {
     }
 
     // --- SEND PUSH NOTIFICATIONS ---
-    await sendPushNotificationBroadcast({
+    sendPushNotificationBroadcast({
       title: "New Campus Announcement",
-      body: formData.title,
+      body: parsed.data.title,
       url: "/main/student"
-    });
+    }).catch(console.error);
 
     return { success: true };
   } catch (err: unknown) {

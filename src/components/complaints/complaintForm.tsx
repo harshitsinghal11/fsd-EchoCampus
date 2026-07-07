@@ -60,10 +60,10 @@ export default function ComplaintForm() {
           rows={6}
         />
         <div className="flex justify-between items-center mt-2">
-          <span className="text-xs text-text-muted">
+          <span className="text-xs text-text-muted mr-1">
             Be as specific as possible to help us address your concern
           </span>
-          <span className={`text-xs font-medium ${charCount > maxChars * 0.9 ? "text-primary" : "text-text-muted"}`}>
+          <span className={`text-xs font-medium text-right tabular-nums min-w-[4.5rem] ${charCount > maxChars * 0.9 ? "text-primary" : "text-text-muted"}`}>
             {charCount} / {maxChars}
           </span>
         </div>

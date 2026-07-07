@@ -2,6 +2,15 @@
 
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
 import { sendPushNotificationBroadcast } from "@/utils/pushUtility";
+import { z } from "zod";
+
+const lostFoundSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters").max(100, "Title is too long"),
+  description: z.string().min(5, "Description must be at least 5 characters").max(1000, "Description is too long"),
+  location_found: z.string().min(3, "Location must be at least 3 characters").max(200, "Location is too long"),
+  contact_info: z.string().min(10, "Contact info must be valid"),
+  image_url: z.string().url("Invalid image URL").optional().or(z.literal("")),
+});
 
 export async function addLostFoundItem(formData: {
   title: string;
@@ -11,6 +20,11 @@ export async function addLostFoundItem(formData: {
   image_url: string;
 }) {
   try {
+    const parsed = lostFoundSchema.safeParse(formData);
+    if (!parsed.success) {
+      return { error: parsed.error.issues[0].message };
+    }
+
     const supabase = await createSupabaseServerClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     
@@ -20,26 +34,26 @@ export async function addLostFoundItem(formData: {
 
     const { error: insertError } = await supabase.from("lost_found").insert({
       user_id: user.id,
-      title: formData.title.trim(),
-      description: formData.description.trim(),
-      location_found: formData.location_found.trim(),
-      contact_info: formData.contact_info,
-      image_url: formData.image_url,
+      title: parsed.data.title,
+      description: parsed.data.description,
+      location_found: parsed.data.location_found,
+      contact_info: parsed.data.contact_info,
+      image_url: parsed.data.image_url || null,
       is_resolved: false
     });
 
     if (insertError) {
-      if (insertError.message?.includes("Daily limit reached") || insertError.message?.includes("limit")) {
+      if (insertError.code === 'P0001' || insertError.message?.includes("Daily limit reached") || insertError.message?.includes("limit")) {
         return { error: "Limit Reached: You can only post 2 items every 24 hours. Please try again tomorrow." };
       }
       return { error: insertError.message || "Failed to report lost item" };
     }
 
-    await sendPushNotificationBroadcast({
+    sendPushNotificationBroadcast({
       title: "New Lost & Found Report",
-      body: formData.title,
+      body: parsed.data.title,
       url: "/main/student/lost-found"
-    });
+    }).catch(console.error);
 
     return { success: true };
 
