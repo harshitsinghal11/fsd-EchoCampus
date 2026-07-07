@@ -25,6 +25,7 @@ EchoCampus is a campus web platform that centralizes common student and faculty 
 - Supabase Auth
 - Supabase Postgres
 - Supabase Realtime
+- Zod
 - Lucide React
 
 ## Screenshots (Optional)
@@ -121,11 +122,11 @@ The repository does not currently include a defined deployment pipeline, CI/CD w
 
 ## Project Status
 EchoCampus has reached a stable production-ready phase with all core features fully implemented. 
-- **Core Architecture:** Global Chat and Live Feeds are powered by Supabase Realtime. Form submissions strictly use Next.js Server Actions with hardened RLS security.
-- **Progressive Web App:** Fully installable PWA with a custom Service Worker and Native Push Notifications wired directly into Supabase.
-- **UI/UX:** A unified dark-mode design system (featuring glassmorphism, custom empty states, and responsive grids) is implemented across all Faculty and Student pages.
+- **Core Architecture:** Global Chat and Live Feeds are powered by Supabase Realtime. Form submissions strictly use Next.js Server Actions with hardened RLS security and strict **Zod** schema validation. Layouts use instantaneous Server-Component role verification.
+- **Progressive Web App:** Fully installable PWA with a custom Service Worker and asynchronous Native Push Notifications wired directly into Supabase.
+- **UI/UX:** A unified dark-mode design system (featuring glassmorphism, custom empty states, tabular-nums, and responsive grids) is implemented across all Faculty and Student pages.
 - **Performance:** Implemented custom SWR hooks for all primary features, providing fast cached navigations and background revalidation synchronized with Supabase Realtime.
-- **Type Safety:** Strict TypeScript interfaces align perfectly with the Supabase schema to reduce runtime errors.
+- **Type Safety:** Strict TypeScript interfaces and Zod schemas align perfectly with the Supabase schema to reduce runtime errors.
 
 ## Contributing (Optional)
 No formal contributing guide is defined in the repository yet.

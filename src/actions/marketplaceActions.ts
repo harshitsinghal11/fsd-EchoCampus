@@ -2,6 +2,15 @@
 
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
 import { sendPushNotificationBroadcast } from "@/utils/pushUtility";
+import { z } from "zod";
+
+const marketplaceSchema = z.object({
+  product_title: z.string().min(3, "Title must be at least 3 characters").max(100, "Title is too long"),
+  description: z.string().min(5, "Description must be at least 5 characters").max(2000, "Description is too long"),
+  price: z.number().positive("Price must be greater than 0"),
+  contact_info: z.string().min(10, "Contact info must be valid"),
+  image_url: z.string().optional(),
+});
 
 interface StudentProfileData {
   session_code: string | null;
@@ -21,6 +30,11 @@ export async function addMarketplaceItem(formData: {
   image_url?: string;
 }) {
   try {
+    const parsed = marketplaceSchema.safeParse(formData);
+    if (!parsed.success) {
+      return { error: parsed.error.issues[0].message };
+    }
+
     const supabase = await createSupabaseServerClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
@@ -56,25 +70,28 @@ export async function addMarketplaceItem(formData: {
 
     const { error: insertError } = await supabase.from("marketplace").insert({
       owner_id: user.id,
-      product_title: formData.product_title.trim(),
-      description: formData.description.trim(),
-      price: formData.price,
+      product_title: parsed.data.product_title,
+      description: parsed.data.description,
+      price: parsed.data.price,
       owner_name: ownerName,
-      contact_info: formData.contact_info,
+      contact_info: parsed.data.contact_info,
       owner_email: user.email,
-      image_url: formData.image_url || null,
+      image_url: parsed.data.image_url || null,
       is_sold: false,
     });
 
     if (insertError) {
+      if (insertError.code === 'P0001' || insertError.message?.includes("limit")) {
+        return { error: "Limit Reached: You can only post 1 item every 3 days." };
+      }
       return { error: insertError.message || "Failed to insert marketplace item" };
     }
 
-    await sendPushNotificationBroadcast({
+    sendPushNotificationBroadcast({
       title: "New Item in Marketplace",
-      body: formData.product_title,
+      body: parsed.data.product_title,
       url: "/main/student/marketplace"
-    });
+    }).catch(console.error);
 
     return { success: true };
 
