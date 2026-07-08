@@ -1,14 +1,17 @@
 import React from 'react';
+import { Loader2 } from "lucide-react";
 
 interface SubmitBtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
   isSubmitting?: boolean;
+  submittingLabel?: string;
   fullWidth?: boolean;
 }
 
 export const SubmitBtn: React.FC<SubmitBtnProps> = ({ 
   label, 
-  isSubmitting, 
+  isSubmitting,
+  submittingLabel = 'Processing...', 
   fullWidth = true,
   className = "",
   disabled,
@@ -30,7 +33,12 @@ export const SubmitBtn: React.FC<SubmitBtnProps> = ({
       `}
       {...props}
     >
-      {isSubmitting ? 'Processing...' : label}
+      {isSubmitting ? (
+        <span className="flex items-center justify-center gap-2">
+          <Loader2 className="w-5 h-5 animate-spin" />
+          {submittingLabel}
+        </span>
+      ) : label}
     </button>
   );
 };

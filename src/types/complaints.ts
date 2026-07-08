@@ -4,4 +4,6 @@ export type Complaint = {
   created_at: string;
   upvotes: number;
   current_user_has_upvoted?: boolean;
+  urgency?: 'HIGH' | 'MEDIUM' | 'LOW';
+  category?: string;
 };

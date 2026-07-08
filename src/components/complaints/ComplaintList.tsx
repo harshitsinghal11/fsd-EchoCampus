@@ -66,7 +66,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
 
   if (isLoading) {
     return (
-      <div className={`flex-1 flex flex-col overflow-y-auto ${isWidget ? '' : 'bg-surface backdrop-blur-xl border border-border rounded-xl p-6'}`}>
+      <div className={`flex-1 flex flex-col w-full h-full overflow-y-auto ${isWidget ? '' : 'bg-surface backdrop-blur-xl border border-border rounded-xl p-6'}`}>
         {!isWidget && (
           <div className="mb-4">
             <h1 className="text-2xl font-bold text-text-primary flex items-center gap-3">
@@ -81,7 +81,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
   }
 
   return (
-    <div className={`flex-1 flex flex-col overflow-y-auto ${isWidget ? '' : 'bg-surface backdrop-blur-xl border border-border rounded-xl p-6'}`}>
+    <div className={`flex-1 flex flex-col w-full h-full overflow-y-auto ${isWidget ? '' : 'bg-surface backdrop-blur-xl border border-border rounded-xl p-6'}`}>
 
       {!isWidget && (
         <div className="mb-4">
@@ -101,16 +101,44 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
           {items.map((c) => (
             <MotionItem
               key={c.id}
-              className={`bg-surface backdrop-blur-xl border border-border rounded-xl hover:bg-surface-hover/40 hover:border-primary/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] transition-all duration-300 ${isWidget ? 'p-4' : 'p-4'}`}
+              className={`relative bg-surface backdrop-blur-xl border rounded-xl transition-all duration-300 ${isWidget ? 'p-4' : 'p-5'} ${
+                c.urgency === 'HIGH'
+                  ? 'border-red-500/50 hover:bg-red-500/5 shadow-[0_0_15px_rgba(239,68,68,0.1)]'
+                  : 'border-border hover:bg-surface-hover/40 hover:border-primary/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)]'
+              }`}
             >
               <div className="flex items-start gap-4">
                 <div className="flex-1">
                   <p className={`text-text-secondary font-medium leading-relaxed ${isWidget ? 'text-sm line-clamp-2' : 'text-lg'}`}>
                     {c.complaint}
                   </p>
-                  <div className="flex items-center gap-2 mt-2 text-xs text-text-muted">
-                    <Clock className="w-3 h-3" />
-                    <span>{formatDate(c.created_at)}</span>
+                  <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-text-muted">
+                    <div className="flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>{formatDate(c.created_at)}</span>
+                    </div>
+                    
+                    {c.category && (
+                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">
+                        {c.category}
+                      </span>
+                    )}
+                    
+                    {c.urgency === 'HIGH' && (
+                      <span className="px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-500 border border-red-500/30 font-bold flex items-center gap-1">
+                        🔥 HIGH URGENCY
+                      </span>
+                    )}
+                    {c.urgency === 'MEDIUM' && (
+                      <span className="px-2.5 py-0.5 rounded-full bg-orange-500/10 text-orange-500 border border-orange-500/30 font-medium flex items-center gap-1">
+                        ⚡ MEDIUM
+                      </span>
+                    )}
+                    {c.urgency === 'LOW' && (
+                      <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/30 font-medium flex items-center gap-1">
+                        💤 LOW
+                      </span>
+                    )}
                   </div>
                 </div>
 

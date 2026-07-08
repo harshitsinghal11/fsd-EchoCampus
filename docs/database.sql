@@ -52,6 +52,8 @@ CREATE TABLE public.complaint_box (
     user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
     content TEXT NOT NULL,
     is_anonymous BOOLEAN DEFAULT false,
+    urgency TEXT DEFAULT 'LOW',
+    category TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
