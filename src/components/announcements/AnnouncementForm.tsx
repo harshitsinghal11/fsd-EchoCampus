@@ -2,9 +2,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 // import { supabase } from "@/lib/supabaseClient";
-import { Link as LinkIcon, Type, AlignLeft } from "lucide-react";
+import { Link as LinkIcon, Type, AlignLeft, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { addAnnouncement } from "@/actions/announcementActions";
+import { enhanceAnnouncement } from "@/actions/aiActions";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import { GlassCard } from "@/components/shared/ui/GlassCard";
 import { FormInput } from "@/components/shared/ui/FormInput";
@@ -16,6 +17,29 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [link, setLink] = useState(""); // New State for Link
+  const [isEnhancing, setIsEnhancing] = useState(false);
+
+  async function handleEnhance() {
+    if (!content.trim()) {
+      toast.error("Please enter a brief note to enhance first.");
+      return;
+    }
+    
+    setIsEnhancing(true);
+    try {
+      const result = await enhanceAnnouncement(content);
+      if (result.error) throw new Error(result.error);
+      
+      if (result.enhancedText) {
+        setContent(result.enhancedText);
+        toast.success("✨ AI Enhanced!");
+      }
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to enhance.");
+    } finally {
+      setIsEnhancing(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -74,17 +98,35 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
           required
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          placeholder="Type your announcement content here..."
+          placeholder="Type your announcement content here (or use AI Enhance)..."
           rows={5}
+          disabled={isEnhancing}
         />
 
-        {/* Submit Button */}
-        <SubmitBtn
-          type="submit"
-          disabled={loading}
-          isSubmitting={loading}
-          label="Publish Now"
-        />
+        {/* Submit Button & AI Button */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <button
+            type="button"
+            onClick={handleEnhance}
+            disabled={isEnhancing || loading || !content.trim()}
+            className={`flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-300 py-3.5 px-6 border ${
+              isEnhancing
+                ? "bg-primary/10 border-primary/30 text-primary animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                : "bg-surface hover:bg-surface-hover border-border text-text shadow-sm hover:shadow-md hover:border-primary/50"
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
+          >
+            <Sparkles size={18} className={isEnhancing ? "animate-spin" : "text-primary"} />
+            {isEnhancing ? "AI Thinking..." : "✨ AI Enhance Note"}
+          </button>
+
+          <SubmitBtn
+            type="submit"
+            disabled={loading || isEnhancing}
+            isSubmitting={loading}
+            label="Publish Now"
+            className="w-full m-0"
+          />
+        </div>
       </form>
     </GlassCard>
   );
