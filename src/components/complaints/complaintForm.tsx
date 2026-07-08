@@ -75,6 +75,7 @@ export default function ComplaintForm() {
         disabled={loading || !complaint.trim()}
         isSubmitting={loading}
         label="Submit Complaint"
+        submittingLabel="Analyzing with AI..."
       />
     </GlassCard>
   );

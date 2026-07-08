@@ -16,9 +16,15 @@ export default function Page() {
           Voice your concerns and track issue resolution.
         </p>
       </header>
-      <div className="flex flex-col md:flex-row gap-6 overflow-hidden">
-        <ComplaintList />
-        <ComplaintForm />
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="relative flex-1 min-h-[500px] md:min-h-0">
+          <div className="absolute inset-0 flex flex-col">
+            <ComplaintList />
+          </div>
+        </div>
+        <div className="w-full md:max-w-md shrink-0">
+          <ComplaintForm />
+        </div>
       </div>
     </div>
   );

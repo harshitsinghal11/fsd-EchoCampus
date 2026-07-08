@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, BellRing, BookUser, ShieldAlert, User } from "lucide-react";
+import { Home, BellRing, BookUser, ShieldAlert, User, MessageSquare } from "lucide-react";
 import { ROUTES } from "@/lib/routes";
 
 export default function BottomNavFaculty() {
@@ -9,7 +9,8 @@ export default function BottomNavFaculty() {
 
   const navItems = [
     { name: "Home", href: ROUTES.FACULTY.DASHBOARD, icon: Home },
-    { name: "Announcement", href: ROUTES.FACULTY.ANNOUNCEMENTS, icon: BellRing },
+    { name: "Complaints", href: "/main/faculty/complaints", icon: MessageSquare },
+    { name: "Alerts", href: ROUTES.FACULTY.ANNOUNCEMENTS, icon: BellRing },
     { name: "Directory", href: ROUTES.FACULTY.DIRECTORY, icon: BookUser },
     { name: "Lost/Found", href: ROUTES.FACULTY.LOST_FOUND, icon: ShieldAlert },
     { name: "Profile", href: ROUTES.FACULTY.PROFILE, icon: User },

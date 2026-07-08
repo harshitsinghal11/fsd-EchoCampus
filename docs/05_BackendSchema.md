@@ -26,7 +26,7 @@ public.complaint_box
 - `public.student_profiles`: student-only profile record keyed by `user_id`, storing `session_code`
 - `public.faculty_profiles`: faculty-only profile record keyed by `user_id`, storing department, phone, cabin, and experience
 - `public.announcements`: faculty-authored announcements linked to `users.id` through `author_id`
-- `public.complaint_box`: complaint records with `user_id`, `content`, `is_anonymous`, and `created_at`
+- `public.complaint_box`: complaint records with `user_id`, `content`, `is_anonymous`, `urgency`, `category`, and `created_at`
 - `public.complaint_upvotes`: one-row-per-user-per-complaint vote table
 - `public.marketplace`: student marketplace listings with owner data, price, contact info, sold state, and timestamps
 - `public.lost_found`: lost and found records with owner, title, description, location, contact info, image data, resolve flag, and timestamp

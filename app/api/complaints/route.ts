@@ -21,6 +21,8 @@ export async function GET(req: Request) {
       created_at,
       is_anonymous,
       user_id,
+      urgency,
+      category,
       complaint_upvotes(count)
     `)
     .order("created_at", { ascending: false });
@@ -96,6 +98,8 @@ export async function GET(req: Request) {
       author_id: c.is_anonymous ? null : c.user_id,
       upvotes: upvoteCount,
       current_user_has_upvoted: myUpvotedIds.has(c.id),
+      urgency: c.urgency,
+      category: c.category,
     };
   });
 
@@ -109,6 +113,8 @@ type ComplaintRow = {
   created_at: string;
   is_anonymous: boolean;
   user_id: string;
+  urgency?: 'HIGH' | 'MEDIUM' | 'LOW';
+  category?: string;
   complaint_upvotes?: { count: number }[] | null;
 };
 
