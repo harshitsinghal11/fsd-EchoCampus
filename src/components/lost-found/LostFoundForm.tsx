@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { X, UploadCloud, Search, MapPin, Phone, AlignLeft } from "lucide-react";
+import { X, UploadCloud, Search, MapPin, Phone, AlignLeft, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { addLostFoundItem } from "@/actions/lostFoundActions";
+import { analyzeLostItem } from "@/actions/aiActions";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import { GlassCard } from "@/components/shared/ui/GlassCard";
 import { FormInput } from "@/components/shared/ui/FormInput";
@@ -21,6 +22,63 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
     image_url: "",
   });
   const [fileToUpload, setFileToUpload] = useState<File | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  const handleAutoFill = async () => {
+    if (!fileToUpload && (!form.image_url || form.image_url.startsWith('blob:'))) {
+      if (!fileToUpload) {
+         toast.error("Please select an image first.");
+         return;
+      }
+    }
+
+    setIsAnalyzing(true);
+    try {
+      let finalImageUrl = form.image_url;
+
+      if (fileToUpload && form.image_url.startsWith('blob:')) {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          toast.error("Session expired. Please login again.");
+          setIsAnalyzing(false);
+          return;
+        }
+
+        const fileExt = fileToUpload.name.split('.').pop();
+        const fileName = `${user.id}-temp-${Date.now()}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('lost_found_images')
+          .upload(fileName, fileToUpload);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('lost_found_images')
+          .getPublicUrl(fileName);
+
+        finalImageUrl = publicUrl;
+        setForm(prev => ({ ...prev, image_url: finalImageUrl }));
+        setFileToUpload(null);
+      }
+
+      const result = await analyzeLostItem(finalImageUrl);
+      if (result.error) throw new Error(result.error);
+
+      setForm((prev) => ({
+        ...prev,
+        title: result.title || prev.title,
+        description: result.description || prev.description,
+      }));
+
+      toast.success("✨ AI Auto-Filled Details!");
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to analyze image";
+      toast.error(message);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -46,7 +104,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
         return;
       }
 
-      let finalImageUrl = "";
+      let finalImageUrl = form.image_url;
       if (fileToUpload) {
         const fileExt = fileToUpload.name.split('.').pop();
         const fileName = `${user.id}-${Date.now()}.${fileExt}`;
@@ -128,6 +186,8 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
               <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
             </label>
           )}
+
+
         </div>
 
         {/* Title Input */}
@@ -181,12 +241,28 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
           placeholder="Provide details (color, brand, scratches, distinguishing marks)..."
         />
 
-        {/* Submit Button */}
-        <SubmitBtn
-          disabled={loading || isPhoneInvalid}
-          isSubmitting={loading}
-          label="Submit Report"
-        />
+        {/* Auto-Fill & Submit Buttons */}
+        <div className="space-y-3 pt-2">
+          <button
+            type="button"
+            onClick={handleAutoFill}
+            disabled={isAnalyzing || loading || !form.image_url}
+            className={`w-full flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-300 py-3 px-4 border ${
+              isAnalyzing
+                ? "bg-primary/10 border-primary/30 text-primary animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                : "bg-surface hover:bg-surface-hover border-border text-text shadow-sm hover:shadow-md hover:border-primary/50"
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
+          >
+            <Sparkles size={18} className={isAnalyzing ? "animate-spin" : "text-primary"} />
+            {isAnalyzing ? "AI is Analyzing Image..." : "✨ Auto-Fill Details from Image"}
+          </button>
+          
+          <SubmitBtn
+            disabled={loading || isPhoneInvalid}
+            isSubmitting={loading}
+            label="Submit Report"
+          />
+        </div>
       </form>
     </GlassCard>
   );
