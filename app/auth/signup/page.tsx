@@ -15,6 +15,7 @@ import {
 import { supabase } from "@/lib/supabaseClient";
 import { ROUTES } from "@/lib/routes";
 import { verifyFacultyCode } from "./actions";
+import { Button } from "@/components/ui/Button";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -361,25 +362,16 @@ export default function SignUpPage() {
               </div>
             )}
 
-            <button
+            <Button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-4 md:mt-6 bg-button-primary text-text-primary py-3 px-6 rounded-xl font-semibold text-base md:text-lg transition-all duration-300 hover:scale-[0.98] hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-70 disabled:cursor-not-allowed group"
+              isSubmitting={isLoading}
+              className="w-full mt-4 md:mt-6 group"
+              size="lg"
             >
-              <span className="flex items-center justify-center">
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Creating account...
-                  </>
-                ) : (
-                  <>
-                    Create Account
-                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                  </>
-                )}
-              </span>
-            </button>
+              Create Account
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Button>
           </form>
 
           <p className="mt-5 md:mt-6 text-center text-sm text-text-muted">

@@ -47,7 +47,7 @@ export default function ComplaintForm() {
   const maxChars = 500;
 
   return (
-    <GlassCard className="p-6 md:p-8 space-y-5">
+    <GlassCard className="p-6 md:p-8">
       <div className="space-y-5">
         <FormTextarea
           id="complaint"
@@ -67,16 +67,16 @@ export default function ComplaintForm() {
             {charCount} / {maxChars}
           </span>
         </div>
-      </div>
 
-      <SubmitBtn
-        type="button"
-        onClick={handleSubmit}
-        disabled={loading || !complaint.trim()}
-        isSubmitting={loading}
-        label="Submit Complaint"
-        submittingLabel="Analyzing with AI..."
-      />
+        <SubmitBtn
+          type="button"
+          onClick={handleSubmit}
+          disabled={loading || !complaint.trim()}
+          isSubmitting={loading}
+          label="Submit Complaint"
+          submittingLabel="Analyzing with AI..."
+        />
+      </div>
     </GlassCard>
   );
 }

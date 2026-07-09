@@ -5,6 +5,7 @@ import {
 import Footer from "@/components/Footer/FooterStudent";
 import { ROUTES } from "@/lib/routes";
 import CheckAuthRedirect from "@/components/CheckAuthRedirect";
+import { Button } from "@/components/ui/Button";
 
 export const metadata = {
   title: "Home",
@@ -37,12 +38,13 @@ export default function Home() {
           </p>
 
           <div className="flex gap-4">
-            <Link
+            <Button
               href={ROUTES.AUTH.LOGIN}
-              className="group flex items-center gap-2 px-8 py-4 bg-button-primary text-text-primary font-bold rounded-xl transition-all duration-300 hover:scale-[0.98] hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              size="lg"
+              className="group font-bold"
             >
               Get Started <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </Link>
+            </Button>
           </div>
         </main>
 

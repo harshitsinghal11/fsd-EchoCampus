@@ -10,6 +10,7 @@ import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import { GlassCard } from "@/components/shared/ui/GlassCard";
 import { FormInput } from "@/components/shared/ui/FormInput";
 import { FormTextarea } from "@/components/shared/ui/FormTextarea";
+import { Button } from "@/components/ui/Button";
 
 
 export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) {
@@ -150,7 +151,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
   const isPhoneInvalid = form.contact_info?.length > 0 && form.contact_info.length !== 10;
 
   return (
-    <GlassCard className="p-6 md:p-8 space-y-5">
+    <GlassCard className="p-6 md:p-8">
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Image Upload / Preview Area */}
         <div className="w-full space-y-1.5">
@@ -165,16 +166,18 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
                 sizes="(max-width: 768px) 100vw, 640px"
                 className="object-cover"
               />
-              <button
+              <Button
                 type="button"
+                variant="danger"
+                size="icon"
                 onClick={() => {
                   setForm({ ...form, image_url: "" });
                   setFileToUpload(null);
                 }}
-                className="absolute top-2 right-2 bg-surface-hover backdrop-blur text-text-secondary p-1.5 rounded-full hover:bg-danger/20 hover:text-danger transition-all shadow-sm"
+                className="absolute top-2 right-2 !rounded-full"
               >
                 <X className="w-5 h-5" />
-              </button>
+              </Button>
             </div>
           ) : (
             <label className="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-border rounded-xl cursor-pointer bg-surface hover:bg-surface-hover/60 hover:border-primary/50 transition-all group">
@@ -243,19 +246,21 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
 
         {/* Auto-Fill & Submit Buttons */}
         <div className="space-y-3 pt-2">
-          <button
+          <Button
             type="button"
+            variant="secondary"
+            size="lg"
             onClick={handleAutoFill}
             disabled={isAnalyzing || loading || !form.image_url}
-            className={`w-full flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-300 py-3 px-4 border ${
+            className={`w-full border ${
               isAnalyzing
                 ? "bg-primary/10 border-primary/30 text-primary animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                : "bg-surface hover:bg-surface-hover border-border text-text shadow-sm hover:shadow-md hover:border-primary/50"
-            } disabled:opacity-50 disabled:cursor-not-allowed`}
+                : "border-border hover:border-primary/50"
+            }`}
           >
             <Sparkles size={18} className={isAnalyzing ? "animate-spin" : "text-primary"} />
             {isAnalyzing ? "AI is Analyzing Image..." : "✨ Auto-Fill Details from Image"}
-          </button>
+          </Button>
           
           <SubmitBtn
             disabled={loading || isPhoneInvalid}

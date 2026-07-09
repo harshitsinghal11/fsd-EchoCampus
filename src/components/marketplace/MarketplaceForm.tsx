@@ -20,6 +20,7 @@ import { addMarketplaceItem } from "@/actions/marketplaceActions";
 import { GlassCard } from "@/components/shared/ui/GlassCard";
 import { FormInput } from "@/components/shared/ui/FormInput";
 import { FormTextarea } from "@/components/shared/ui/FormTextarea";
+import { Button } from "@/components/ui/Button";
 
 export default function MarketCreateForm() {
   const userEmail = useUserEmail();
@@ -123,7 +124,7 @@ export default function MarketCreateForm() {
   }
   const isPhoneInvalid = form.contact_info.length > 0 && form.contact_info.length !== 10;
   return (
-    <GlassCard className="p-6 md:p-8 space-y-5">
+    <GlassCard className="p-6 md:p-8">
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Image Upload / Preview Area */}
         <div className="w-full space-y-1.5">
@@ -138,16 +139,18 @@ export default function MarketCreateForm() {
                 sizes="(max-width: 768px) 100vw, 640px"
                 className="object-cover"
               />
-              <button
+              <Button
                 type="button"
+                variant="danger"
+                size="icon"
                 onClick={() => {
                   setForm({ ...form, image_url: "" });
                   setFileToUpload(null);
                 }}
-                className="absolute top-2 right-2 bg-surface-hover backdrop-blur text-text-secondary p-1.5 rounded-full hover:bg-danger/20 hover:text-danger transition-all shadow-sm"
+                className="absolute top-2 right-2 !rounded-full"
               >
                 <X className="w-5 h-5" />
-              </button>
+              </Button>
             </div>
           ) : (
             <label className="flex flex-col items-center justify-center w-full h-32 md:h-40 border-2 border-dashed border-border rounded-xl cursor-pointer hover:bg-surface-hover hover:border-primary/50 transition-all group relative overflow-hidden bg-surface">
