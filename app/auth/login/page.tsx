@@ -11,6 +11,7 @@ import {
   fetchUserRole,
 } from "@/lib/authProfile";
 import { ROUTES } from "@/lib/routes";
+import { Button } from "@/components/ui/Button";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -101,11 +102,11 @@ export default function Login() {
 
       <div className="relative w-full max-w-md">
         {/* Glassmorphism Card matching the Dashboard */}
-        <div className="bg-surface backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl shadow-2xl border border-border p-6 sm:p-8">
+        <div className="bg-surface backdrop-blur-xl rounded-2xl shadow-xl border border-border p-6 sm:p-8">
 
           {/* Header */}
-          <div className="text-center mb-6">
-            <h1 className="text-3xl md:text-4xl font-extrabold text-text-primary mb-2 md:mb-3 tracking-tight">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl md:text-4xl font-extrabold text-text-primary mb-2 tracking-tight">
               Echo<span className="text-primary">Campus</span>
             </h1>
             <p className="text-base md:text-lg text-text-muted font-medium tracking-wide">
@@ -130,7 +131,7 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-11 pr-4 py-2.5 md:py-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 transition-all duration-200 hover:bg-surface-hover"
+                  className="w-full pl-11 pr-4 py-2.5 md:py-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent transition-all duration-300 hover:bg-surface-hover"
                   placeholder="Enter your email"
                 />
               </div>
@@ -151,13 +152,13 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full pl-11 pr-12 py-2.5 md:py-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 transition-all duration-200 hover:bg-surface-hover"
+                  className="w-full pl-11 pr-12 py-2.5 md:py-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent transition-all duration-300 hover:bg-surface-hover"
                   placeholder="Enter your password"
                 />
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-text-disabled hover:text-text-secondary transition-colors duration-200"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-text-disabled hover:text-text-secondary transition-colors duration-200 focus:outline-none focus-visible:text-primary rounded-r-xl"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -169,25 +170,16 @@ export default function Login() {
             </div>
 
             {/* Submit Button */}
-            <button
+            <Button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-2 md:mt-4 bg-button-primary text-text-primary py-3 md:py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-input-focus focus:ring-offset-2 focus:ring-offset-background disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group"
+              isSubmitting={isLoading}
+              className="w-full mt-4 md:mt-6 group"
+              size="lg"
             >
-              <span className="flex items-center justify-center">
-                {isLoading ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Loading...
-                  </>
-                ) : (
-                  <>
-                    Login Now
-                    <ArrowRight className="ml-2 h-5 w-5 " />
-                  </>
-                )}
-              </span>
-            </button>
+              Login Now
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+            </Button>
           </form>
 
           {/* Footer Link */}

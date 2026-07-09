@@ -10,6 +10,7 @@ import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import { GlassCard } from "@/components/shared/ui/GlassCard";
 import { FormInput } from "@/components/shared/ui/FormInput";
 import { FormTextarea } from "@/components/shared/ui/FormTextarea";
+import { Button } from "@/components/ui/Button";
 
 export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void }) {
   const router = useRouter();
@@ -24,12 +25,12 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
       toast.error("Please enter a brief note to enhance first.");
       return;
     }
-    
+
     setIsEnhancing(true);
     try {
       const result = await enhanceAnnouncement(content);
       if (result.error) throw new Error(result.error);
-      
+
       if (result.enhancedText) {
         setContent(result.enhancedText);
         toast.success("✨ AI Enhanced!");
@@ -69,7 +70,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
   }
 
   return (
-    <GlassCard className="p-6 md:p-8 space-y-5">
+    <GlassCard className="p-6 md:p-8">
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* 1. Title Input */}
         <FormInput
@@ -104,20 +105,21 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
         />
 
         {/* Submit Button & AI Button */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-          <button
+        <div className="space-y-3 pt-2">
+          <Button
             type="button"
+            variant="secondary"
+            size="lg"
             onClick={handleEnhance}
             disabled={isEnhancing || loading || !content.trim()}
-            className={`flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-300 py-3.5 px-6 border ${
-              isEnhancing
-                ? "bg-primary/10 border-primary/30 text-primary animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                : "bg-surface hover:bg-surface-hover border-border text-text shadow-sm hover:shadow-md hover:border-primary/50"
-            } disabled:opacity-50 disabled:cursor-not-allowed`}
+            className={`border w-full ${isEnhancing
+              ? "bg-primary/10 border-primary/30 text-primary animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+              : "border-border hover:border-primary/50"
+              }`}
           >
             <Sparkles size={18} className={isEnhancing ? "animate-spin" : "text-primary"} />
             {isEnhancing ? "AI Thinking..." : "✨ AI Enhance Note"}
-          </button>
+          </Button>
 
           <SubmitBtn
             type="submit"

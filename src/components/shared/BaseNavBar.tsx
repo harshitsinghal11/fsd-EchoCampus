@@ -58,7 +58,7 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
             <div className="flex items-center">
               <button
                 onClick={toggleMenu}
-                className="inline-flex items-center justify-center p-2.5 rounded-xl text-text-secondary hover:text-text-primary hover:bg-surface-hover/80 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-input-focus/50 z-50 group"
+                className="inline-flex items-center justify-center p-2.5 rounded-xl text-text-secondary hover:text-text-primary hover:bg-surface-hover/80 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary z-50 group"
               >
                 {isMenuOpen ? (
                   <X className="h-6 w-6 " />
