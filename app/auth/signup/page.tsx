@@ -171,8 +171,8 @@ export default function SignUpPage() {
   return (
     <div className="min-h-[100dvh] w-full bg-background flex items-center justify-center p-4 sm:p-6 md:p-8">
       <div className="relative w-full max-w-md">
-        <div className="bg-surface backdrop-blur-xl rounded-[1.5rem] md:rounded-3xl shadow-2xl border border-border p-6 sm:p-8">
-          <div className="text-center mb-6">
+        <div className="bg-surface backdrop-blur-xl rounded-2xl shadow-xl border border-border p-6 sm:p-8">
+          <div className="text-center mb-8">
             <h3 className="text-3xl md:text-4xl font-extrabold text-text-primary mb-2 tracking-tight">
               Join <span className="text-primary">EchoCampus</span>
             </h3>
@@ -196,7 +196,7 @@ export default function SignUpPage() {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   required
-                  className="w-full pl-11 pr-4 py-2.5 md:py-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 transition-all duration-200 hover:bg-surface-hover"
+                  className="w-full pl-11 pr-4 py-2.5 md:py-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent transition-all duration-300 hover:bg-surface-hover"
                   placeholder="Enter your full name"
                 />
               </div>
@@ -216,7 +216,7 @@ export default function SignUpPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-11 pr-4 py-2.5 md:py-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 transition-all duration-200 hover:bg-surface-hover"
+                  className="w-full pl-11 pr-4 py-2.5 md:py-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent transition-all duration-300 hover:bg-surface-hover"
                   placeholder="Enter your email"
                 />
               </div>
@@ -237,13 +237,13 @@ export default function SignUpPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   minLength={8}
-                  className="w-full pl-11 pr-12 py-2.5 md:py-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus:ring-2 focus:ring-input-focus/50 focus:border-primary/50 transition-all duration-200 hover:bg-surface-hover"
+                  className="w-full pl-11 pr-12 py-2.5 md:py-3 bg-surface border border-border rounded-xl text-text-primary placeholder-text-disabled focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent transition-all duration-300 hover:bg-surface-hover"
                   placeholder="Create a password"
                 />
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-text-disabled hover:text-text-secondary transition-colors duration-200"
+                  className="absolute inset-y-0 right-0 pr-4 flex items-center text-text-disabled hover:text-text-secondary transition-colors duration-200 focus:outline-none focus-visible:text-primary rounded-r-xl"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
@@ -364,7 +364,7 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full mt-2 md:mt-4 bg-button-primary text-text-primary py-3 md:py-3.5 px-6 rounded-xl font-semibold text-base md:text-lg shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-input-focus focus:ring-offset-2 focus:ring-offset-background disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none group"
+              className="w-full mt-4 md:mt-6 bg-button-primary text-text-primary py-3 px-6 rounded-xl font-semibold text-base md:text-lg transition-all duration-300 hover:scale-[0.98] hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-70 disabled:cursor-not-allowed group"
             >
               <span className="flex items-center justify-center">
                 {isLoading ? (
@@ -375,7 +375,7 @@ export default function SignUpPage() {
                 ) : (
                   <>
                     Create Account
-                    <ArrowRight className="ml-2 h-5 w-5 " />
+                    <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                   </>
                 )}
               </span>

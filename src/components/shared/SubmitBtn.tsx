@@ -22,11 +22,11 @@ export const SubmitBtn: React.FC<SubmitBtnProps> = ({
       type="submit"
       disabled={disabled || isSubmitting}
       className={`
-        bg-button-primary hover:bg-primary-hover text-background font-semibold
-        rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 
-        hover:shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all duration-200 
-        focus:outline-none focus:ring-2 focus:ring-input-focus focus:ring-offset-2 
-        focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed 
+        bg-button-primary hover:bg-primary-hover text-text-primary font-semibold
+        rounded-xl shadow-lg shadow-primary/20 transition-all duration-300 
+        hover:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 
+        focus-visible:ring-primary focus-visible:ring-offset-2 
+        focus-visible:ring-offset-background disabled:opacity-70 disabled:cursor-not-allowed 
         flex items-center justify-center
         ${fullWidth ? 'w-full py-3.5 px-6 text-base md:text-lg mt-2' : 'px-4 sm:px-6'}
         ${className}
