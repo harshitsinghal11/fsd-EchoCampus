@@ -279,7 +279,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
           >
             <Sparkles size={18} className={isAnalyzing ? "animate-spin" : "text-primary"} />
             {isAnalyzing ? "AI is Analyzing Image..." : "Auto Fill"}
-          </button>
+          </Button>
 
           <SubmitBtn
             disabled={loading || isPhoneInvalid || isDescriptionInvalid || isTitleInvalid}

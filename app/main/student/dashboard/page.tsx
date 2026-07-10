@@ -85,15 +85,12 @@ export default function StudentDashboard() {
         <section className="bg-surface backdrop-blur-xl rounded-2xl p-5 md:p-6 lg:p-8 border border-border shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">Recent Complaints</h2>
             </div>
             <Link
               href={ROUTES.STUDENT.COMPLAINTS}
-              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary transition-colors"
-            >
+              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary transition-colors">
               View All
-
             </Link>
           </div>
           <ComplaintList isWidget={true} />
@@ -103,20 +100,16 @@ export default function StudentDashboard() {
         <section className="lg:col-span-3 bg-surface backdrop-blur-xl rounded-2xl p-5 md:p-6 lg:p-8 border border-border shadow-md hover:shadow-lg transition-shadow duration-300">
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">Recent Lost & Found</h2>
             </div>
             <Link
               href={ROUTES.STUDENT.LOST_FOUND}
-              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors"
-            >
+              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors">
               View All
-
             </Link>
           </div>
           <LostFoundList showSearch={false} />
         </section>
-
       </div>
     </div>
   );
