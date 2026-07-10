@@ -24,12 +24,12 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
       toast.error("Please enter a brief note to enhance first.");
       return;
     }
-    
+
     setIsEnhancing(true);
     try {
       const result = await enhanceAnnouncement(content);
       if (result.error) throw new Error(result.error);
-      
+
       if (result.enhancedText) {
         setContent(result.enhancedText);
         toast.success("✨ AI Enhanced!");
@@ -104,19 +104,21 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
         />
 
         {/* Submit Button & AI Button */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+        <div className="pt-2 flex flex-col gap-3">
           <button
             type="button"
             onClick={handleEnhance}
             disabled={isEnhancing || loading || !content.trim()}
-            className={`flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-300 py-3.5 px-6 border ${
-              isEnhancing
-                ? "bg-primary/10 border-primary/30 text-primary animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                : "bg-surface hover:bg-surface-hover border-border text-text shadow-sm hover:shadow-md hover:border-primary/50"
-            } disabled:opacity-50 disabled:cursor-not-allowed`}
+            className={`w-full flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-300 py-3.5 px-6 border ${isEnhancing
+              ? "bg-primary/10 border-primary/30 text-primary animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+              : "bg-surface hover:bg-surface-hover border-border text-text shadow-sm hover:shadow-md hover:border-primary/50"
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            <Sparkles size={18} className={isEnhancing ? "animate-spin" : "text-primary"} />
-            {isEnhancing ? "AI Thinking..." : "✨ AI Enhance Note"}
+            <Sparkles
+              size={18}
+              className={isEnhancing ? "animate-spin" : "text-primary"}
+            />
+            {isEnhancing ? "AI Thinking..." : "Enhance Note"}
           </button>
 
           <SubmitBtn

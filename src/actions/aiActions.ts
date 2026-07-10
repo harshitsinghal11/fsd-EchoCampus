@@ -50,7 +50,7 @@ export async function analyzeLostItem(imageUrl: string) {
     const base64Image = buffer.toString('base64');
     const mimeType = response.headers.get('content-type') || 'image/jpeg';
 
-    const systemPrompt = "Identify the main object in this image. Return ONLY a valid JSON object with exactly two keys: 'title' (a short, clear name like 'Blue Milton Water Bottle') and 'description' (a 2-sentence visual description focusing on brand, color, and defining marks). Return ONLY JSON, no markdown formatting.";
+    const systemPrompt = "Identify the main object in this image. Return ONLY a valid JSON object with exactly two keys: 'title' (a short, clear name like 'Blue Milton Water Bottle', STRICTLY under 30 characters) and 'description' (a visual description focusing on brand, color, and defining marks, STRICTLY under 50 characters). Return ONLY JSON, no markdown formatting.";
     
     const { generateAIVisionResponse } = await import("@/utils/ai");
     const aiResult = await generateAIVisionResponse(systemPrompt, base64Image, mimeType);

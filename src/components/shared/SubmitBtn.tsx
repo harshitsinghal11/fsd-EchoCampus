@@ -8,14 +8,14 @@ interface SubmitBtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
 }
 
-export const SubmitBtn: React.FC<SubmitBtnProps> = ({ 
-  label, 
+export const SubmitBtn: React.FC<SubmitBtnProps> = ({
+  label,
   isSubmitting,
-  submittingLabel = 'Processing...', 
+  submittingLabel = 'Processing...',
   fullWidth = true,
   className = "",
   disabled,
-  ...props 
+  ...props
 }) => {
   return (
     <button
@@ -28,7 +28,7 @@ export const SubmitBtn: React.FC<SubmitBtnProps> = ({
         focus:outline-none focus:ring-2 focus:ring-input-focus focus:ring-offset-2 
         focus:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed 
         flex items-center justify-center
-        ${fullWidth ? 'w-full py-3.5 px-6 text-base md:text-lg mt-2' : 'px-4 sm:px-6'}
+        ${fullWidth ? 'w-full py-3.5 px-6 text-base border border-transparent' : 'px-4 sm:px-6'}
         ${className}
       `}
       {...props}

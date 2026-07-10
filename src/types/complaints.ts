@@ -6,4 +6,5 @@ export type Complaint = {
   current_user_has_upvoted?: boolean;
   urgency?: 'HIGH' | 'MEDIUM' | 'LOW';
   category?: string;
+  session_code?: string;
 };

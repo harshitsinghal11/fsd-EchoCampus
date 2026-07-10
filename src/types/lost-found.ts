@@ -7,4 +7,5 @@ export interface LostFoundItem {
   contact_info: string;
   image_url: string | null;
   created_at: string;
+  is_resolved: boolean;
 }

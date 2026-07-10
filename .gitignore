@@ -20,6 +20,9 @@
 # production
 /build
 
+#Agents Skills
+/.agents/
+
 # misc
 .DS_Store
 *.pem

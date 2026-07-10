@@ -27,8 +27,8 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
   const handleAutoFill = async () => {
     if (!fileToUpload && (!form.image_url || form.image_url.startsWith('blob:'))) {
       if (!fileToUpload) {
-         toast.error("Please select an image first.");
-         return;
+        toast.error("Please select an image first.");
+        return;
       }
     }
 
@@ -71,7 +71,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
         description: result.description || prev.description,
       }));
 
-      toast.success("✨ AI Auto-Filled Details!");
+      toast.success("✨ AI Auto Filled Details!");
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Failed to analyze image";
       toast.error(message);
@@ -148,6 +148,10 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
   };
 
   const isPhoneInvalid = form.contact_info?.length > 0 && form.contact_info.length !== 10;
+  const descriptionCharCount = form.description.length;
+  const isDescriptionInvalid = descriptionCharCount > 50;
+  const titleCharCount = form.title.length;
+  const isTitleInvalid = titleCharCount > 30;
 
   return (
     <GlassCard className="p-6 md:p-8 space-y-5">
@@ -191,14 +195,22 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
         </div>
 
         {/* Title Input */}
-        <FormInput
-          label="What is it?"
-          icon={Search}
-          required
-          value={form.title}
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
-          placeholder="e.g. Realme TWS Earbuds"
-        />
+        <div>
+          <FormInput
+            label="What is it?"
+            icon={Search}
+            required
+            value={form.title}
+            error={isTitleInvalid}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            placeholder="e.g. Realme TWS Earbuds"
+          />
+          <div className="flex justify-end mt-1.5">
+            <span className={`text-[11px] font-medium transition-colors ${isTitleInvalid ? 'text-danger' : 'text-text-disabled'}`}>
+              {titleCharCount} / 30
+            </span>
+          </div>
+        </div>
 
         {/* Two Column Grid for Location & Phone */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -231,15 +243,23 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
         </div>
 
         {/* Description Input */}
-        <FormTextarea
-          label="Description"
-          icon={AlignLeft}
-          required
-          rows={3}
-          value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
-          placeholder="Provide details (color, brand, scratches, distinguishing marks)..."
-        />
+        <div>
+          <FormTextarea
+            label="Description"
+            icon={AlignLeft}
+            required
+            rows={3}
+            value={form.description}
+            error={isDescriptionInvalid}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            placeholder="Provide details (color, brand, scratches, distinguishing marks)..."
+          />
+          <div className="flex justify-end mt-1.5">
+            <span className={`text-[11px] font-medium transition-colors ${isDescriptionInvalid ? 'text-danger' : 'text-text-disabled'}`}>
+              {descriptionCharCount} / 50
+            </span>
+          </div>
+        </div>
 
         {/* Auto-Fill & Submit Buttons */}
         <div className="space-y-3 pt-2">
@@ -247,18 +267,17 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
             type="button"
             onClick={handleAutoFill}
             disabled={isAnalyzing || loading || !form.image_url}
-            className={`w-full flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-300 py-3 px-4 border ${
-              isAnalyzing
-                ? "bg-primary/10 border-primary/30 text-primary animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                : "bg-surface hover:bg-surface-hover border-border text-text shadow-sm hover:shadow-md hover:border-primary/50"
-            } disabled:opacity-50 disabled:cursor-not-allowed`}
+            className={`w-full flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-300 py-3.5 px-6 text-base border ${isAnalyzing
+              ? "bg-primary/10 border-primary/30 text-primary animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+              : "bg-surface hover:bg-surface-hover border-border text-text shadow-sm hover:shadow-md hover:border-primary/50"
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             <Sparkles size={18} className={isAnalyzing ? "animate-spin" : "text-primary"} />
-            {isAnalyzing ? "AI is Analyzing Image..." : "✨ Auto-Fill Details from Image"}
+            {isAnalyzing ? "AI is Analyzing Image..." : "Auto Fill"}
           </button>
-          
+
           <SubmitBtn
-            disabled={loading || isPhoneInvalid}
+            disabled={loading || isPhoneInvalid || isDescriptionInvalid || isTitleInvalid}
             isSubmitting={loading}
             label="Submit Report"
           />
