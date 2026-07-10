@@ -1,5 +1,5 @@
 import React from 'react';
-import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 interface SubmitBtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
@@ -18,8 +18,10 @@ export const SubmitBtn: React.FC<SubmitBtnProps> = ({
   ...props
 }) => {
   return (
-    <button
+    <Button
       type="submit"
+      variant="primary"
+      size={fullWidth ? "lg" : "md"}
       disabled={disabled || isSubmitting}
       className={`
         bg-button-primary hover:bg-primary-hover text-background font-semibold
@@ -33,12 +35,7 @@ export const SubmitBtn: React.FC<SubmitBtnProps> = ({
       `}
       {...props}
     >
-      {isSubmitting ? (
-        <span className="flex items-center justify-center gap-2">
-          <Loader2 className="w-5 h-5 animate-spin" />
-          {submittingLabel}
-        </span>
-      ) : label}
-    </button>
+      {isSubmitting ? submittingLabel : label}
+    </Button>
   );
 };

@@ -30,7 +30,7 @@ export default function FacultyDashboard() {
         <div className="hidden md:flex items-center gap-3">
           <Link
             href={ROUTES.FACULTY.DIRECTORY}
-            className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 hover:border-primary/50 hover:shadow-[0_0_15px_rgba(20,184,166,0.2)] transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 hover:border-primary/50 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent"
           >
             Directory
           </Link>
@@ -41,7 +41,7 @@ export default function FacultyDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
 
         {/* 1. STUDENT COMPLAINTS */}
-        <section className="bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-border shadow-xl flex flex-col min-h-[350px] md:min-h-[400px]">
+        <section className="bg-surface backdrop-blur-xl rounded-2xl p-5 md:p-6 lg:p-8 border border-border shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6 shrink-0">
             <div className="flex items-center gap-2 md:gap-3">
               
@@ -60,7 +60,7 @@ export default function FacultyDashboard() {
         </section>
 
         {/* 2. LATEST ANNOUNCEMENTS */}
-        <section className="bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-border shadow-xl flex flex-col min-h-[350px] md:min-h-[400px]">
+        <section className="bg-surface backdrop-blur-xl rounded-2xl p-5 md:p-6 lg:p-8 border border-border shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6 shrink-0">
             <div className="flex items-center gap-2 md:gap-3">
               
@@ -83,7 +83,7 @@ export default function FacultyDashboard() {
       {/* --- BOTTOM ROW (Lost & Found) --- */}
       <div className="mt-4 md:mt-6 lg:mt-8">
         {/* 3. LOST ITEMS */}
-        <section className="bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl p-5 md:p-6 lg:p-8 border border-border shadow-xl">
+        <section className="bg-surface backdrop-blur-xl rounded-2xl p-5 md:p-6 lg:p-8 border border-border shadow-md hover:shadow-lg transition-shadow duration-300">
           <div className="flex justify-between items-center mb-5 md:mb-6 shrink-0">
              <div className="flex items-center gap-2 md:gap-3">
               

@@ -10,6 +10,7 @@ import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import { GlassCard } from "@/components/shared/ui/GlassCard";
 import { FormInput } from "@/components/shared/ui/FormInput";
 import { FormTextarea } from "@/components/shared/ui/FormTextarea";
+import { Button } from "@/components/ui/Button";
 
 export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void }) {
   const router = useRouter();
@@ -69,7 +70,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
   }
 
   return (
-    <GlassCard className="p-6 md:p-8 space-y-5">
+    <GlassCard className="p-6 md:p-8">
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* 1. Title Input */}
         <FormInput
@@ -107,6 +108,8 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
         <div className="pt-2 flex flex-col gap-3">
           <button
             type="button"
+            variant="secondary"
+            size="lg"
             onClick={handleEnhance}
             disabled={isEnhancing || loading || !content.trim()}
             className={`w-full flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-300 py-3.5 px-6 border ${isEnhancing
