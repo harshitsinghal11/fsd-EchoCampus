@@ -101,11 +101,10 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
           {items.map((c) => (
             <MotionItem
               key={c.id}
-              className={`relative bg-surface backdrop-blur-xl border rounded-xl transition-all duration-300 ${isWidget ? 'p-4' : 'p-5'} ${
-                c.urgency === 'HIGH'
+              className={`relative bg-surface backdrop-blur-xl border rounded-xl transition-all duration-300 ${isWidget ? 'p-4' : 'p-5'} ${c.urgency === 'HIGH'
                   ? 'border-red-500/50 hover:bg-red-500/5 shadow-[0_0_15px_rgba(239,68,68,0.1)]'
                   : 'border-border hover:bg-surface-hover/40 hover:border-primary/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)]'
-              }`}
+                }`}
             >
               <div className="flex items-start gap-4">
                 <div className="flex-1">
@@ -117,13 +116,13 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
                       <Clock className="w-3.5 h-3.5" />
                       <span>{formatDate(c.created_at)}</span>
                     </div>
-                    
+
                     {c.category && (
                       <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">
                         {c.category}
                       </span>
                     )}
-                    
+
                     {c.urgency === 'HIGH' && (
                       <span className="px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-500 border border-red-500/30 font-bold flex items-center gap-1">
                         🔥 HIGH URGENCY

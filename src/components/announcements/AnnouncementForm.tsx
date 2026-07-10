@@ -105,21 +105,24 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
         />
 
         {/* Submit Button & AI Button */}
-        <div className="space-y-3 pt-2">
-          <Button
+        <div className="pt-2 flex flex-col gap-3">
+          <button
             type="button"
             variant="secondary"
             size="lg"
             onClick={handleEnhance}
             disabled={isEnhancing || loading || !content.trim()}
-            className={`border w-full ${isEnhancing
+            className={`w-full flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-300 py-3.5 px-6 border ${isEnhancing
               ? "bg-primary/10 border-primary/30 text-primary animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-              : "border-border hover:border-primary/50"
-              }`}
+              : "bg-surface hover:bg-surface-hover border-border text-text shadow-sm hover:shadow-md hover:border-primary/50"
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            <Sparkles size={18} className={isEnhancing ? "animate-spin" : "text-primary"} />
-            {isEnhancing ? "AI Thinking..." : "✨ AI Enhance Note"}
-          </Button>
+            <Sparkles
+              size={18}
+              className={isEnhancing ? "animate-spin" : "text-primary"}
+            />
+            {isEnhancing ? "AI Thinking..." : "Enhance Note"}
+          </button>
 
           <SubmitBtn
             type="submit"

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { MapPin, Phone, Calendar, Camera, Trash2, ArrowRight, Search } from "lucide-react";
+import { MapPin, Phone, Calendar, Camera, Trash2, ArrowRight, Search, CheckCircle } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { LostFoundSkeleton } from "@/components/shared/Skeletons";
@@ -10,7 +10,7 @@ import { MotionItem } from "@/components/shared/MotionItem";
 import { useLostFound } from "@/hooks/data/useLostFound";
 import { EmptyLostFound, EmptySearch } from "@/components/shared/EmptyStates";
 import { SearchBar } from "@/components/shared/SearchBar";
-import { deleteLostFoundItem } from "@/actions/lostFoundActions";
+import { deleteLostFoundItem, resolveLostFoundItem } from "@/actions/lostFoundActions";
 import { useDebounce } from "@/hooks/useDebounce";
 
 interface LostFoundListProps {
@@ -48,13 +48,25 @@ export default function LostFoundList({
   }, [refreshTrigger, mutate]);
 
   const handleDelete = async (id: string, imageUrl: string | null) => {
-    const confirm = window.confirm("Has this item been returned? This post will be deleted.");
+    const confirm = window.confirm("Are you sure you want to delete this post?");
     if (!confirm) return;
 
     const result = await deleteLostFoundItem(id, imageUrl);
     if (result.error) toast.error("Error: " + result.error);
     else {
       toast.success("Item removed");
+      mutate();
+    }
+  };
+
+  const handleResolve = async (id: string) => {
+    const confirm = window.confirm("Has this item been returned/resolved?");
+    if (!confirm) return;
+
+    const result = await resolveLostFoundItem(id);
+    if (result.error) toast.error("Error: " + result.error);
+    else {
+      toast.success("Item marked as resolved!");
       mutate();
     }
   };
@@ -101,6 +113,14 @@ export default function LostFoundList({
                 }
             `}
             >
+              {/* RESOLVED BADGE */}
+              {item.is_resolved && (
+                <div className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-primary/20 backdrop-blur-md text-primary px-2.5 py-1 rounded-full border border-primary/30 shadow-lg">
+                  <CheckCircle className="w-3.5 h-3.5" />
+                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">Resolved</span>
+                </div>
+              )}
+
               {/* 1. IMAGE THUMBNAIL */}
               <div className={`
               bg-surface-hover shrink-0 overflow-hidden border border-border flex items-center justify-center relative
@@ -131,17 +151,17 @@ export default function LostFoundList({
 
                     <div className="flex items-center gap-2 shrink-0">
                       {/* Action Button */}
-                      {showSearch && currentUserId === item.user_id && (
+                      {showSearch && currentUserId === item.user_id && !item.is_resolved && (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleDelete(item.id, item.image_url);
+                            handleResolve(item.id);
                           }}
-                          className="flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 bg-danger/10 hover:bg-danger/20 border border-danger/20 text-danger hover:text-danger text-[10px] sm:text-[11px] font-bold rounded-md transition-all shrink-0"
-                          title="Mark as Found / Delete"
+                          className="flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 bg-primary/10 hover:bg-primary/20 border border-primary/20 text-primary hover:text-primary text-[10px] sm:text-[11px] font-bold rounded-md transition-all shrink-0"
+                          title="Mark as Resolved"
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
-                          <span className="hidden sm:inline">Delete</span>
+                          <CheckCircle className="w-3.5 h-3.5" />
+                          <span className="hidden sm:inline">Resolve</span>
                         </button>
                       )}
                     </div>

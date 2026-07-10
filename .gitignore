@@ -20,7 +20,7 @@
 # production
 /build
 
-#agent-skiils
+#Agents Skills
 /.agents/
 
 # misc
