@@ -48,9 +48,9 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
         {displayItems.map((item) => (
         <MotionItem
           key={item.id}
-          className={`border w-full flex flex-col ${isWidget
+          className={`border w-full flex flex-col transition-all duration-300 ${isWidget
             ? "bg-surface-hover/60 p-4 rounded-xl border-border hover:bg-surface-hover"
-            : "group relative bg-surface backdrop-blur-xl p-7 rounded-2xl border-border hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 hover:bg-surface-hover/40 transition-all duration-300"
+            : "group relative bg-surface p-5 sm:p-6 rounded-2xl border-border shadow-sm hover:shadow-md hover:border-primary/50 hover:shadow-primary/10 hover:bg-surface-hover/40"
             }`}
         >
           <div className="flex flex-col gap-2 w-full">

@@ -109,7 +109,7 @@ export default function LostFoundList({
               group overflow-hidden transition-all duration-300 w-full relative
               ${!showSearch
                   ? 'bg-surface hover:bg-surface-hover/80 rounded-xl p-3 flex items-center gap-3 border border-transparent hover:border-border cursor-pointer'
-                  : 'bg-surface backdrop-blur-xl border-border shadow-xl hover:bg-surface-hover hover:border-primary/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:bg-surface-hover/40 rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 flex flex-col h-full border'
+                  : 'bg-surface border-border shadow-sm hover:shadow-md hover:shadow-primary/10 hover:bg-surface-hover/40 hover:border-primary/30 rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 flex flex-col h-full border'
                 }
             `}
             >

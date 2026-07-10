@@ -5,11 +5,20 @@ import AnnouncementList from "@/components/announcements/AnnouncementList";
 import MarketplaceList from "@/components/marketplace/MarketplaceList";
 import ComplaintList from "@/components/complaints/ComplaintList";
 import LostFoundList from "@/components/lost-found/LostFoundList";
+import { createSupabaseServerClient } from "@/utils/supabaseServer";
 
 export const metadata = {
   title: "Dashboard",
 };
-export default function StudentDashboard() {
+export default async function StudentDashboard() {
+  const supabase = await createSupabaseServerClient();
+  const [announcementsCount, marketplaceCount, complaintsCount, lostFoundCount] = await Promise.all([
+    supabase.from("announcements").select("*", { count: "exact", head: true }).then(res => res.count || 0),
+    supabase.from("marketplace").select("*", { count: "exact", head: true }).then(res => res.count || 0),
+    supabase.from("complaint_box").select("*", { count: "exact", head: true }).then(res => res.count || 0),
+    supabase.from("lost_found").select("*", { count: "exact", head: true }).then(res => res.count || 0)
+  ]);
+
   return (
     <div className="w-full max-w-7xl mx-auto min-h-screen p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 text-text-primary">
 
@@ -46,29 +55,35 @@ export default function StudentDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
 
         {/* 1. LATEST ANNOUNCEMENTS (Full Width) */}
-        <section className="lg:col-span-3 bg-surface backdrop-blur-xl rounded-2xl p-5 md:p-6 lg:p-8 border border-border shadow-md hover:shadow-lg transition-shadow duration-300">
+        <section className="relative lg:col-span-3 bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300">
+          <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-2 rounded-full text-xs font-bold z-10 shadow-sm">
+            {announcementsCount}
+          </div>
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-
-              <h2 className="text-lg md:text-xl font-semibold text-text-primary">Latest Announcements</h2>
+              <h2 className="text-lg md:text-xl font-semibold text-text-primary">
+                Latest Announcements
+              </h2>
             </div>
             <Link
               href={ROUTES.STUDENT.ANNOUNCEMENTS}
-              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary transition-colors"
-            >
+              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary transition-colors">
               View All
-
             </Link>
           </div>
           <AnnouncementList isWidget={true} />
         </section>
 
         {/* 2. NEWEST LISTINGS (Left 2/3) */}
-        <section className="lg:col-span-2 bg-surface backdrop-blur-xl rounded-2xl p-5 md:p-6 lg:p-8 border border-border shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
+        <section className="relative lg:col-span-2 bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
+          <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-2 rounded-full text-xs font-bold z-10 shadow-sm">
+            {marketplaceCount}
+          </div>
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-
-              <h2 className="text-lg md:text-xl font-semibold text-text-primary">Newest Listings</h2>
+              <h2 className="text-lg md:text-xl font-semibold text-text-primary">
+                Newest Listings
+              </h2>
             </div>
             <Link
               href={ROUTES.STUDENT.MARKETPLACE}
@@ -82,10 +97,15 @@ export default function StudentDashboard() {
         </section>
 
         {/* 3. RECENT COMPLAINTS (Right 1/3) */}
-        <section className="bg-surface backdrop-blur-xl rounded-2xl p-5 md:p-6 lg:p-8 border border-border shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
+        <section className="relative bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
+          <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-2 rounded-full text-xs font-bold z-10 shadow-sm">
+            {complaintsCount}
+          </div>
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-              <h2 className="text-lg md:text-xl font-semibold text-text-primary">Recent Complaints</h2>
+              <h2 className="text-lg md:text-xl font-semibold text-text-primary">
+                Recent Complaints
+              </h2>
             </div>
             <Link
               href={ROUTES.STUDENT.COMPLAINTS}
@@ -97,10 +117,15 @@ export default function StudentDashboard() {
         </section>
 
         {/* 4. LOST & FOUND SECTION (Full Width at Bottom) */}
-        <section className="lg:col-span-3 bg-surface backdrop-blur-xl rounded-2xl p-5 md:p-6 lg:p-8 border border-border shadow-md hover:shadow-lg transition-shadow duration-300">
+        <section className="relative lg:col-span-3 bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300">
+          <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-2 rounded-full text-xs font-bold z-10 shadow-sm">
+            {lostFoundCount}
+          </div>
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
-              <h2 className="text-lg md:text-xl font-semibold text-text-primary">Recent Lost & Found</h2>
+              <h2 className="text-lg md:text-xl font-semibold text-text-primary">
+                Recent Lost & Found
+              </h2>
             </div>
             <Link
               href={ROUTES.STUDENT.LOST_FOUND}

@@ -7,7 +7,7 @@ export function AnnouncementSkeleton({ isWidget = false }: { isWidget?: boolean 
           key={i}
           className={`border w-full flex flex-col animate-pulse ${isWidget
             ? "bg-surface-hover/60 p-4 rounded-xl border-border"
-            : "relative overflow-hidden bg-surface backdrop-blur-xl p-6 md:p-8 rounded-2xl border-border shadow-xl"
+            : "relative overflow-hidden bg-surface p-5 sm:p-6 rounded-2xl border-border shadow-sm"
             }`}
         >
           <div className="flex flex-col gap-1 w-full">
@@ -44,7 +44,7 @@ export function MarketplaceSkeleton({ isWidget = false }: { isWidget?: boolean }
       : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"
       }`}>
       {[...Array(isWidget ? 4 : 6)].map((_, i) => (
-        <div key={i} className="relative overflow-hidden rounded-2xl p-5 md:p-6 border transition-all duration-300 bg-surface backdrop-blur-xl border-border shadow-xl animate-pulse">
+        <div key={i} className="relative overflow-hidden rounded-2xl p-5 sm:p-6 border transition-all duration-300 bg-surface border-border shadow-sm animate-pulse">
           {/* Header */}
           <div className="flex justify-between items-start gap-3">
             <div className="h-6 bg-surface-hover rounded-md w-3/4"></div>
@@ -81,7 +81,7 @@ export function ComplaintSkeleton({ isWidget = false }: { isWidget?: boolean }) 
   return (
     <div className="space-y-3">
       {[...Array(isWidget ? 3 : 5)].map((_, i) => (
-        <div key={i} className={`bg-surface backdrop-blur-xl border border-border rounded-xl animate-pulse p-4`}>
+        <div key={i} className={`bg-surface border border-border rounded-xl animate-pulse p-4`}>
           <div className="flex items-start gap-4">
             <div className="flex-1 space-y-1.5">
               <div className="h-5 bg-surface-hover rounded-md w-full"></div>
@@ -119,7 +119,7 @@ export function LostFoundSkeleton({ isWidget = false }: { isWidget?: boolean }) 
           animate-pulse
           ${isWidget
             ? 'bg-surface rounded-xl p-3 flex items-center gap-3 border border-transparent'
-            : 'bg-surface rounded-3xl p-5 flex flex-col sm:flex-row gap-5 md:gap-6 border border-border'
+            : 'bg-surface rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row gap-5 md:gap-6 border border-border'
           }
         `}>
           {/* Image Thumbnail */}
@@ -172,7 +172,7 @@ export function DirectorySkeleton() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {[...Array(6)].map((_, i) => (
-        <div key={i} className="bg-surface backdrop-blur-xl border border-border rounded-xl p-6 animate-pulse">
+        <div key={i} className="bg-surface border border-border rounded-2xl p-5 sm:p-6 animate-pulse">
           {/* Name and Department */}
           <div className="mb-4">
             <div className="h-6 bg-surface-hover rounded-md w-1/2 mb-1"></div>
@@ -209,7 +209,7 @@ export function ProfileSkeleton() {
   return (
     <div className="min-h-dvh bg-background py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl overflow-hidden border border-border shadow-2xl relative animate-pulse">
+        <div className="bg-surface rounded-2xl overflow-hidden border border-border shadow-md relative animate-pulse">
           {/* Skeleton Header */}
           <div className="bg-surface border-b border-border px-8 py-6 relative overflow-hidden">
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">

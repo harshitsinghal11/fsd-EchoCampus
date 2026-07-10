@@ -1,12 +1,13 @@
 'use client';
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { ThumbsUp, MessageSquare, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { ComplaintSkeleton } from "@/components/shared/Skeletons";
 import { MotionList } from "@/components/shared/MotionList";
 import { MotionItem } from "@/components/shared/MotionItem";
 import { useComplaints } from "@/hooks/data/useComplaints";
-import { EmptyComplaints } from "@/components/shared/EmptyStates";
+import { EmptyComplaints, EmptySearch } from "@/components/shared/EmptyStates";
+import { useDebounce } from "@/hooks/useDebounce";
 
 type UpvoteApiResponse = {
   added?: boolean;
@@ -16,12 +17,38 @@ type UpvoteApiResponse = {
 
 interface ComplaintListProps {
   isWidget?: boolean;
+  searchTerm?: string;
+  urgencyFilter?: string;
 }
 
-export default function ComplaintList({ isWidget = false }: ComplaintListProps) {
+export default function ComplaintList({ isWidget = false, searchTerm = "", urgencyFilter = "ALL" }: ComplaintListProps) {
   const [limit, setLimit] = useState(10);
   const { items, isLoading, mutate } = useComplaints(isWidget, isWidget ? undefined : limit);
   const [upvoting, setUpvoting] = useState<string | null>(null);
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  const displayItems = useMemo(() => {
+    if (isWidget) return items;
+    let filtered = items;
+
+    if (urgencyFilter !== "ALL") {
+      filtered = filtered.filter(item => item.urgency === urgencyFilter);
+    }
+
+    const q = debouncedSearchTerm.trim().toLowerCase();
+    if (q) {
+      filtered = filtered.filter(item => {
+        const hay = [
+          item.complaint,
+          item.category ?? "",
+        ].join(" ").toLowerCase();
+        return hay.includes(q);
+      });
+    }
+    
+    return filtered;
+  }, [items, debouncedSearchTerm, urgencyFilter, isWidget]);
 
   async function upvote(id: string) {
     setUpvoting(id);
@@ -66,7 +93,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
 
   if (isLoading) {
     return (
-      <div className={`flex-1 flex flex-col w-full h-full overflow-y-auto ${isWidget ? '' : 'bg-surface backdrop-blur-xl border border-border rounded-xl p-6'}`}>
+      <div className={`flex-1 flex flex-col w-full h-full overflow-y-auto ${isWidget ? '' : 'bg-surface border border-border rounded-2xl p-5 sm:p-6 shadow-sm'}`}>
         {!isWidget && (
           <div className="mb-4">
             <h1 className="text-2xl font-bold text-text-primary flex items-center gap-3">
@@ -81,8 +108,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
   }
 
   return (
-    <div className={`flex-1 flex flex-col w-full h-full overflow-y-auto ${isWidget ? '' : 'bg-surface backdrop-blur-xl border border-border rounded-xl p-6'}`}>
-
+    <div className={`flex-1 flex flex-col w-full h-full overflow-y-auto ${isWidget ? '' : 'bg-surface border border-border rounded-2xl p-5 sm:p-6 shadow-sm'}`}>
       {!isWidget && (
         <div className="mb-4">
           <h1 className="text-2xl font-bold text-text-primary flex items-center gap-3">
@@ -94,66 +120,71 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
         </div>
       )}
 
+      {!isLoading && !isWidget && items.length > 0 && displayItems.length === 0 && (
+        <EmptySearch searchTerm={searchTerm} />
+      )}
+
       {items.length === 0 ? (
         <EmptyComplaints isWidget={isWidget} />
-      ) : (
+      ) : displayItems.length > 0 && (
         <MotionList className="space-y-3">
-          {items.map((c) => (
+          {displayItems.map((c) => (
             <MotionItem
               key={c.id}
-              className={`relative bg-surface backdrop-blur-xl border rounded-xl transition-all duration-300 ${isWidget ? 'p-4' : 'p-5'} ${c.urgency === 'HIGH'
-                  ? 'border-red-500/50 hover:bg-red-500/5 shadow-[0_0_15px_rgba(239,68,68,0.1)]'
-                  : 'border-border hover:bg-surface-hover/40 hover:border-primary/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)]'
+              className={`relative bg-surface rounded-xl transition-all duration-300 ${isWidget ? 'p-4' : 'p-5 sm:p-6'} ${c.urgency === 'HIGH'
+                ? 'shadow-sm hover:shadow-[0_0_15px_rgba(239,68,68,0.1)]'
+                : 'border-border shadow-sm hover:shadow-md hover:bg-surface-hover/40 hover:border-primary/30 hover:shadow-primary/10'
                 }`}
             >
-              <div className="flex items-start gap-4">
+              <div className="flex flex-col gap-3">
                 <div className="flex-1">
-                  <p className={`text-text-secondary font-medium leading-relaxed ${isWidget ? 'text-sm line-clamp-2' : 'text-lg'}`}>
+                  <p className={`text-text-primary font-medium leading-relaxed ${isWidget ? 'text-sm line-clamp-2' : 'text-lg'}`}>
                     {c.complaint}
                   </p>
-                  <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-text-muted">
-                    <div className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5" />
-                      <span>{formatDate(c.created_at)}</span>
-                    </div>
-
+                  <div className="flex items-center gap-1.5 mt-2 text-xs font-medium text-text-muted">
                     {c.category && (
-                      <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-medium">
-                        {c.category}
-                      </span>
+                      <>
+                        <span>{c.category}</span>
+                        <span>•</span>
+                      </>
                     )}
-
-                    {c.urgency === 'HIGH' && (
-                      <span className="px-2.5 py-0.5 rounded-full bg-red-500/10 text-red-500 border border-red-500/30 font-bold flex items-center gap-1">
-                        🔥 HIGH URGENCY
-                      </span>
-                    )}
-                    {c.urgency === 'MEDIUM' && (
-                      <span className="px-2.5 py-0.5 rounded-full bg-orange-500/10 text-orange-500 border border-orange-500/30 font-medium flex items-center gap-1">
-                        ⚡ MEDIUM
-                      </span>
-                    )}
-                    {c.urgency === 'LOW' && (
-                      <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/30 font-medium flex items-center gap-1">
-                        💤 LOW
-                      </span>
-                    )}
+                    <span>{formatDate(c.created_at)}</span>
                   </div>
                 </div>
 
-                <button
-                  onClick={() => upvote(c.id)}
-                  disabled={upvoting === c.id}
-                  className={`flex items-center gap-1 px-2 py-1.5 rounded-md border transition-colors disabled:opacity-50 group ${c.current_user_has_upvoted
-                    ? "bg-primary/10 border-primary/30"
-                    : "bg-transparent border-border hover:bg-primary/10 hover:border-primary/30"
-                    } ${isWidget ? '' : 'flex-col min-w-[60px]'}`}
-                >
-                  <span className={`text-sm font-bold ${c.current_user_has_upvoted ? 'text-text-primary' : 'text-text-secondary group-hover:text-text-primary'} ${upvoting === c.id ? 'animate-pulse' : ''}`}>
-                    {c.upvotes}
-                  </span>
-                  <ThumbsUp className={`w-3.5 h-3.5 ${c.current_user_has_upvoted ? "text-primary" : "text-text-muted group-hover:text-primary"} ${upvoting === c.id ? 'text-primary' : ''}`} />
-                </button>
+                <div className="flex items-center justify-between mt-1">
+                  <div className="flex items-center">
+                    {c.urgency === 'HIGH' && (
+                      <span className="text-sm font-semibold flex items-center gap-1.5 text-red-500">
+                        🔥 High
+                      </span>
+                    )}
+                    {c.urgency === 'MEDIUM' && (
+                      <span className="text-sm font-semibold flex items-center gap-1.5 text-orange-500">
+                        ⚡ Medium
+                      </span>
+                    )}
+                    {c.urgency === 'LOW' && (
+                      <span className="text-sm font-semibold flex items-center gap-1.5 text-blue-500">
+                        💤 Low
+                      </span>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => upvote(c.id)}
+                    disabled={upvoting === c.id}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50 group ${c.current_user_has_upvoted
+                      ? "bg-primary/10 text-primary"
+                      : "bg-surface-hover text-text-secondary hover:bg-surface-hover/80 hover:text-text-primary"
+                      }`}
+                  >
+                    <ThumbsUp className={`w-4 h-4 ${c.current_user_has_upvoted ? "text-primary" : "text-text-muted group-hover:text-text-primary"} ${upvoting === c.id ? 'text-primary' : ''}`} />
+                    <span className={`text-sm font-bold ${upvoting === c.id ? 'animate-pulse' : ''}`}>
+                      {c.upvotes}
+                    </span>
+                  </button>
+                </div>
               </div>
             </MotionItem>
           ))}
@@ -161,7 +192,7 @@ export default function ComplaintList({ isWidget = false }: ComplaintListProps) 
       )}
 
       {/* --- LOAD MORE BUTTON --- */}
-      {!isWidget && items.length === limit && (
+      {!isWidget && items.length === limit && displayItems.length > 0 && !searchTerm && urgencyFilter === 'ALL' && (
         <div className="flex justify-center mt-6">
           <button
             onClick={() => setLimit((prev) => prev + 10)}

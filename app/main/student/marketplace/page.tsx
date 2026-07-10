@@ -43,7 +43,7 @@ export default function MarketplacePage() {
         </div>
 
         {/* Create Form - Takes 1 column, sticky on large screens */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1" id="action-form">
           <div className="lg:sticky lg:top-6">
             <MarketCreateForm />
           </div>

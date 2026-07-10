@@ -41,7 +41,7 @@ export default function FacultyDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
 
         {/* 1. STUDENT COMPLAINTS */}
-        <section className="bg-surface backdrop-blur-xl rounded-2xl p-5 md:p-6 lg:p-8 border border-border shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
+        <section className="bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6 shrink-0">
             <div className="flex items-center gap-2 md:gap-3">
               
@@ -60,7 +60,7 @@ export default function FacultyDashboard() {
         </section>
 
         {/* 2. LATEST ANNOUNCEMENTS */}
-        <section className="bg-surface backdrop-blur-xl rounded-2xl p-5 md:p-6 lg:p-8 border border-border shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
+        <section className="bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6 shrink-0">
             <div className="flex items-center gap-2 md:gap-3">
               
@@ -83,7 +83,7 @@ export default function FacultyDashboard() {
       {/* --- BOTTOM ROW (Lost & Found) --- */}
       <div className="mt-4 md:mt-6 lg:mt-8">
         {/* 3. LOST ITEMS */}
-        <section className="bg-surface backdrop-blur-xl rounded-2xl p-5 md:p-6 lg:p-8 border border-border shadow-md hover:shadow-lg transition-shadow duration-300">
+        <section className="bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300">
           <div className="flex justify-between items-center mb-5 md:mb-6 shrink-0">
              <div className="flex items-center gap-2 md:gap-3">
               

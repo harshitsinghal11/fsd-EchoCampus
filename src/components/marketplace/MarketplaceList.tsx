@@ -88,9 +88,9 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
           {displayItems.map((item) => (
             <MotionItem
               key={item.id}
-              className={`relative overflow-hidden rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 border transition-all duration-300 flex flex-col h-full ${item.is_sold
+              className={`relative overflow-hidden rounded-xl p-3 sm:p-5 md:p-6 border transition-all duration-300 flex flex-col h-full ${item.is_sold
                 ? "bg-surface border-border opacity-75 grayscale-30"
-                : "bg-surface backdrop-blur-xl border-border shadow-xl hover:bg-surface-hover hover:border-primary/30 hover:shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:bg-surface-hover/40 group"
+                : "bg-surface border-border shadow-sm hover:shadow-md hover:shadow-primary/10 hover:border-primary/30 group"
                 }`}
             >
               {/* IMAGE THUMBNAIL */}

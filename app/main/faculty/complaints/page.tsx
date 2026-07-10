@@ -1,5 +1,5 @@
 import { MessageSquare } from "lucide-react";
-import ComplaintList from "@/components/complaints/ComplaintList";
+import FacultyComplaintsClient from "./FacultyComplaintsClient";
 
 export const metadata = {
   title: "Complaints",
@@ -18,7 +18,7 @@ export default function FacultyComplaintsPage() {
         </p>
       </header>
 
-      <ComplaintList />
+      <FacultyComplaintsClient />
     </div>
   );
 }

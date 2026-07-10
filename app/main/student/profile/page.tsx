@@ -87,7 +87,7 @@ export default function StudentProfilePage() {
       <div className="max-w-4xl mx-auto">
 
         {/* Main Card */}
-        <div className="bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl overflow-hidden border border-border shadow-2xl relative">
+        <div className="bg-surface rounded-2xl overflow-hidden border border-border shadow-md relative">
 
           {/* Header Section */}
           <div className="bg-surface border-b border-border px-8 py-6 relative overflow-hidden">

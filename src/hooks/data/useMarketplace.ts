@@ -17,7 +17,7 @@ const fetcher = async ([_key, limit]: [string, number | undefined]) => {
 };
 
 export function useMarketplace(isWidget: boolean = false, customLimit?: number) {
-  const limit = isWidget ? 3 : customLimit;
+  const limit = isWidget ? 4 : customLimit;
   const key = ['marketplace', limit];
 
   const { data, error, isLoading, mutate } = useSWR<MarketplaceItem[], Error, [string, number | undefined]>(key as [string, number | undefined], fetcher);
