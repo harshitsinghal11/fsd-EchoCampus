@@ -5,6 +5,7 @@ import { LayoutDashboard } from "lucide-react";
 import ComplaintList from "@/components/complaints/ComplaintList";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
 import LostFoundList from "@/components/lost-found/LostFoundList";
+import { ComplaintSummaryWidget } from "@/components/dashboard/ComplaintSummaryWidget";
 
 export const metadata = {
   title: "Faculty Dashboard",
@@ -13,7 +14,7 @@ export const metadata = {
 export default function FacultyDashboard() {
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6 md:space-y-8 p-4 md:p-6 lg:p-8">
-      
+
       {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 pt-2 md:pt-0">
         <div className="flex flex-col gap-1 md:gap-2">
@@ -44,17 +45,18 @@ export default function FacultyDashboard() {
         <section className="bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6 shrink-0">
             <div className="flex items-center gap-2 md:gap-3">
-              
+
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">Student Complaints</h2>
             </div>
-            <Link 
-              href={ROUTES.FACULTY.COMPLAINTS} 
+            <Link
+              href={ROUTES.FACULTY.COMPLAINTS}
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary transition-colors"
             >
               View All
-              
+
             </Link>
           </div>
+          <ComplaintSummaryWidget />
           {/* Reusable Component in Widget Mode */}
           <ComplaintList isWidget={true} />
         </section>
@@ -63,19 +65,16 @@ export default function FacultyDashboard() {
         <section className="bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
           <div className="flex justify-between items-center mb-5 md:mb-6 shrink-0">
             <div className="flex items-center gap-2 md:gap-3">
-              
-              <h2 className="text-lg md:text-xl font-semibold text-text-primary">Your Announcements</h2>
+              <h2 className="text-lg md:text-xl font-semibold text-text-primary">Latest Announcements</h2>
             </div>
-            <Link 
-              href={ROUTES.FACULTY.ANNOUNCEMENTS} 
-              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors"
-            >
-              Manage
-              
+            <Link
+              href={ROUTES.FACULTY.ANNOUNCEMENTS}
+              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors">
+              Create/Manage
             </Link>
           </div>
           {/* Reusable Component in Widget Mode */}
-          <AnnouncementList isWidget={true} />
+          <AnnouncementList isWidget={true} widgetLimit={5} />
         </section>
 
       </div>
@@ -85,16 +84,16 @@ export default function FacultyDashboard() {
         {/* 3. LOST ITEMS */}
         <section className="bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300">
           <div className="flex justify-between items-center mb-5 md:mb-6 shrink-0">
-             <div className="flex items-center gap-2 md:gap-3">
-              
+            <div className="flex items-center gap-2 md:gap-3">
+
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">Lost Items</h2>
             </div>
-            <Link 
-              href={ROUTES.FACULTY.LOST_FOUND} 
+            <Link
+              href={ROUTES.FACULTY.LOST_FOUND}
               className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors"
             >
-              View all 
-              
+              View all
+
             </Link>
           </div>
           {/* Reusable Component (Search hidden) */}

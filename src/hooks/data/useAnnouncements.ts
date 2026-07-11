@@ -26,7 +26,7 @@ const fetcher = async ([_key, limit, searchTerm]: [string, number | undefined, s
 };
 
 export function useAnnouncements(isWidget: boolean = false, searchTerm: string = "", customLimit?: number) {
-  const limit = isWidget ? 3 : customLimit;
+  const limit = isWidget ? (customLimit || 3) : customLimit;
   const key = ['announcements', limit, searchTerm];
 
   const { data, error, isLoading, mutate } = useSWR<Announcement[], Error, [string, number | undefined, string]>(key as [string, number | undefined, string], fetcher, { keepPreviousData: true });
