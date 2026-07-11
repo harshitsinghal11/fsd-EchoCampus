@@ -10,8 +10,10 @@ import { MotionItem } from "@/components/shared/MotionItem";
 import { useLostFound } from "@/hooks/data/useLostFound";
 import { EmptyLostFound, EmptySearch } from "@/components/shared/EmptyStates";
 import { SearchBar } from "@/components/shared/SearchBar";
-import { deleteLostFoundItem, resolveLostFoundItem } from "@/actions/lostFoundActions";
+import { resolveLostFoundItem, deleteLostFoundItem } from "@/actions/lostFoundActions";
 import { useDebounce } from "@/hooks/useDebounce";
+import { usePagination } from "@/hooks/usePagination";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 interface LostFoundListProps {
   refreshTrigger?: number;
@@ -23,14 +25,30 @@ export default function LostFoundList({
   showSearch = true
 }: LostFoundListProps) {
 
-  const [limit, setLimit] = useState(10);
+  const { limit, loadMore } = usePagination(10, 10);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-  const { items, isLoading, mutate } = useLostFound(!showSearch, debouncedSearchTerm, !showSearch ? undefined : limit);
+
+  const { items, isLoading, mutate } = useLostFound(!showSearch, !showSearch ? undefined : limit);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
-  const displayItems = items;
+  const displayItems = useMemo(() => {
+    if (!showSearch) return items;
+    const q = debouncedSearchTerm.trim().toLowerCase();
+    if (!q) return items;
+    return items.filter((item) => {
+      const hay = [
+        item.title,
+        item.description ?? "",
+        item.location_found,
+      ]
+        .join(" ")
+        .toLowerCase();
+      return hay.includes(q);
+    });
+  }, [items, debouncedSearchTerm, showSearch]);
+
 
   useEffect(() => {
     async function fetchUser() {
@@ -101,7 +119,7 @@ export default function LostFoundList({
 
       {/* --- LIST LAYOUT --- */}
       {displayItems.length > 0 && (
-        <MotionList className={!showSearch ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5" : "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-6 pr-1 sm:pr-2 custom-scrollbar w-full"}>
+        <MotionList className={!showSearch ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5" : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 pr-1 sm:pr-2 custom-scrollbar w-full"}>
           {displayItems.map((item) => (
             <MotionItem
               key={item.id}
@@ -145,7 +163,7 @@ export default function LostFoundList({
                 <div>
                   {/* Header: Title + Date + Delete */}
                   <div className="flex justify-between items-start gap-2 sm:gap-3">
-                    <h2 className={`font-semibold line-clamp-1 ${!showSearch ? 'text-xs sm:text-sm' : 'text-sm sm:text-base md:text-lg'} text-text-primary group-hover:text-primary-light transition-colors`}>
+                    <h2 className={`font-semibold line-clamp-2 ${!showSearch ? 'text-xs sm:text-sm' : 'text-sm sm:text-base md:text-lg'} text-text-primary group-hover:text-primary-light transition-colors`}>
                       {item.title}
                     </h2>
 
@@ -221,12 +239,9 @@ export default function LostFoundList({
 
       {/* --- LOAD MORE BUTTON --- */}
       {showSearch && items.length === limit && displayItems.length > 0 && !searchTerm && (
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={() => setLimit((prev) => prev + 10)}
-            className="px-6 py-2.5 bg-surface border border-border rounded-xl text-text-primary hover:bg-surface-hover hover:border-primary/50 transition-all text-sm font-semibold shadow-sm hover:shadow-md"
-          >
-            Load More
+        <div className="flex justify-center mt-6 h-10 items-center">
+          <button onClick={loadMore} className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+            Load more items...
           </button>
         </div>
       )}

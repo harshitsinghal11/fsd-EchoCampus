@@ -26,6 +26,29 @@ export async function enhanceAnnouncement(text: string) {
   }
 }
 
+export async function enhanceComplaint(text: string) {
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return { error: "Unauthorized" };
+    }
+
+    if (!text || text.trim().length === 0) {
+      return { error: "Please provide some text to enhance." };
+    }
+
+    const systemPrompt = "You are a professional campus counselor. Rewrite the following student complaint to be constructive, clear, and professional, removing offensive language but keeping the core issue intact. Do not output anything else but the rewritten text.";
+    
+    const enhancedText = await generateAIResponse(systemPrompt, text);
+    return { success: true, enhancedText: enhancedText.trim() };
+  } catch (error: any) {
+    console.error("Enhance Complaint Error:", error);
+    return { error: error.message || "Failed to enhance complaint." };
+  }
+}
+
 export async function analyzeLostItem(imageUrl: string) {
   try {
     const supabase = await createSupabaseServerClient();

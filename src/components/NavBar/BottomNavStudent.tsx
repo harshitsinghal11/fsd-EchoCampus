@@ -32,13 +32,13 @@ export default function BottomNavStudent() {
       >
         {/* Backdrop */}
         <div
-          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${showMore ? "opacity-100" : "opacity-0"
+          className={`absolute inset-0 bg-black/70 transition-opacity duration-300 ${showMore ? "opacity-100" : "opacity-0"
             }`}
           onClick={() => setShowMore(false)}
         />
 
         {/* Sheet */}
-        <div className={`relative bg-[#18181b] border-t border-border rounded-t-3xl shadow-2xl transition-transform duration-300 ease-out pb-[env(safe-area-inset-bottom)] ${showMore ? "translate-y-0" : "translate-y-full"
+        <div className={`relative bg-[#18181b] border-t border-border rounded-t-3xl shadow-lg transition-transform duration-300 ease-out pb-[env(safe-area-inset-bottom)] ${showMore ? "translate-y-0" : "translate-y-full"
           }`}>
           <div className="flex justify-center pt-3 pb-2">
             <div className="w-12 h-1.5 bg-border rounded-full" />
@@ -76,7 +76,7 @@ export default function BottomNavStudent() {
       </div>
 
       {/* Main Bottom Nav */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 w-full bg-[#18181b] border-t border-border pb-[env(safe-area-inset-bottom)] z-50 shadow-[0_-4px_10px_rgba(0,0,0,0.4)]">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 w-full bg-[#18181b] border-t border-border pb-[env(safe-area-inset-bottom)] z-50 shadow-lg">
 
         <nav className="flex items-center justify-around h-16 px-1">
           {navItems.map((item) => {

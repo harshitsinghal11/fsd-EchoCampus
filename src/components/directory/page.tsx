@@ -36,7 +36,7 @@ export default function Directory() {
       </div>
 
       {/* Search and Filter Section */}
-      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-surface backdrop-blur-xl border border-border p-6 rounded-2xl">
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between bg-surface border border-border p-6 rounded-2xl">
         <SearchBar
           value={searchTerm}
           onChange={setSearchTerm}
@@ -71,7 +71,7 @@ export default function Directory() {
           {filteredFaculty.map((faculty) => (
             <div
               key={faculty.id}
-              className="group bg-surface backdrop-blur-xl border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 hover:bg-surface-hover/40"
+              className="group bg-surface border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-md hover:shadow-primary/10 hover:bg-surface-hover/40"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1 min-w-0">

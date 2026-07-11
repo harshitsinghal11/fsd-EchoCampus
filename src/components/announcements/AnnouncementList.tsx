@@ -7,6 +7,8 @@ import { useAnnouncements } from "@/hooks/data/useAnnouncements";
 import { EmptyAnnouncements, EmptySearch } from "@/components/shared/EmptyStates";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
+import { useEffect } from "react";
 
 interface AnnouncementListProps {
   isWidget?: boolean;
@@ -19,6 +21,10 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
   const { items, isLoading } = useAnnouncements(isWidget, debouncedSearchTerm, isWidget ? undefined : limit);
 
   const displayItems = items;
+
+  const handleLoadMore = () => {
+    setLimit(prev => prev + 10);
+  };
 
   if (isLoading) {
     return (
@@ -92,12 +98,9 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
 
       {/* --- LOAD MORE BUTTON --- */}
       {!isWidget && items.length === limit && displayItems.length > 0 && !searchTerm && (
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={() => setLimit((prev) => prev + 10)}
-            className="px-6 py-2.5 bg-surface border border-border rounded-xl text-text-primary hover:bg-surface-hover hover:border-primary/50 transition-all text-sm font-semibold shadow-sm hover:shadow-md"
-          >
-            Load More
+        <div className="flex justify-center mt-6 h-10 items-center">
+          <button onClick={handleLoadMore} className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+            Load more announcements...
           </button>
         </div>
       )}

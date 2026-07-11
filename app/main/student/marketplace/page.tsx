@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import MarketList from "@/components/marketplace/MarketplaceList";
 import MarketCreateForm from "@/components/marketplace/MarketplaceForm";
-import { Store } from "lucide-react";
+import { Store, PenLine } from "lucide-react";
+import { Modal } from "@/components/shared/ui/Modal";
 
 export default function MarketplacePage() {
   const [userEmail, setUserEmail] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetch email on client side
   useEffect(() => {
@@ -25,7 +27,7 @@ export default function MarketplacePage() {
   }, []);
 
   return (
-    <div className="w-full max-w-7xl mx-auto min-h-screen p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-background text-text-primary">
+    <div className="w-full max-w-7xl mx-auto min-h-screen p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-background text-text-primary relative pb-24">
       {/* Page Title */}
       <div className="flex flex-col gap-1 md:gap-2">
          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-text-primary flex items-center gap-3">
@@ -35,20 +37,27 @@ export default function MarketplacePage() {
          <p className="text-sm md:text-base text-text-muted font-medium">Buy, sell, and trade items with fellow students.</p>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mx-auto">
-
-        {/* Market List - Takes 2 columns */}
-        <div className="lg:col-span-2">
-          <MarketList currentUserEmail={userEmail} />
-        </div>
-
-        {/* Create Form - Takes 1 column, sticky on large screens */}
-        <div className="lg:col-span-1" id="action-form">
-          <div className="lg:sticky lg:top-6">
-            <MarketCreateForm />
-          </div>
-        </div>
+      {/* Market List - Full Width */}
+      <div className="w-full">
+        <MarketList currentUserEmail={userEmail} />
       </div>
+
+      {/* Floating Action Button */}
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="fixed bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 bg-primary hover:bg-primary-hover text-white rounded-full shadow-lg shadow-primary/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-30"
+      >
+        <PenLine className="w-6 h-6" />
+      </button>
+
+      {/* Create Modal */}
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)}
+        title="Post an Item"
+      >
+        <MarketCreateForm onSuccess={() => setIsModalOpen(false)} />
+      </Modal>
     </div>
   );
 }

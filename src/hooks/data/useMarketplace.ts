@@ -20,7 +20,7 @@ export function useMarketplace(isWidget: boolean = false, customLimit?: number) 
   const limit = isWidget ? 4 : customLimit;
   const key = ['marketplace', limit];
 
-  const { data, error, isLoading, mutate } = useSWR<MarketplaceItem[], Error, [string, number | undefined]>(key as [string, number | undefined], fetcher);
+  const { data, error, isLoading, mutate } = useSWR<MarketplaceItem[], Error, [string, number | undefined]>(key as [string, number | undefined], fetcher, { keepPreviousData: true });
 
   useEffect(() => {
     const channel = supabase

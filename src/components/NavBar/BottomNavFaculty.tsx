@@ -17,7 +17,7 @@ export default function BottomNavFaculty() {
   ];
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 w-full bg-[#18181b] border-t border-border pb-[env(safe-area-inset-bottom)] z-50 shadow-[0_-4px_10px_rgba(0,0,0,0.4)]">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 w-full bg-[#18181b] border-t border-border pb-[env(safe-area-inset-bottom)] z-50 shadow-lg">
       <nav className="flex items-center justify-between h-16 px-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href;

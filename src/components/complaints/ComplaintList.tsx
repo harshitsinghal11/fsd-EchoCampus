@@ -8,6 +8,8 @@ import { MotionItem } from "@/components/shared/MotionItem";
 import { useComplaints } from "@/hooks/data/useComplaints";
 import { EmptyComplaints, EmptySearch } from "@/components/shared/EmptyStates";
 import { useDebounce } from "@/hooks/useDebounce";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
+import { useEffect } from "react";
 
 type UpvoteApiResponse = {
   added?: boolean;
@@ -28,6 +30,10 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
+  const handleLoadMore = () => {
+    setLimit(prev => prev + 10);
+  };
+
   const displayItems = useMemo(() => {
     if (isWidget) return items;
     let filtered = items;
@@ -46,7 +52,7 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
         return hay.includes(q);
       });
     }
-    
+
     return filtered;
   }, [items, debouncedSearchTerm, urgencyFilter, isWidget]);
 
@@ -109,17 +115,6 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
 
   return (
     <div className={`flex-1 flex flex-col w-full h-full overflow-y-auto ${isWidget ? '' : 'bg-surface border border-border rounded-2xl p-5 sm:p-6 shadow-sm'}`}>
-      {!isWidget && (
-        <div className="mb-4">
-          <h1 className="text-2xl font-bold text-text-primary flex items-center gap-3">
-            Live Complaints
-          </h1>
-          <p className="text-text-secondary mt-2">
-            {items.length} {items.length === 1 ? 'complaint' : 'complaints'} from the community
-          </p>
-        </div>
-      )}
-
       {!isLoading && !isWidget && items.length > 0 && displayItems.length === 0 && (
         <EmptySearch searchTerm={searchTerm} />
       )}
@@ -131,11 +126,7 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
           {displayItems.map((c) => (
             <MotionItem
               key={c.id}
-              className={`relative bg-surface rounded-xl transition-all duration-300 ${isWidget ? 'p-4' : 'p-5 sm:p-6'} ${c.urgency === 'HIGH'
-                ? 'shadow-sm hover:shadow-[0_0_15px_rgba(239,68,68,0.1)]'
-                : 'border-border shadow-sm hover:shadow-md hover:bg-surface-hover/40 hover:border-primary/30 hover:shadow-primary/10'
-                }`}
-            >
+              className={isWidget ? 'p-4' : 'p-5 sm:p-6 border border-border rounded-lg'}>
               <div className="flex flex-col gap-3">
                 <div className="flex-1">
                   <p className={`text-text-primary font-medium leading-relaxed ${isWidget ? 'text-sm line-clamp-2' : 'text-lg'}`}>
@@ -192,13 +183,10 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
       )}
 
       {/* --- LOAD MORE BUTTON --- */}
-      {!isWidget && items.length === limit && displayItems.length > 0 && !searchTerm && urgencyFilter === 'ALL' && (
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={() => setLimit((prev) => prev + 10)}
-            className="px-6 py-2.5 bg-surface border border-border rounded-xl text-text-primary hover:bg-surface-hover hover:border-primary/50 transition-all text-sm font-semibold shadow-sm hover:shadow-md"
-          >
-            Load More
+      {!isWidget && items.length === limit && displayItems.length > 0 && !searchTerm && (
+        <div className="flex justify-center mt-6 h-10 items-center">
+          <button onClick={handleLoadMore} className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+            Load more complaints...
           </button>
         </div>
       )}

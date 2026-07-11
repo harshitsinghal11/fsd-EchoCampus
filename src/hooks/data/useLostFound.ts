@@ -4,27 +4,24 @@ import { useEffect } from 'react';
 
 import { LostFoundItem } from '@/types/lost-found';
 
-const fetcher = async ([_key, limit, searchTerm]: [string, number | undefined, string]) => {
+const fetcher = async ([_key, limit]: [string, number | undefined]) => {
   let query = supabase
     .from("lost_found")
     .select("*")
     .order("created_at", { ascending: false });
 
   if (limit) query = query.limit(limit);
-  if (searchTerm) {
-    query = query.or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%`);
-  }
 
   const { data, error } = await query;
   if (error) throw error;
   return data as LostFoundItem[];
 };
 
-export function useLostFound(isWidget: boolean = false, searchTerm: string = "", customLimit?: number) {
+export function useLostFound(isWidget: boolean = false, customLimit?: number) {
   const limit = isWidget ? 3 : customLimit;
-  const key = ['lost_found', limit, searchTerm];
+  const key = ['lost_found', limit];
 
-  const { data, error, isLoading, mutate } = useSWR<LostFoundItem[], Error, [string, number | undefined, string]>(key as [string, number | undefined, string], fetcher);
+  const { data, error, isLoading, mutate } = useSWR<LostFoundItem[], Error, [string, number | undefined]>(key as [string, number | undefined], fetcher, { keepPreviousData: true });
 
   useEffect(() => {
     const channel = supabase
