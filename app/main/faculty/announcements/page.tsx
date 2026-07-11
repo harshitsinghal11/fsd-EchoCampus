@@ -1,43 +1,49 @@
+"use client";
+import { useState } from "react";
 import AnnouncementForm from "@/components/announcements/AnnouncementForm";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
-import { AnnouncementSkeleton } from "@/components/shared/Skeletons";
-import { Megaphone } from "lucide-react";
-import { Suspense } from "react";
-
-export const metadata = {
-  title: "Announcements",
-};
+import { Megaphone, PenLine } from "lucide-react";
+import { Modal } from "@/components/shared/ui/Modal";
 
 export default function AdminAnnouncementsPage() {
-   return (
-      <div className="w-full max-w-7xl mx-auto space-y-6 md:space-y-8 p-4 md:p-6 lg:p-8">
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-         {/* Page Title */}
-         <div className="flex flex-col gap-1 md:gap-2">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-text-primary flex items-center gap-3">
-               <Megaphone className="w-7 h-7 md:w-8 md:h-8 text-primary" />
-               Announcement Center
-            </h1>
-            <p className="text-sm md:text-base text-text-muted font-medium">Manage campus-wide broadcasts and updates.</p>
-         </div>
-
-         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mx-auto">
-
-            {/* LEFT COLUMN: Live Feed (66% Width) */}
-            <div className="lg:col-span-2">
-               <Suspense fallback={<AnnouncementSkeleton />}>
-                  <AnnouncementList />
-               </Suspense>
-            </div>
-
-            {/* RIGHT COLUMN: The Form Widget (33% Width) */}
-            <div className="lg:col-span-1 mb-6 lg:mb-0">
-               <div className="lg:sticky lg:top-28">
-                  <AnnouncementForm />
-               </div>
-            </div>
-
-         </div>
+  return (
+    <div className="w-full max-w-7xl mx-auto min-h-[100dvh] p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-background text-text-primary relative pb-24">
+      {/* Page Title */}
+      <div className="flex flex-col gap-1 md:gap-2">
+        <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-text-primary flex items-center gap-3">
+          <Megaphone className="w-7 h-7 md:w-8 md:h-8 text-primary" />
+          Announcement Center
+        </h1>
+        <p className="text-sm md:text-base text-text-muted font-medium">
+          Manage campus-wide broadcasts and updates.
+        </p>
       </div>
-   );
+
+      {/* MAIN CONTENT - Full Width Feed */}
+      <div className="w-full">
+        <AnnouncementList />
+      </div>
+
+      {/* Floating Action Button */}
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="fixed bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 bg-primary hover:bg-primary-hover text-white rounded-full shadow-lg shadow-primary/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-30"
+      >
+        <PenLine className="w-6 h-6" />
+      </button>
+
+      {/* Create Announcement Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Create an Announcement"
+      >
+        <AnnouncementForm onSuccess={() => {
+          setIsModalOpen(false);
+        }} />
+      </Modal>
+    </div>
+  );
 }

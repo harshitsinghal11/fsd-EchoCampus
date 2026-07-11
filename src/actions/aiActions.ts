@@ -91,3 +91,43 @@ export async function analyzeLostItem(imageUrl: string) {
     return { error: error.message || "Failed to analyze image." };
   }
 }
+
+export async function getComplaintInsights() {
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return { error: "Unauthorized" };
+    }
+
+    // Fetch the latest 50 complaints to analyze trends
+    const { data: complaints, error: fetchError } = await supabase
+      .from("complaint_box")
+      .select("content, urgency, category, created_at")
+      .order("created_at", { ascending: false })
+      .limit(50);
+
+    if (fetchError) {
+      return { error: "Failed to fetch complaints for analysis." };
+    }
+
+    if (!complaints || complaints.length === 0) {
+      return { success: true, summary: "No recent complaints found to analyze." };
+    }
+
+    // Prepare data for the prompt
+    const complaintsText = complaints.map(c => 
+      `[${c.urgency}] [${c.category}] ${c.content}`
+    ).join("\n");
+
+    const systemPrompt = "You are a data analyst for a university administration. Review the following list of recent student complaints. Provide a highly scannable, bulleted summary (max 3-4 bullets) highlighting the most prominent trends or urgent matters. Keep it very simple and easy to read at a glance on a dashboard. Use short phrases. Use emojis like 🚨 for urgent issues, 🔧 for maintenance, or 📊 for general trends. Do not use filler words like 'Here is the summary'.";
+    
+    const summary = await generateAIResponse(systemPrompt, complaintsText);
+    
+    return { success: true, summary: summary.trim() };
+  } catch (error: any) {
+    console.error("Insights Error:", error);
+    return { error: error.message || "Failed to generate insights." };
+  }
+}

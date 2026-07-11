@@ -12,13 +12,14 @@ import { useEffect } from "react";
 
 interface AnnouncementListProps {
   isWidget?: boolean;
+  widgetLimit?: number;
 }
 
-export default function AnnouncementList({ isWidget = false }: AnnouncementListProps) {
+export default function AnnouncementList({ isWidget = false, widgetLimit }: AnnouncementListProps) {
   const [limit, setLimit] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
-  const { items, isLoading } = useAnnouncements(isWidget, debouncedSearchTerm, isWidget ? undefined : limit);
+  const { items, isLoading } = useAnnouncements(isWidget, debouncedSearchTerm, isWidget ? widgetLimit : limit);
 
   const displayItems = items;
 
@@ -38,7 +39,7 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
     <div className="flex flex-col h-full w-full">
       {!isWidget && (
         <div className="mb-6">
-          <SearchBar 
+          <SearchBar
             value={searchTerm}
             onChange={setSearchTerm}
             placeholder="Search announcements..."
@@ -47,54 +48,54 @@ export default function AnnouncementList({ isWidget = false }: AnnouncementListP
         </div>
       )}
 
-      <MotionList className="space-y-4 pr-2 custom-scrollbar h-full overflow-y-auto w-full">
+      <MotionList className={isWidget ? "space-y-4 pr-2 custom-scrollbar h-full overflow-y-auto w-full" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full h-full overflow-y-auto custom-scrollbar pr-2"}>
         {items.length === 0 && <EmptyAnnouncements isWidget={isWidget} />}
         {items.length > 0 && displayItems.length === 0 && <EmptySearch searchTerm={searchTerm} />}
 
         {displayItems.map((item) => (
-        <MotionItem
-          key={item.id}
-          className={`border w-full flex flex-col transition-all duration-300 ${isWidget
-            ? "bg-surface-hover/60 p-4 rounded-xl border-border hover:bg-surface-hover"
-            : "group relative bg-surface p-5 sm:p-6 rounded-2xl border-border shadow-sm hover:shadow-md hover:border-primary/50 hover:shadow-primary/10 hover:bg-surface-hover/40"
-            }`}
-        >
-          <div className="flex flex-col gap-2 w-full">
-            <div className="flex items-start justify-between gap-4">
-              <h4 className={`font-bold text-text-primary group-hover:text-primary transition-colors flex-1 ${isWidget ? "text-sm line-clamp-1" : "text-lg md:text-xl"}`}>
-                {item.title}
-              </h4>
+          <MotionItem
+            key={item.id}
+            className={`border w-full flex flex-col transition-all duration-300 ${isWidget
+              ? "bg-surface-hover/60 p-4 rounded-xl border-border hover:bg-surface-hover"
+              : "group relative bg-surface p-5 sm:p-6 rounded-2xl border-border shadow-sm hover:shadow-md hover:border-primary/50 hover:shadow-primary/10 hover:bg-surface-hover/40"
+              }`}
+          >
+            <div className="flex flex-col gap-2 w-full">
+              <div className="flex items-start justify-between gap-4">
+                <h4 className={`font-bold text-text-primary group-hover:text-primary transition-colors flex-1 ${isWidget ? "text-sm line-clamp-1" : "text-base md:text-lg line-clamp-2"}`}>
+                  {item.title}
+                </h4>
 
-              {item.link && (
-                <a
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`shrink-0 inline-flex items-center gap-1.5 font-medium text-primary hover:text-primary-light transition-colors ${isWidget ? "text-[10px] md:text-xs" : "text-xs font-semibold bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20 hover:bg-primary/20"
-                    }`}
-                >
-                  <ExternalLink className={isWidget ? "w-3 h-3" : "w-3.5 h-3.5"} />
-                  {isWidget ? "Open Link" : "View Link"}
-                </a>
+                {item.link && (
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`shrink-0 inline-flex items-center gap-1.5 font-medium text-primary hover:text-primary-light transition-colors ${isWidget ? "text-[10px] md:text-xs" : "text-xs font-semibold bg-primary/10 px-3 py-1.5 rounded-lg border border-primary/20 hover:bg-primary/20"
+                      }`}
+                  >
+                    <ExternalLink className={isWidget ? "w-3 h-3" : "w-3.5 h-3.5"} />
+                    {isWidget ? "Open Link" : "View Link"}
+                  </a>
+                )}
+              </div>
+
+              <p className={`text-text-muted ${isWidget ? "text-xs" : "text-xs md:text-sm leading-relaxed whitespace-pre-wrap"}`}>
+                {item.content}
+              </p>
+
+              {!isWidget && (
+                <div className="mt-2 pt-3 border-t border-border/60 text-xs text-text-secondary flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <User className="w-3.5 h-3.5 text-text-disabled shrink-0" />
+                    <span className="font-medium">{item.users?.full_name || "Faculty"}</span>
+                  </div>
+                </div>
               )}
             </div>
-
-            <p className={`text-text-muted ${isWidget ? "text-xs line-clamp-2" : "text-sm md:text-base leading-relaxed whitespace-pre-wrap"}`}>
-              {item.content}
-            </p>
-
-            {!isWidget && (
-              <div className="mt-2 pt-3 border-t border-border/60 text-xs text-text-secondary flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5 text-text-disabled shrink-0" />
-                  <span className="font-medium">{item.users?.full_name || "Faculty"}</span>
-                </div>
-              </div>
-            )}
-          </div>
-        </MotionItem>
-      ))}
-    </MotionList>
+          </MotionItem>
+        ))}
+      </MotionList>
 
       {/* --- LOAD MORE BUTTON --- */}
       {!isWidget && items.length === limit && displayItems.length > 0 && !searchTerm && (

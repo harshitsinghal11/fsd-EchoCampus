@@ -126,7 +126,7 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
           {displayItems.map((c) => (
             <MotionItem
               key={c.id}
-              className={isWidget ? 'p-4' : 'p-5 sm:p-6 border border-border rounded-lg'}>
+              className={isWidget ? 'p-4 border border-border rounded-xl bg-surface-hover/60 hover:bg-surface-hover transition-colors' : 'p-5 sm:p-6 border border-border rounded-lg'}>
               <div className="flex flex-col gap-3">
                 <div className="flex-1">
                   <p className={`text-text-primary font-medium leading-relaxed ${isWidget ? 'text-sm line-clamp-2' : 'text-lg'}`}>
