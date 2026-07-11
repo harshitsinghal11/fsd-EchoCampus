@@ -2,13 +2,15 @@
 import { useState } from "react";
 import LostFoundForm from "@/components/lost-found/LostFoundForm";
 import LostFoundList from "@/components/lost-found/LostFoundList";
-import { Search } from "lucide-react";
+import { Search, PenLine } from "lucide-react";
+import { Modal } from "@/components/shared/ui/Modal";
 
 export default function LostFoundPage() {
   const [refreshKey, setRefreshKey] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="w-full max-w-7xl mx-auto min-h-[100dvh] p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-background text-text-primary">
+    <div className="w-full max-w-7xl mx-auto min-h-[100dvh] p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-background text-text-primary relative pb-24">
 
       {/* Page Title */}
       <div className="flex flex-col gap-1 md:gap-2">
@@ -19,22 +21,29 @@ export default function LostFoundPage() {
         <p className="text-sm md:text-base text-text-muted font-medium">Report and find lost items across the campus.</p>
       </div>
 
-      {/* MAIN CONTENT GRID */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mx-auto">
-
-        {/* LEFT COLUMN: Feed (Top on Mobile, Left on Desktop) */}
-        <div className="lg:col-span-2">
-          <LostFoundList refreshTrigger={refreshKey} showSearch={true} />
-        </div>
-
-        {/* RIGHT COLUMN: Report Form (Bottom on Mobile, Right on Desktop) */}
-        <div className="lg:col-span-1 mb-6 lg:mb-0" id="action-form">
-          <div className="lg:sticky lg:top-28">
-            <LostFoundForm onSuccess={() => setRefreshKey(prev => prev + 1)} />
-          </div>
-        </div>
-
+      {/* MAIN CONTENT - Full Width Feed */}
+      <div className="w-full">
+        <LostFoundList refreshTrigger={refreshKey} showSearch={true} />
       </div>
+
+      {/* Floating Action Button */}
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="fixed bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 bg-primary hover:bg-primary-hover text-white rounded-full shadow-lg shadow-primary/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-30"
+      >
+        <PenLine className="w-6 h-6" />
+      </button>
+
+      {/* Report Modal */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Report a Lost or Found Item">
+        <LostFoundForm onSuccess={() => {
+          setRefreshKey(prev => prev + 1);
+          setIsModalOpen(false);
+        }} />
+      </Modal>
     </div>
   );
 }

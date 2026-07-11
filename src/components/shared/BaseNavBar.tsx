@@ -41,7 +41,7 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
   return (
     <>
       {/* --- TOP NAVBAR --- */}
-      <nav className="hidden md:block bg-surface backdrop-blur-xl border-b border-border sticky top-0 z-50 shadow-lg shadow-black/20">
+      <nav className="hidden md:block bg-surface border-b border-border sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16 md:h-20">
 
@@ -77,13 +77,13 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
       >
         {/* Dark Backdrop */}
         <div
-          className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 bg-black/70 transition-opacity duration-300 ${isMenuOpen ? 'opacity-100' : 'opacity-0'}`}
           onClick={toggleMenu}
         />
 
         {/* Slide-out Panel */}
         <div
-          className={`absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-surface-hover border-l border-border shadow-2xl transition-duration-300 ease-in-out flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+          className={`absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-surface-hover border-l border-border shadow-lg transition-duration-300 ease-in-out flex flex-col ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
         >
           {/* 1. Header */}
           <div className="flex items-center justify-between p-5 border-b border-border shrink-0">

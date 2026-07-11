@@ -11,22 +11,24 @@ import {
 import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
+import { ImageUpload } from "@/components/shared/ui/ImageUpload";
+import { uploadImageToSupabase } from "@/utils/storage";
 import React, { useState } from "react";
 import { useUserEmail } from "@/hooks/useUserEmail";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { addMarketplaceItem } from "@/actions/marketplaceActions";
-import { GlassCard } from "@/components/shared/ui/GlassCard";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { FormInput } from "@/components/shared/ui/FormInput";
 import { FormTextarea } from "@/components/shared/ui/FormTextarea";
 import { Button } from "@/components/ui/Button";
 
-export default function MarketCreateForm() {
+export default function MarketCreateForm({ onSuccess }: { onSuccess?: () => void }) {
   const userEmail = useUserEmail();
   const router = useRouter();
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { loading, execute } = useFormSubmit();
 
   // Consolidated all fields into one state object
   const [form, setForm] = useState({
@@ -64,114 +66,53 @@ export default function MarketCreateForm() {
       return;
     }
 
-    setIsSubmitting(true);
-
-    try {
-      let finalImageUrl = "";
-      if (fileToUpload) {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          const fileExt = fileToUpload.name.split('.').pop();
-          const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-
-          const { error: uploadError } = await supabase.storage
-            .from('marketplace_images')
-            .upload(fileName, fileToUpload);
-
-          if (uploadError) throw uploadError;
-
-          const { data: { publicUrl } } = supabase.storage
-            .from('marketplace_images')
-            .getPublicUrl(fileName);
-
-          finalImageUrl = publicUrl;
+    await execute(
+      async () => {
+        let finalImageUrl = "";
+        if (fileToUpload) {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            finalImageUrl = await uploadImageToSupabase(fileToUpload, 'marketplace_images', user.id);
+          }
         }
-      }
 
-      const parsedPrice = Number(form.price);
+        const parsedPrice = Number(form.price);
 
-      const result = await addMarketplaceItem({
-        product_title: form.product_title,
-        description: form.description,
-        price: parsedPrice,
-        contact_info: form.contact_info,
-        image_url: finalImageUrl
-      });
-
-      if (result.error) {
-        throw new Error(result.error);
-      }
-
-      toast.success("Item Published Successfully!");
-
-      setForm({
-        product_title: "",
-        description: "",
-        price: "",
-        contact_info: "",
-        image_url: "",
-      });
-      setFileToUpload(null);
-
-      router.refresh();
-
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Connection failed.";
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
-    }
+        return addMarketplaceItem({
+          product_title: form.product_title,
+          description: form.description,
+          price: parsedPrice,
+          contact_info: form.contact_info,
+          image_url: finalImageUrl
+        });
+      },
+      () => {
+        setForm({
+          product_title: "",
+          description: "",
+          price: "",
+          contact_info: "",
+          image_url: "",
+        });
+        setFileToUpload(null);
+        if (onSuccess) onSuccess();
+        router.refresh();
+      },
+      "Item Published Successfully!"
+    );
   }
   const isPhoneInvalid = form.contact_info.length > 0 && form.contact_info.length !== 10;
   return (
-    <GlassCard className="p-6 md:p-8">
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Image Upload / Preview Area */}
-        <div className="w-full space-y-1.5">
-          <label className="block text-sm font-semibold text-text-secondary">Item Photo</label>
-          {form.image_url ? (
-            <div className="relative w-full h-48 rounded-xl overflow-hidden border border-border group">
-              <Image
-                src={form.image_url}
-                alt="Preview"
-                fill
-                unoptimized
-                sizes="(max-width: 768px) 100vw, 640px"
-                className="object-cover"
-              />
-              <Button
-                type="button"
-                variant="danger"
-                size="icon"
-                onClick={() => {
-                  setForm({ ...form, image_url: "" });
-                  setFileToUpload(null);
-                }}
-                className="absolute top-2 right-2 !rounded-full"
-              >
-                <X className="w-5 h-5" />
-              </Button>
-            </div>
-          ) : (
-            <label className="flex flex-col items-center justify-center w-full h-32 md:h-40 border-2 border-dashed border-border rounded-xl cursor-pointer hover:bg-surface-hover hover:border-primary/50 transition-all group relative overflow-hidden bg-surface">
-              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                <div className="p-3 bg-surface-hover rounded-full mb-3 group-hover:scale-110 transition-transform">
-                  <Camera className="w-6 h-6 text-text-disabled group-hover:text-primary transition-colors" />
-                </div>
-                <p className="text-sm font-medium text-text-secondary">
-                  Tap to upload photo
-                </p>
-                <p className="text-xs text-text-muted mt-1">PNG, JPG up to 200KB</p>
-              </div>
-              <input
-                type="file"
-                className="hidden"
-                accept="image/*"
-                onChange={handleImageUpload}
-              />
-            </label>
-          )}
-        </div>
+    <form onSubmit={handleSubmit} className="space-y-5 w-full">
+      {/* Image Upload / Preview Area */}
+      <ImageUpload
+        imageUrl={form.image_url}
+        onImageSelected={handleImageUpload}
+        onClear={() => {
+          setForm({ ...form, image_url: "" });
+          setFileToUpload(null);
+        }}
+      />
 
         {/* Title Input */}
         <FormInput
@@ -245,12 +186,11 @@ export default function MarketCreateForm() {
             !form.product_title ||
             !form.price ||
             form.contact_info.length !== 10 ||
-            isSubmitting
+            loading
           }
-          isSubmitting={isSubmitting}
+          isSubmitting={loading}
           label="Post"
         />
-      </form>
-    </GlassCard>
+    </form>
   );
 }

@@ -5,14 +5,40 @@ import { AlignLeft } from "lucide-react";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import { toast } from "sonner";
 import { submitComplaint } from "@/actions/complaintActions";
+import { enhanceComplaint } from "@/actions/aiActions";
 import { useRouter } from "next/navigation";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { GlassCard } from "@/components/shared/ui/GlassCard";
 import { FormTextarea } from "@/components/shared/ui/FormTextarea";
+import { MagicButton } from "@/components/shared/ui/MagicButton";
 
 export default function ComplaintForm() {
   const router = useRouter();
   const [complaint, setComplaint] = useState("");
-  const [loading, setLoading] = useState(false);
+  const { loading, execute } = useFormSubmit();
+  const [isEnhancing, setIsEnhancing] = useState(false);
+
+  async function handleEnhance() {
+    if (!complaint.trim()) {
+      toast.error("Please enter a complaint to enhance first.");
+      return;
+    }
+
+    setIsEnhancing(true);
+    try {
+      const result = await enhanceComplaint(complaint);
+      if (result.error) throw new Error(result.error);
+
+      if (result.enhancedText) {
+        setComplaint(result.enhancedText);
+        toast.success("✨ Complaint Enhanced!");
+      }
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to enhance.");
+    } finally {
+      setIsEnhancing(false);
+    }
+  }
 
   async function handleSubmit() {
     if (!complaint.trim()) {
@@ -20,27 +46,17 @@ export default function ComplaintForm() {
       return;
     }
 
-    setLoading(true);
-
-    try {
-      const result = await submitComplaint({
+    await execute(
+      () => submitComplaint({
         complaint: complaint.trim(),
         isAnonymous: true,
-      });
-
-      if (result.error) {
-        toast.error(result.error);
-      } else {
-        toast.success("Thank you! Your complaint has been submitted successfully.");
+      }),
+      () => {
         setComplaint("");
         router.refresh();
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Network error. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+      },
+      "Thank you! Your complaint has been submitted successfully."
+    );
   }
 
   const charCount = complaint.length;
@@ -51,7 +67,6 @@ export default function ComplaintForm() {
       <div className="space-y-5">
         <FormTextarea
           id="complaint"
-          label="Complaint Details"
           icon={AlignLeft}
           value={complaint}
           onChange={(e) => setComplaint(e.target.value)}
@@ -68,14 +83,24 @@ export default function ComplaintForm() {
           </span>
         </div>
 
-        <SubmitBtn
-          type="button"
-          onClick={handleSubmit}
-          disabled={loading || !complaint.trim()}
-          isSubmitting={loading}
-          label="Submit Complaint"
-          submittingLabel="Analyzing with AI..."
-        />
+        <div className="flex flex-col gap-3 pt-2">
+          <MagicButton
+            onClick={handleEnhance}
+            disabled={isEnhancing || loading || !complaint.trim()}
+            isProcessing={isEnhancing}
+            label="Enhance Complaint"
+            processingLabel="AI Thinking..."
+          />
+
+          <SubmitBtn
+            type="button"
+            onClick={handleSubmit}
+            disabled={loading || !complaint.trim()}
+            isSubmitting={loading}
+            label="Submit Complaint"
+            submittingLabel="Analyzing with AI..."
+          />
+        </div>
       </div>
     </GlassCard>
   );

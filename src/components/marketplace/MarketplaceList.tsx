@@ -11,6 +11,9 @@ import { useMarketplace } from "@/hooks/data/useMarketplace";
 import { EmptyMarketplace, EmptySearch } from "@/components/shared/EmptyStates";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { useDebounce } from "@/hooks/useDebounce";
+import { usePagination } from "@/hooks/usePagination";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
+import { useEffect } from "react";
 
 interface MarketListProps {
   currentUserEmail?: string;
@@ -18,10 +21,11 @@ interface MarketListProps {
 }
 
 export default function MarketList({ currentUserEmail, isWidget = false }: MarketListProps) {
-  const [limit, setLimit] = useState(10);
+  const { limit, loadMore } = usePagination(10, 10);
   const { items, isLoading, mutate } = useMarketplace(isWidget, isWidget ? undefined : limit);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
 
   const displayItems = useMemo(() => {
     if (isWidget) return items;
@@ -82,8 +86,8 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
 
       {displayItems.length > 0 && (
         <MotionList className={`grid gap-3 sm:gap-4 md:gap-6 items-start ${isWidget
-          ? "grid-cols-2 sm:grid-cols-2"
-          : "grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"
+          ? "grid-cols-2"
+          : "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
           }`}>
           {displayItems.map((item) => (
             <MotionItem
@@ -111,7 +115,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
               )}
 
               <div className="flex justify-between items-start gap-2 sm:gap-3">
-                <h2 className={`font-semibold line-clamp-1 ${isWidget ? 'text-xs sm:text-sm' : 'text-sm sm:text-base md:text-lg'} ${item.is_sold ? 'text-text-muted' : 'text-text-primary group-hover:text-primary-light transition-colors'}`}>
+                <h2 className={`font-semibold line-clamp-2 ${isWidget ? 'text-xs sm:text-sm' : 'text-sm sm:text-base md:text-lg'} ${item.is_sold ? 'text-text-muted' : 'text-text-primary group-hover:text-primary-light transition-colors'}`}>
                   {item.product_title}
                 </h2>
 
@@ -164,12 +168,9 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
 
       {/* --- LOAD MORE BUTTON --- */}
       {!isWidget && items.length === limit && displayItems.length > 0 && !searchTerm && (
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={() => setLimit((prev) => prev + 10)}
-            className="px-6 py-2.5 bg-surface border border-border rounded-xl text-text-primary hover:bg-surface-hover hover:border-primary/50 transition-all text-sm font-semibold shadow-sm hover:shadow-md"
-          >
-            Load More
+        <div className="flex justify-center mt-6 h-10 items-center">
+          <button onClick={loadMore} className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+            Load more items...
           </button>
         </div>
       )}

@@ -29,7 +29,7 @@ export function useAnnouncements(isWidget: boolean = false, searchTerm: string =
   const limit = isWidget ? 3 : customLimit;
   const key = ['announcements', limit, searchTerm];
 
-  const { data, error, isLoading, mutate } = useSWR<Announcement[], Error, [string, number | undefined, string]>(key as [string, number | undefined, string], fetcher);
+  const { data, error, isLoading, mutate } = useSWR<Announcement[], Error, [string, number | undefined, string]>(key as [string, number | undefined, string], fetcher, { keepPreviousData: true });
 
   useEffect(() => {
     const channel = supabase

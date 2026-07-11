@@ -16,7 +16,7 @@ export function useComplaints(isWidget: boolean = false, customLimit?: number) {
   const limit = isWidget ? 3 : customLimit;
   const key = ['/api/complaints', limit];
 
-  const { data, error, isLoading, mutate } = useSWR<Complaint[], Error, [string, number | undefined]>(key as [string, number | undefined], fetcher);
+  const { data, error, isLoading, mutate } = useSWR<Complaint[], Error, [string, number | undefined]>(key as [string, number | undefined], fetcher, { keepPreviousData: true });
 
   useEffect(() => {
     const channel = supabase

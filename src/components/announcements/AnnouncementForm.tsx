@@ -7,17 +7,19 @@ import { toast } from "sonner";
 import { addAnnouncement } from "@/actions/announcementActions";
 import { enhanceAnnouncement } from "@/actions/aiActions";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
+import { MagicButton } from "@/components/shared/ui/MagicButton";
 import { GlassCard } from "@/components/shared/ui/GlassCard";
 import { FormInput } from "@/components/shared/ui/FormInput";
 import { FormTextarea } from "@/components/shared/ui/FormTextarea";
+import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { Button } from "@/components/ui/Button";
 
 export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void }) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { loading, execute } = useFormSubmit();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [link, setLink] = useState(""); // New State for Link
+  const [link, setLink] = useState("");
   const [isEnhancing, setIsEnhancing] = useState(false);
 
   async function handleEnhance() {
@@ -44,29 +46,18 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
 
-    try {
-      const result = await addAnnouncement({ title, content, link });
-
-      if (result.error) {
-        throw new Error(result.error);
-      }
-
-      // Reset Form
-      setTitle("");
-      setContent("");
-      setLink("");
-      toast.success("Announcement posted!");
-      if (onSuccess) onSuccess();
-      router.refresh();
-
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Failed to post.";
-      toast.error(message);
-    } finally {
-      setLoading(false);
-    }
+    await execute(
+      () => addAnnouncement({ title, content, link }),
+      () => {
+        setTitle("");
+        setContent("");
+        setLink("");
+        if (onSuccess) onSuccess();
+        router.refresh();
+      },
+      "Announcement posted!"
+    );
   }
 
   return (
@@ -106,23 +97,13 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
 
         {/* Submit Button & AI Button */}
         <div className="pt-2 flex flex-col gap-3">
-          <button
-            type="button"
-            variant="secondary"
-            size="lg"
+          <MagicButton
             onClick={handleEnhance}
             disabled={isEnhancing || loading || !content.trim()}
-            className={`w-full flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-300 py-3.5 px-6 border ${isEnhancing
-              ? "bg-primary/10 border-primary/30 text-primary animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-              : "bg-surface hover:bg-surface-hover border-border text-text shadow-sm hover:shadow-md hover:border-primary/50"
-              } disabled:opacity-50 disabled:cursor-not-allowed`}
-          >
-            <Sparkles
-              size={18}
-              className={isEnhancing ? "animate-spin" : "text-primary"}
-            />
-            {isEnhancing ? "AI Thinking..." : "Enhance Note"}
-          </button>
+            isProcessing={isEnhancing}
+            label="Enhance Note"
+            processingLabel="AI Thinking..."
+          />
 
           <SubmitBtn
             type="submit"
