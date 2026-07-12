@@ -25,7 +25,7 @@ export default async function StudentDashboard() {
       {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 pt-2 md:pt-0">
         <div className="flex flex-col gap-1 md:gap-2">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-text-primary capitalize flex items-center gap-3">
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary capitalize flex items-center gap-3">
             <LayoutDashboard className="w-7 h-7 md:w-8 md:h-8 text-primary" />
             Hey! Welcome To EchoCampus
           </h1>
@@ -38,13 +38,13 @@ export default async function StudentDashboard() {
         <div className="hidden md:flex items-center gap-3">
           <Link
             href={ROUTES.STUDENT.CHAT}
-            className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 hover:border-primary/50 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent"
+            className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent"
           >
             Global Chat
           </Link>
           <Link
             href={ROUTES.STUDENT.DIRECTORY}
-            className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 hover:border-primary/50 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent"
+            className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent"
           >
             Directory
           </Link>

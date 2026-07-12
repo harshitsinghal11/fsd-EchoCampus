@@ -100,7 +100,7 @@ export default function StudentProfilePage() {
               </div>
 
               <div className="text-center md:text-left text-text-primary">
-                <h1 className="text-4xl font-extrabold tracking-tight mb-3">Student Profile</h1>
+                <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary mb-3">Student Profile</h1>
               </div>
             </div>
           </div>

@@ -105,7 +105,7 @@ export default function ProfilePage() {
                </div>
                
                <div className="text-center md:text-left text-text-primary">
-                  <h1 className="text-4xl font-extrabold tracking-tight mb-3">{profile.name}</h1>
+                  <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary mb-3">{profile.name}</h1>
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-success/10 border border-primary/20 text-primary text-sm font-semibold shadow-inner">
                      <Briefcase className="w-4 h-4" />
                      {profile.department}

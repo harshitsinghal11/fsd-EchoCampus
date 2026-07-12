@@ -138,11 +138,11 @@ EchoCampus has reached a stable production-ready phase with all core features fu
 No formal contributing guide is defined in the repository yet.
 
 ## License
-ISC
+MIT7
 
 ## Contact
 
-Built by **Harshit** — B.Tech CSE, Manav Rachna University
+Built by **Harshit Singhal** — B.Tech CSE, Manav Rachna University
 
 - [GitHub](https://github.com/harshitsinghal11)
 - [LinkedIn](https://linkedin.com/in/harshitsinghal11)

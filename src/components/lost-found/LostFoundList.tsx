@@ -138,7 +138,7 @@ export default function LostFoundList({
               {item.is_resolved && (
                 <div className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-primary/20 backdrop-blur-md text-primary px-2.5 py-1 rounded-full border border-primary/30 shadow-lg">
                   <CheckCircle className="w-3.5 h-3.5" />
-                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider">Resolved</span>
+                  <span className="text-[11px] font-bold uppercase tracking-wider">Resolved</span>
                 </div>
               )}
 
@@ -166,7 +166,7 @@ export default function LostFoundList({
                 <div>
                   {/* Header: Title + Date + Delete */}
                   <div className="flex justify-between items-start gap-2 sm:gap-3">
-                    <h2 className={`font-semibold line-clamp-2 ${!showSearch ? 'text-xs sm:text-sm' : 'text-sm sm:text-base md:text-lg'} text-text-primary`}>
+                    <h2 className={`font-semibold line-clamp-2 ${!showSearch ? 'text-sm' : 'text-base md:text-lg'} text-text-primary`}>
                       {item.title}
                     </h2>
 
@@ -178,7 +178,7 @@ export default function LostFoundList({
                             e.stopPropagation();
                             handleResolve(item.id);
                           }}
-                          className="flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 bg-primary/10 hover:bg-primary/20 border border-primary/20 text-primary hover:text-primary text-[10px] sm:text-[11px] font-bold rounded-md transition-all shrink-0"
+                          className="flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 bg-primary/10 hover:bg-primary/20 border border-primary/20 text-primary hover:text-primary text-[11px] font-bold rounded-md transition-all shrink-0"
                           title="Mark as Resolved"
                         >
                           <CheckCircle className="w-3.5 h-3.5" />
@@ -196,14 +196,14 @@ export default function LostFoundList({
                     </div>
                   )}
 
-                  {/* Full Details (Full Page Only) */}
+                  {/* Full Details */}
                   {showSearch && (
-                    <div className="flex flex-col w-full">
-                      <p className={`text-text-muted mt-1.5 sm:mt-2 leading-relaxed text-[10px] sm:text-xs md:text-sm line-clamp-2 sm:line-clamp-3`}>
+                    <div className="flex flex-col w-full mt-2">
+                      <p className={`text-text-muted leading-relaxed text-sm line-clamp-2 sm:line-clamp-3`}>
                         {item.description || "No additional description."}
                       </p>
-                      {item.description && item.description.length > 120 && (
-                        <span className="text-primary text-[10px] sm:text-xs font-medium mt-1 ml-auto hover:underline">
+                      {item.description && item.description.length > 150 && (
+                        <span className="text-primary text-xs font-medium mt-1 ml-auto hover:underline">
                           Read more...
                         </span>
                       )}
@@ -213,15 +213,15 @@ export default function LostFoundList({
 
                 {showSearch && (
                   <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-4 border-t border-border/60 text-xs text-text-secondary flex flex-row justify-between items-center gap-1.5 sm:gap-2">
-                    <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
-                      <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-text-disabled shrink-0" />
-                      <span className="truncate text-[10px] sm:text-xs max-w-[100px] sm:max-w-[200px]">{item.location_found}</span>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <MapPin className="w-4 h-4 text-text-disabled shrink-0" />
+                      <span className="truncate text-xs max-w-[100px] sm:max-w-[200px]">{item.location_found}</span>
                     </div>
 
                     {item.contact_info && (
-                      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                        <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-text-disabled shrink-0" />
-                        <span className="text-[10px] sm:text-xs">{item.contact_info}</span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <Phone className="w-4 h-4 text-text-disabled shrink-0" />
+                        <span className="text-xs">{item.contact_info}</span>
                       </div>
                     )}
                   </div>
@@ -236,7 +236,7 @@ export default function LostFoundList({
               {/* Simple Timestamp for Widget Mode */}
               {!showSearch && (
                 <div className="absolute bottom-1.5 right-2 mt-1">
-                  <span className="text-[9px] sm:text-[10px] text-text-disabled font-medium">
+                  <span className="text-xs text-text-disabled font-medium">
                     {new Date(item.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                   </span>
                 </div>

@@ -13,7 +13,7 @@ export default function Page() {
   return (
     <div className="w-full max-w-7xl mx-auto min-h-screen p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 bg-background text-text-primary">
       <header className="flex flex-col gap-1 md:gap-2 mb-6">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-text-primary flex items-center gap-3">
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary flex items-center gap-3">
           <MessageSquare className="w-7 h-7 md:w-8 md:h-8 text-primary" />
           Campus Complaints
         </h1>

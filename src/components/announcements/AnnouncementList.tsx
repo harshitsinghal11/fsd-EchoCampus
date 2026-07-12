@@ -64,7 +64,7 @@ export default function AnnouncementList({ isWidget = false, widgetLimit }: Anno
           >
             <div className="flex flex-col gap-2 w-full">
               <div className="flex items-start justify-between gap-4">
-                <h4 className={`font-bold text-text-primary flex-1 ${isWidget ? "text-sm line-clamp-1" : "text-base md:text-lg line-clamp-2"}`}>
+                <h4 className={`font-semibold text-text-primary flex-1 ${isWidget ? "text-sm line-clamp-1" : "text-base md:text-lg line-clamp-2"}`}>
                   {item.title}
                 </h4>
 
@@ -84,7 +84,7 @@ export default function AnnouncementList({ isWidget = false, widgetLimit }: Anno
               </div>
 
               <div className="flex flex-col w-full">
-                <p className={`text-text-muted ${isWidget ? "text-xs line-clamp-2" : "text-xs md:text-sm line-clamp-3 leading-relaxed whitespace-pre-wrap"}`}>
+                <p className={`text-text-muted ${isWidget ? "text-xs line-clamp-2" : "text-sm line-clamp-3 leading-relaxed whitespace-pre-wrap"}`}>
                   {item.content}
                 </p>
                 {item.content.length > (isWidget ? 100 : 150) && (
