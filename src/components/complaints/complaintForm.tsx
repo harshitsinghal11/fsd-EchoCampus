@@ -8,9 +8,9 @@ import { submitComplaint } from "@/actions/complaintActions";
 import { enhanceComplaint } from "@/actions/aiActions";
 import { useRouter } from "next/navigation";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
-import { GlassCard } from "@/components/shared/ui/GlassCard";
-import { FormTextarea } from "@/components/shared/ui/FormTextarea";
-import { MagicButton } from "@/components/shared/ui/MagicButton";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { FormTextarea } from "@/components/ui/FormTextarea";
+import { MagicButton } from "@/components/ui/MagicButton";
 
 export default function ComplaintForm() {
   const router = useRouter();

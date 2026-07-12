@@ -3,7 +3,7 @@ import { useState } from "react";
 import LostFoundForm from "@/components/lost-found/LostFoundForm";
 import LostFoundList from "@/components/lost-found/LostFoundList";
 import { Search, PenLine } from "lucide-react";
-import { Modal } from "@/components/shared/ui/Modal";
+import { Modal } from "@/components/ui/Modal";
 
 export default function LostFoundPage() {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -14,7 +14,7 @@ export default function LostFoundPage() {
 
       {/* Page Title */}
       <div className="flex flex-col gap-1 md:gap-2">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-text-primary flex items-center gap-3">
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary flex items-center gap-3">
           <Search className="w-7 h-7 md:w-8 md:h-8 text-primary" />
           Lost & Found
         </h1>

@@ -11,7 +11,7 @@ import {
 import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
-import { ImageUpload } from "@/components/shared/ui/ImageUpload";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 import { uploadImageToSupabase } from "@/utils/storage";
 import React, { useState } from "react";
 import { useUserEmail } from "@/hooks/useUserEmail";
@@ -20,8 +20,8 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { addMarketplaceItem } from "@/actions/marketplaceActions";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
-import { FormInput } from "@/components/shared/ui/FormInput";
-import { FormTextarea } from "@/components/shared/ui/FormTextarea";
+import { FormInput } from "@/components/ui/FormInput";
+import { FormTextarea } from "@/components/ui/FormTextarea";
 import { Button } from "@/components/ui/Button";
 
 export default function MarketCreateForm({ onSuccess }: { onSuccess?: () => void }) {

@@ -1,6 +1,6 @@
-import Navbar from "@/components/NavBar/NavBarAdmin";
-import BottomNavFaculty from "@/components/NavBar/BottomNavFaculty";
-import Footer from "@/components/Footer/FooterAdmin";
+import Navbar from "@/components/Navbar/NavbarFaculty";
+import BottomNavFaculty from "@/components/Navbar/BottomNavFaculty";
+import Footer from "@/components/footer/FooterFaculty";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
 

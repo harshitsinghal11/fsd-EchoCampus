@@ -6,7 +6,7 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen">
     <main className="max-w-4xl mx-auto px-6 py-12 text-text-primary">
-      <h1 className="text-3xl font-bold mb-6">Terms of Service</h1>
+      <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-6">Terms of Service</h1>
       <div className="space-y-4 text-sm leading-6 text-text-primary">
         <p>
           EchoCampus is intended for respectful campus use. Users are

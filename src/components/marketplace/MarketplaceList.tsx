@@ -14,6 +14,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { usePagination } from "@/hooks/usePagination";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { useEffect } from "react";
+import { Modal } from "@/components/ui/Modal";
 
 interface MarketListProps {
   currentUserEmail?: string;
@@ -21,10 +22,11 @@ interface MarketListProps {
 }
 
 export default function MarketList({ currentUserEmail, isWidget = false }: MarketListProps) {
-  const { limit, loadMore } = usePagination(10, 10);
+  const { limit, loadMore } = usePagination(12, 12);
   const { items, isLoading, mutate } = useMarketplace(isWidget, isWidget ? undefined : limit);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
 
   const displayItems = useMemo(() => {
@@ -87,14 +89,15 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
       {displayItems.length > 0 && (
         <MotionList className={`grid gap-3 sm:gap-4 md:gap-6 items-start ${isWidget
           ? "grid-cols-2"
-          : "grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          : "grid-cols-2 lg:grid-cols-3 xl:grid-cols-3"
           }`}>
           {displayItems.map((item) => (
             <MotionItem
               key={item.id}
-              className={`relative overflow-hidden rounded-xl p-3 sm:p-5 md:p-6 border transition-all duration-300 flex flex-col h-full ${item.is_sold
+              onClick={() => setSelectedItem(item)}
+              className={`relative overflow-hidden rounded-xl p-3 sm:p-5 md:p-6 border transition-all duration-300 flex flex-col h-full cursor-pointer ${item.is_sold
                 ? "bg-surface border-border opacity-75 grayscale-30"
-                : "bg-surface border-border shadow-sm hover:shadow-md hover:shadow-primary/10 hover:border-primary/30 group"
+                : "bg-surface border-border"
                 }`}
             >
               {/* IMAGE THUMBNAIL */}
@@ -115,48 +118,58 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
               )}
 
               <div className="flex justify-between items-start gap-2 sm:gap-3">
-                <h2 className={`font-semibold line-clamp-2 ${isWidget ? 'text-xs sm:text-sm' : 'text-sm sm:text-base md:text-lg'} ${item.is_sold ? 'text-text-muted' : 'text-text-primary group-hover:text-primary-light transition-colors'}`}>
+                <h2 className={`font-semibold line-clamp-2 ${isWidget ? 'text-sm' : 'text-base md:text-lg'} ${item.is_sold ? 'text-text-muted' : 'text-text-primary group-hover:text-primary-light transition-colors'}`}>
                   {item.product_title}
                 </h2>
 
                 {item.is_sold ? (
-                  <span className="shrink-0 inline-flex items-center gap-1 bg-surface-hover/80 text-text-muted border border-border text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md uppercase tracking-wider">
-                    <CheckCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                  <span className="shrink-0 inline-flex items-center gap-1 bg-surface-hover/80 text-text-muted border border-border text-[11px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                    <CheckCircle className="w-3 h-3" />
                     Sold
                   </span>
                 ) : (
-                  <span className="shrink-0 bg-primary/10 text-primary border border-primary/20 text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md uppercase tracking-wider">
+                  <span className="shrink-0 bg-primary/10 text-primary border border-primary/20 text-[11px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
                     Active
                   </span>
                 )}
               </div>
 
-              <p className={`font-bold mt-1.5 sm:mt-2 ${isWidget ? 'text-sm sm:text-base' : 'text-base sm:text-lg sm:mt-2'} ${item.is_sold ? 'text-text-disabled' : 'text-primary'}`}>
+              <p className={`font-bold mt-2 ${isWidget ? 'text-base' : 'text-lg'} ${item.is_sold ? 'text-text-disabled' : 'text-primary'}`}>
                 ₹{item.price.toLocaleString('en-IN')}
               </p>
 
-              <p className={`text-text-muted mt-1.5 sm:mt-2 leading-relaxed ${isWidget ? 'text-[10px] sm:text-xs line-clamp-2' : 'text-[10px] sm:text-xs md:text-sm line-clamp-2 sm:line-clamp-3'}`}>
-                {item.description}
-              </p>
+              <div className="flex flex-col w-full">
+                <p className={`text-text-muted mt-2 leading-relaxed ${isWidget ? 'text-xs line-clamp-2' : 'text-sm line-clamp-2 sm:line-clamp-3'}`}>
+                  {item.description}
+                </p>
+                {item.description && item.description.length > (isWidget ? 100 : 150) && (
+                  <span className="text-primary text-xs font-medium mt-1 ml-auto hover:underline">
+                    Read more...
+                  </span>
+                )}
+              </div>
 
-              <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-4 border-t border-border/60 text-xs text-text-secondary flex flex-row justify-between items-center gap-1.5 sm:gap-2 grow">
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-text-disabled shrink-0" />
-                  <span className="truncate text-[10px] sm:text-xs">{item.owner_name}</span>
+              <div className="mt-4 pt-4 border-t border-border/60 text-xs text-text-secondary flex flex-row justify-between items-center gap-2 grow">
+                <div className="flex items-center gap-2">
+                  <User className="w-4 h-4 text-text-disabled shrink-0" />
+                  <span className="truncate">{item.owner_name}</span>
                 </div>
 
                 {!isWidget && item.contact_info && (
-                  <div className="flex items-center gap-1.5 sm:gap-2">
-                    <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-text-disabled shrink-0" />
-                    <span className="text-[10px] sm:text-xs">{item.contact_info}</span>
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4 text-text-disabled shrink-0" />
+                    <span>{item.contact_info}</span>
                   </div>
                 )}
               </div>
 
               {!item.is_sold && currentUserEmail && item.owner_email === currentUserEmail && (
                 <button
-                  onClick={() => markSold(item.id)}
-                  className="mt-3 sm:mt-5 w-full bg-primary/10 hover:bg-primary/10 text-primary border border-primary/30 font-medium px-3 sm:px-4 py-1.5 sm:py-2.5 rounded-lg sm:rounded-xl transition-all duration-200 text-[11px] sm:text-xs hover:shadow-lg hover:shadow-primary/20 "
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    markSold(item.id);
+                  }}
+                  className="mt-4 w-full bg-primary/10 hover:bg-primary/10 text-primary border border-primary/30 font-medium px-4 py-2 rounded-xl transition-all duration-200 text-sm hover:shadow-lg hover:shadow-primary/20 "
                 >
                   Mark as Sold
                 </button>
@@ -174,6 +187,47 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
           </button>
         </div>
       )}
+
+      {/* Modal for viewing full details */}
+      <Modal
+        isOpen={!!selectedItem}
+        onClose={() => setSelectedItem(null)}
+        title={selectedItem?.product_title || "Item Details"}
+      >
+        {selectedItem && (
+          <div className="flex flex-col gap-4">
+            {selectedItem.image_url && (
+              <div className="w-full relative aspect-video bg-surface-hover border border-border rounded-xl overflow-hidden mb-2">
+                <Image
+                  src={selectedItem.image_url}
+                  alt={selectedItem.product_title}
+                  fill
+                  unoptimized
+                  className="object-contain"
+                />
+              </div>
+            )}
+            <div className="flex justify-between items-center text-sm text-text-secondary border-b border-border/50 pb-3">
+              <div className="flex items-center gap-2">
+                <User className="w-4 h-4 text-text-disabled" />
+                <span className="font-medium">{selectedItem.owner_name}</span>
+              </div>
+              <p className="font-bold text-lg text-primary">₹{selectedItem.price.toLocaleString('en-IN')}</p>
+            </div>
+
+            <p className="text-sm md:text-base text-text-primary whitespace-pre-wrap leading-relaxed">
+              {selectedItem.description}
+            </p>
+
+            {selectedItem.contact_info && (
+              <div className="mt-4 pt-4 border-t border-border/50 flex items-center gap-2 text-text-primary">
+                <Phone className="w-4 h-4 text-text-disabled" />
+                <span className="font-medium">Contact: {selectedItem.contact_info}</span>
+              </div>
+            )}
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

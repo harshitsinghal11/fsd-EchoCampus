@@ -6,10 +6,10 @@ import { toast } from "sonner";
 import { addLostFoundItem } from "@/actions/lostFoundActions";
 import { analyzeLostItem } from "@/actions/aiActions";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
-import { MagicButton } from "@/components/shared/ui/MagicButton";
-import { FormInput } from "@/components/shared/ui/FormInput";
-import { FormTextarea } from "@/components/shared/ui/FormTextarea";
-import { ImageUpload } from "@/components/shared/ui/ImageUpload";
+import { MagicButton } from "@/components/ui/MagicButton";
+import { FormInput } from "@/components/ui/FormInput";
+import { FormTextarea } from "@/components/ui/FormTextarea";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { uploadImageToSupabase } from "@/utils/storage";
 

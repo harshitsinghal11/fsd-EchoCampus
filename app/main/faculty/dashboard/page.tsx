@@ -18,7 +18,7 @@ export default function FacultyDashboard() {
       {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 pt-2 md:pt-0">
         <div className="flex flex-col gap-1 md:gap-2">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-text-primary capitalize flex items-center gap-3">
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary capitalize flex items-center gap-3">
             <LayoutDashboard className="w-7 h-7 md:w-8 md:h-8 text-primary" />
             Faculty Dashboard
           </h1>

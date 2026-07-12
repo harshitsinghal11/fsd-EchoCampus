@@ -25,7 +25,7 @@ export default async function StudentDashboard() {
       {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 pt-2 md:pt-0">
         <div className="flex flex-col gap-1 md:gap-2">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-text-primary capitalize flex items-center gap-3">
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary capitalize flex items-center gap-3">
             <LayoutDashboard className="w-7 h-7 md:w-8 md:h-8 text-primary" />
             Hey! Welcome To EchoCampus
           </h1>
@@ -38,13 +38,13 @@ export default async function StudentDashboard() {
         <div className="hidden md:flex items-center gap-3">
           <Link
             href={ROUTES.STUDENT.CHAT}
-            className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 hover:border-primary/50 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent"
+            className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent"
           >
             Global Chat
           </Link>
           <Link
             href={ROUTES.STUDENT.DIRECTORY}
-            className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 hover:border-primary/50 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent"
+            className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent"
           >
             Directory
           </Link>
@@ -56,9 +56,6 @@ export default async function StudentDashboard() {
 
         {/* 1. LATEST ANNOUNCEMENTS (Full Width) */}
         <section className="relative lg:col-span-3 bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300">
-          <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-2 rounded-full text-xs font-bold z-10 shadow-sm">
-            {announcementsCount}
-          </div>
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">
@@ -76,9 +73,6 @@ export default async function StudentDashboard() {
 
         {/* 2. NEWEST LISTINGS (Left 2/3) */}
         <section className="relative lg:col-span-2 bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
-          <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-2 rounded-full text-xs font-bold z-10 shadow-sm">
-            {marketplaceCount}
-          </div>
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">
@@ -87,10 +81,8 @@ export default async function StudentDashboard() {
             </div>
             <Link
               href={ROUTES.STUDENT.MARKETPLACE}
-              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors"
-            >
+              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors">
               Browse Market
-
             </Link>
           </div>
           <MarketplaceList isWidget={true} />
@@ -98,9 +90,6 @@ export default async function StudentDashboard() {
 
         {/* 3. RECENT COMPLAINTS (Right 1/3) */}
         <section className="relative bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
-          <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-2 rounded-full text-xs font-bold z-10 shadow-sm">
-            {complaintsCount}
-          </div>
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">
@@ -118,9 +107,6 @@ export default async function StudentDashboard() {
 
         {/* 4. LOST & FOUND SECTION (Full Width at Bottom) */}
         <section className="relative lg:col-span-3 bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300">
-          <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-2 rounded-full text-xs font-bold z-10 shadow-sm">
-            {lostFoundCount}
-          </div>
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">

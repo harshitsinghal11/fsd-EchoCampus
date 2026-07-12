@@ -25,7 +25,7 @@ export default function Directory() {
       {/* HEADER */}
       <div className="flex flex-col md:flex-row justify-between md:items-end gap-4 pt-2 md:pt-0">
         <div className="flex flex-col gap-1 md:gap-2">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-text-primary capitalize flex items-center gap-3">
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary capitalize flex items-center gap-3">
             <BookUser className="w-7 h-7 md:w-8 md:h-8 text-primary" />
             Campus Directory
           </h1>
@@ -67,18 +67,18 @@ export default function Directory() {
       ) : filteredFaculty.length === 0 ? (
         <EmptySearch searchTerm={searchTerm} />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
           {filteredFaculty.map((faculty) => (
             <div
               key={faculty.id}
-              className="group bg-surface border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-md hover:shadow-primary/10 hover:bg-surface-hover/40"
+              className="group bg-surface border border-border rounded-2xl p-5 "
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-bold text-text-primary group-hover:text-primary transition-colors truncate">
+                  <h3 className="text-lg font-semibold text-text-primary transition-colors truncate">
                     {faculty.name}
                   </h3>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-primary/10 text-primary border border-primary/20 mt-1">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 mt-1">
                     {faculty.department}
                   </span>
                 </div>
@@ -108,14 +108,14 @@ export default function Directory() {
                 <div className="flex items-center justify-between pt-3 mt-3 border-t border-border/60">
                   {faculty.cabin_no && (
                     <div className="flex flex-col">
-                      <span className="text-[10px] uppercase tracking-wider text-text-disabled font-bold">Room</span>
+                      <span className="text-[11px] uppercase tracking-wider text-text-disabled font-bold">Room</span>
                       <span className="text-sm text-text-secondary font-medium">{faculty.cabin_no}</span>
                     </div>
                   )}
 
                   {faculty.experience !== null && faculty.experience !== undefined && (
                     <div className="flex flex-col text-right">
-                      <span className="text-[10px] uppercase tracking-wider text-text-disabled font-bold">Experience</span>
+                      <span className="text-[11px] uppercase tracking-wider text-text-disabled font-bold">Experience</span>
                       <span className="text-sm text-text-secondary font-medium">{faculty.experience} Yrs</span>
                     </div>
                   )}

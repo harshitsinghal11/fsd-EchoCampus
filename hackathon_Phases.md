@@ -74,7 +74,7 @@
 - **File:** `src/components/complaints/ComplaintList.tsx`
 - **Technical Detail:** UI highlights high urgency and displays the AI-generated category.
 
-### ❌ 2.5 Admin Summarization Widget
+### ✅ 2.5 Admin Summarization Widget
 - **Technical Detail:** Add an AI summary widget to the Faculty dashboard: *"This week, 60% of complaints are about Library WiFi. Trend is increasing."*
 
 ---
@@ -109,6 +109,10 @@
 - **File:** `app/main/student/hugo/page.tsx` & `app/api/chat/route.ts`
 - **Technical Detail:** Student asks a question -> API generates embedding -> queries `campus_knowledge` -> sends to Gemini -> streams response.
 
+### ❌ 4.4 AI Chat Moderator
+- **File:** `src/actions/chatActions.ts`
+- **Technical Detail:** An AI safety layer intercepts real-time chat messages. If Gemini flags the text as abusive/toxic, the message is blocked and rolled back before inserting into the DB.
+
 ---
 
 ## 🎨 Phase 5: Aesthetic & UI/UX Improvements (The "Wow" Factor) ❌
@@ -122,3 +126,7 @@
 
 ### ✅ 5.3 Premium Empty States
 - **Technical Detail:** Upgrade the `BaseEmptyState` with Framer Motion layout animations, background aesthetic blobs, and actionable CTA buttons (e.g., "File a Complaint") for empty pages.
+
+### ✅ 5.4 Global Chat UI Overhaul
+- **File:** `app/main/student/chat/page.tsx`
+- **Technical Detail:** Rebuilt the chat interface to feature a professional side-by-side layout (75% chat, 25% active participants sidebar), smooth auto-scrolling, mobile participant popups via an overlay modal, and modernized bubble aesthetics (`bg-primary`).

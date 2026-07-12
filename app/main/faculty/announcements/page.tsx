@@ -3,7 +3,7 @@ import { useState } from "react";
 import AnnouncementForm from "@/components/announcements/AnnouncementForm";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
 import { Megaphone, PenLine } from "lucide-react";
-import { Modal } from "@/components/shared/ui/Modal";
+import { Modal } from "@/components/ui/Modal";
 
 export default function AdminAnnouncementsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,7 +12,7 @@ export default function AdminAnnouncementsPage() {
     <div className="w-full max-w-7xl mx-auto min-h-[100dvh] p-4 sm:p-6 md:p-8 space-y-6 md:space-y-8 bg-background text-text-primary relative pb-24">
       {/* Page Title */}
       <div className="flex flex-col gap-1 md:gap-2">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tight text-text-primary flex items-center gap-3">
+        <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary flex items-center gap-3">
           <Megaphone className="w-7 h-7 md:w-8 md:h-8 text-primary" />
           Announcement Center
         </h1>

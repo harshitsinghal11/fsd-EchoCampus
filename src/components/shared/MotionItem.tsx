@@ -11,9 +11,15 @@ const itemVariants: Variants = {
   }
 };
 
-export function MotionItem({ children, className }: { children: React.ReactNode, className?: string }) {
+interface MotionItemProps {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
+}
+
+export function MotionItem({ children, className, onClick }: MotionItemProps) {
   return (
-    <motion.div variants={itemVariants} className={className}>
+    <motion.div variants={itemVariants} className={className} onClick={onClick}>
       {children}
     </motion.div>
   );
