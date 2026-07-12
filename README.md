@@ -12,8 +12,9 @@ EchoCampus is a campus web platform that centralizes common student and faculty 
 - Student-only marketplace with owner-controlled sold status
 - Lost and found posting, browsing, and owner deletion
 - AI-Powered Announcement Enhancement using Gemini (transforms quick notes into professional announcements)
-- AI-Powered Complaint Intelligence (auto-detects urgency and category, sending campus-wide alerts for HIGH urgency)
+- AI-Powered Complaint Intelligence (auto-detects urgency and category, sending campus-wide alerts for HIGH urgency, plus AI Summarization Widget on Faculty Dashboard)
 - Smart Image Recognition for Lost & Found (auto-fills title and description via Gemini Vision)
+- Unified Expanded View Modals for seamless browsing of lengthy content
 - Searchable faculty directory
 - Anonymous student chat powered by Supabase Realtime
 - Student and faculty profile pages
@@ -127,9 +128,9 @@ The repository does not currently include a defined deployment pipeline, CI/CD w
 ## Project Status
 EchoCampus has reached a stable production-ready phase with all core features fully implemented. 
 - **Core Architecture:** Global Chat and Live Feeds are powered by Supabase Realtime. Form submissions strictly use Next.js Server Actions with hardened RLS security and strict **Zod** schema validation. Layouts use instantaneous Server-Component role verification.
-- **AI Integration (Phase 1-3 Completed):** Successfully integrated Google Gemini AI into three major workflows: transforming casual faculty notes into professional announcements, intelligently analyzing student complaints for urgency (triggering push notifications for high urgency), and using Multimodal Vision AI to automatically generate titles and descriptions for uploaded Lost & Found items.
+- **AI Integration (Phase 1-3 Completed):** Successfully integrated Google Gemini AI into four major workflows: transforming casual faculty notes into professional announcements, intelligently analyzing student complaints for urgency (triggering push notifications for high urgency), generating AI-driven complaint summaries on the Faculty Dashboard, and using Multimodal Vision AI to automatically generate titles and descriptions for uploaded Lost & Found items.
 - **Progressive Web App:** Fully installable PWA with a custom Service Worker and asynchronous Native Push Notifications wired directly into Supabase.
-- **UI/UX:** A unified dark-mode design system (featuring glassmorphism, custom empty states, tabular-nums, and responsive grids) is implemented across all Faculty and Student pages.
+- **UI/UX:** A unified dark-mode design system (featuring glassmorphism, custom empty states, tabular-nums, expanded view modals, and responsive grids) is implemented across all Faculty and Student pages.
 - **Performance:** Implemented custom SWR hooks for all primary features, providing fast cached navigations and background revalidation synchronized with Supabase Realtime.
 - **Type Safety:** Strict TypeScript interfaces and Zod schemas align perfectly with the Supabase schema to reduce runtime errors.
 

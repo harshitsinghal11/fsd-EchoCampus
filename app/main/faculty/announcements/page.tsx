@@ -3,7 +3,7 @@ import { useState } from "react";
 import AnnouncementForm from "@/components/announcements/AnnouncementForm";
 import AnnouncementList from "@/components/announcements/AnnouncementList";
 import { Megaphone, PenLine } from "lucide-react";
-import { Modal } from "@/components/shared/ui/Modal";
+import { Modal } from "@/components/ui/Modal";
 
 export default function AdminAnnouncementsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);

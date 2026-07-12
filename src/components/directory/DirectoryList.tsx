@@ -67,15 +67,15 @@ export default function Directory() {
       ) : filteredFaculty.length === 0 ? (
         <EmptySearch searchTerm={searchTerm} />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
           {filteredFaculty.map((faculty) => (
             <div
               key={faculty.id}
-              className="group bg-surface border border-border rounded-2xl p-5 transition-all duration-300 hover:border-primary/50 hover:shadow-md hover:shadow-primary/10 hover:bg-surface-hover/40"
+              className="group bg-surface border border-border rounded-2xl p-5 "
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-bold text-text-primary group-hover:text-primary transition-colors truncate">
+                  <h3 className="text-lg font-bold text-text-primary transition-colors truncate">
                     {faculty.name}
                   </h3>
                   <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-primary/10 text-primary border border-primary/20 mt-1">

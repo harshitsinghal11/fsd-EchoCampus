@@ -1,6 +1,6 @@
 "use client";
 
-import ComplaintForm from "@/components/complaints/complaintForm";
+import ComplaintForm from "@/components/complaints/ComplaintForm";
 import ComplaintList from "@/components/complaints/ComplaintList";
 import { MessageSquare } from "lucide-react";
 import { useState } from "react";

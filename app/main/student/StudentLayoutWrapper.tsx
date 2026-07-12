@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Footer from "@/components/Footer/FooterStudent";
+import Footer from "@/components/footer/FooterStudent";
 
 export function StudentLayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

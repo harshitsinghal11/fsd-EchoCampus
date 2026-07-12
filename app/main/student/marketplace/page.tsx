@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabaseClient";
 import MarketList from "@/components/marketplace/MarketplaceList";
 import MarketCreateForm from "@/components/marketplace/MarketplaceForm";
 import { Store, PenLine } from "lucide-react";
-import { Modal } from "@/components/shared/ui/Modal";
+import { Modal } from "@/components/ui/Modal";
 
 export default function MarketplacePage() {
   const [userEmail, setUserEmail] = useState("");

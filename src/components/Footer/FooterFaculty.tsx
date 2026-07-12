@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Mail, Linkedin, Instagram, Heart } from 'lucide-react';
 import { ROUTES } from "@/lib/routes";
 
-export default function FooterAdmin() {
+export default function FooterFaculty() {
   return (
     <footer className="bg-background border-t border-border/50 mt-auto relative overflow-hidden">
       {/* Decorative gradient overlay */}

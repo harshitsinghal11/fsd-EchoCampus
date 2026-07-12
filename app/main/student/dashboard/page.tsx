@@ -56,9 +56,6 @@ export default async function StudentDashboard() {
 
         {/* 1. LATEST ANNOUNCEMENTS (Full Width) */}
         <section className="relative lg:col-span-3 bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300">
-          <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-2 rounded-full text-xs font-bold z-10 shadow-sm">
-            {announcementsCount}
-          </div>
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">
@@ -76,9 +73,6 @@ export default async function StudentDashboard() {
 
         {/* 2. NEWEST LISTINGS (Left 2/3) */}
         <section className="relative lg:col-span-2 bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
-          <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-2 rounded-full text-xs font-bold z-10 shadow-sm">
-            {marketplaceCount}
-          </div>
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">
@@ -87,10 +81,8 @@ export default async function StudentDashboard() {
             </div>
             <Link
               href={ROUTES.STUDENT.MARKETPLACE}
-              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors"
-            >
+              className="group flex items-center gap-1 text-xs md:text-sm font-medium text-primary hover:text-primary-light transition-colors">
               Browse Market
-
             </Link>
           </div>
           <MarketplaceList isWidget={true} />
@@ -98,9 +90,6 @@ export default async function StudentDashboard() {
 
         {/* 3. RECENT COMPLAINTS (Right 1/3) */}
         <section className="relative bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
-          <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-2 rounded-full text-xs font-bold z-10 shadow-sm">
-            {complaintsCount}
-          </div>
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">
@@ -118,9 +107,6 @@ export default async function StudentDashboard() {
 
         {/* 4. LOST & FOUND SECTION (Full Width at Bottom) */}
         <section className="relative lg:col-span-3 bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300">
-          <div className="absolute -top-2 -right-2 bg-primary text-white px-2 py-2 rounded-full text-xs font-bold z-10 shadow-sm">
-            {lostFoundCount}
-          </div>
           <div className="flex justify-between items-center mb-5 md:mb-6">
             <div className="flex items-center gap-2 md:gap-3">
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">

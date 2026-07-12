@@ -1,4 +1,4 @@
-import DirectoryList from "@/components/directory/page";
+import DirectoryList from "@/components/directory/DirectoryList";
 
 export const metadata = {
   title: "Directory",

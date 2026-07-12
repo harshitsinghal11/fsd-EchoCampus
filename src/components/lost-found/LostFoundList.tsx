@@ -14,6 +14,8 @@ import { resolveLostFoundItem, deleteLostFoundItem } from "@/actions/lostFoundAc
 import { useDebounce } from "@/hooks/useDebounce";
 import { usePagination } from "@/hooks/usePagination";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
+import { Modal } from "@/components/ui/Modal";
+import { User } from "lucide-react";
 
 interface LostFoundListProps {
   refreshTrigger?: number;
@@ -25,10 +27,10 @@ export default function LostFoundList({
   showSearch = true
 }: LostFoundListProps) {
 
-  const { limit, loadMore } = usePagination(10, 10);
+  const { limit, loadMore } = usePagination(12, 12);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
-
+  const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
   const { items, isLoading, mutate } = useLostFound(!showSearch, !showSearch ? undefined : limit);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
@@ -119,15 +121,16 @@ export default function LostFoundList({
 
       {/* --- LIST LAYOUT --- */}
       {displayItems.length > 0 && (
-        <MotionList className={!showSearch ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5" : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 pr-1 sm:pr-2 custom-scrollbar w-full"}>
+        <MotionList className={!showSearch ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5" : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 pr-1 sm:pr-2 custom-scrollbar w-full"}>
           {displayItems.map((item) => (
             <MotionItem
               key={item.id}
+              onClick={() => setSelectedItem(item)}
               className={`
               group overflow-hidden transition-all duration-300 w-full relative
               ${!showSearch
-                  ? 'bg-surface hover:bg-surface-hover/80 rounded-xl p-3 flex items-center gap-3 border border-transparent hover:border-border cursor-pointer'
-                  : 'bg-surface border-border shadow-sm hover:shadow-md hover:shadow-primary/10 hover:bg-surface-hover/40 hover:border-primary/30 rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 flex flex-col h-full border'
+                  ? 'bg-surface hover:bg-surface-hover/80 rounded-xl p-3 flex items-center gap-3 border border-transparent cursor-pointer'
+                  : 'bg-surface border-border shadow-sm rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 flex flex-col h-full border'
                 }
             `}
             >
@@ -163,7 +166,7 @@ export default function LostFoundList({
                 <div>
                   {/* Header: Title + Date + Delete */}
                   <div className="flex justify-between items-start gap-2 sm:gap-3">
-                    <h2 className={`font-semibold line-clamp-2 ${!showSearch ? 'text-xs sm:text-sm' : 'text-sm sm:text-base md:text-lg'} text-text-primary group-hover:text-primary-light transition-colors`}>
+                    <h2 className={`font-semibold line-clamp-2 ${!showSearch ? 'text-xs sm:text-sm' : 'text-sm sm:text-base md:text-lg'} text-text-primary`}>
                       {item.title}
                     </h2>
 
@@ -195,9 +198,16 @@ export default function LostFoundList({
 
                   {/* Full Details (Full Page Only) */}
                   {showSearch && (
-                    <p className={`text-text-muted mt-1.5 sm:mt-2 leading-relaxed text-[10px] sm:text-xs md:text-sm line-clamp-2 sm:line-clamp-3`}>
-                      {item.description || "No additional description."}
-                    </p>
+                    <div className="flex flex-col w-full">
+                      <p className={`text-text-muted mt-1.5 sm:mt-2 leading-relaxed text-[10px] sm:text-xs md:text-sm line-clamp-2 sm:line-clamp-3`}>
+                        {item.description || "No additional description."}
+                      </p>
+                      {item.description && item.description.length > 120 && (
+                        <span className="text-primary text-[10px] sm:text-xs font-medium mt-1 ml-auto hover:underline">
+                          Read more...
+                        </span>
+                      )}
+                    </div>
                   )}
                 </div>
 
@@ -245,6 +255,53 @@ export default function LostFoundList({
           </button>
         </div>
       )}
+
+      {/* Modal for viewing full details */}
+      <Modal
+        isOpen={!!selectedItem}
+        onClose={() => setSelectedItem(null)}
+        title={selectedItem?.title || "Item Details"}
+      >
+        {selectedItem && (
+          <div className="flex flex-col gap-4">
+            {selectedItem.image_url && (
+              <div className="w-full relative aspect-video bg-surface-hover border border-border rounded-xl overflow-hidden mb-2">
+                <Image
+                  src={selectedItem.image_url}
+                  alt={selectedItem.title}
+                  fill
+                  unoptimized
+                  className="object-contain"
+                />
+              </div>
+            )}
+
+            <div className="flex items-center gap-2 text-sm text-text-secondary border-b border-border/50 pb-3">
+              <MapPin className="w-4 h-4 text-primary shrink-0" />
+              <span className="font-medium">{selectedItem.location_found}</span>
+            </div>
+
+            <p className="text-sm md:text-base text-text-primary whitespace-pre-wrap leading-relaxed">
+              {selectedItem.description || "No description provided."}
+            </p>
+
+            <div className="mt-4 pt-4 border-t border-border/50 flex flex-col gap-2">
+              {selectedItem.contact_info && (
+                <div className="flex items-center gap-2 text-text-primary">
+                  <Phone className="w-4 h-4 text-text-disabled" />
+                  <span className="font-sm">Contact: {selectedItem.contact_info}</span>
+                </div>
+              )}
+              {selectedItem.is_resolved && (
+                <div className="flex items-center gap-2 text-primary mt-1">
+                  <CheckCircle className="w-4 h-4" />
+                  <span className="font-bold">Item marked as resolved</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

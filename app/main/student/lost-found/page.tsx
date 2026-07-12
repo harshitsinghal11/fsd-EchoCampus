@@ -3,7 +3,7 @@ import { useState } from "react";
 import LostFoundForm from "@/components/lost-found/LostFoundForm";
 import LostFoundList from "@/components/lost-found/LostFoundList";
 import { Search, PenLine } from "lucide-react";
-import { Modal } from "@/components/shared/ui/Modal";
+import { Modal } from "@/components/ui/Modal";
 
 export default function LostFoundPage() {
   const [refreshKey, setRefreshKey] = useState(0);

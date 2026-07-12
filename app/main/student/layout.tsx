@@ -1,5 +1,5 @@
-import Navbar from "@/components/NavBar/NavBarStudent";
-import BottomNavStudent from "@/components/NavBar/BottomNavStudent";
+import Navbar from "@/components/Navbar/NavbarStudent";
+import BottomNavStudent from "@/components/Navbar/BottomNavStudent";
 import { StudentLayoutWrapper } from "./StudentLayoutWrapper";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/utils/supabaseServer";

@@ -7,10 +7,10 @@ import { toast } from "sonner";
 import { addAnnouncement } from "@/actions/announcementActions";
 import { enhanceAnnouncement } from "@/actions/aiActions";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
-import { MagicButton } from "@/components/shared/ui/MagicButton";
-import { GlassCard } from "@/components/shared/ui/GlassCard";
-import { FormInput } from "@/components/shared/ui/FormInput";
-import { FormTextarea } from "@/components/shared/ui/FormTextarea";
+import { MagicButton } from "@/components/ui/MagicButton";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { FormInput } from "@/components/ui/FormInput";
+import { FormTextarea } from "@/components/ui/FormTextarea";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { Button } from "@/components/ui/Button";
 
@@ -61,59 +61,57 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
   }
 
   return (
-    <GlassCard className="p-6 md:p-8">
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* 1. Title Input */}
-        <FormInput
-          label="Subject / Title"
-          icon={Type}
-          required
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="e.g. Exam Schedule Update"
+    <form onSubmit={handleSubmit} className="space-y-5 w-full">
+      {/* 1. Title Input */}
+      <FormInput
+        label="Subject / Title"
+        icon={Type}
+        required
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        placeholder="e.g. Exam Schedule Update"
+      />
+
+      {/* 2. Link Input (NEW) */}
+      <FormInput
+        label="Attachment Link (optional)"
+        icon={LinkIcon}
+        type="url"
+        value={link}
+        onChange={(e) => setLink(e.target.value)}
+        placeholder="https://www.example.com"
+      />
+
+      {/* 3. Content Textarea */}
+      <FormTextarea
+        label="Details"
+        icon={AlignLeft}
+        required
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        placeholder="Type your announcement content here (or use AI Enhance)..."
+        rows={5}
+        disabled={isEnhancing}
+      />
+
+      {/* Submit Button & AI Button */}
+      <div className="pt-2 flex flex-col gap-3">
+        <MagicButton
+          onClick={handleEnhance}
+          disabled={isEnhancing || loading || !content.trim()}
+          isProcessing={isEnhancing}
+          label="Enhance Note"
+          processingLabel="AI Thinking..."
         />
 
-        {/* 2. Link Input (NEW) */}
-        <FormInput
-          label="Attachment Link (optional)"
-          icon={LinkIcon}
-          type="url"
-          value={link}
-          onChange={(e) => setLink(e.target.value)}
-          placeholder="https://www.example.com"
+        <SubmitBtn
+          type="submit"
+          disabled={loading || isEnhancing}
+          isSubmitting={loading}
+          label="Publish Now"
+          className="w-full m-0"
         />
-
-        {/* 3. Content Textarea */}
-        <FormTextarea
-          label="Details"
-          icon={AlignLeft}
-          required
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="Type your announcement content here (or use AI Enhance)..."
-          rows={5}
-          disabled={isEnhancing}
-        />
-
-        {/* Submit Button & AI Button */}
-        <div className="pt-2 flex flex-col gap-3">
-          <MagicButton
-            onClick={handleEnhance}
-            disabled={isEnhancing || loading || !content.trim()}
-            isProcessing={isEnhancing}
-            label="Enhance Note"
-            processingLabel="AI Thinking..."
-          />
-
-          <SubmitBtn
-            type="submit"
-            disabled={loading || isEnhancing}
-            isSubmitting={loading}
-            label="Publish Now"
-            className="w-full m-0"
-          />
-        </div>
-      </form>
-    </GlassCard>
+      </div>
+    </form>
   );
 }

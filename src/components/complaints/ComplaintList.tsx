@@ -10,6 +10,8 @@ import { EmptyComplaints, EmptySearch } from "@/components/shared/EmptyStates";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { useEffect } from "react";
+import { Modal } from "@/components/ui/Modal";
+import { User } from "lucide-react"; // Assuming we might want to display user/author, although complaints might be anonymous. Let's see what's in Complaint.
 
 type UpvoteApiResponse = {
   added?: boolean;
@@ -24,14 +26,15 @@ interface ComplaintListProps {
 }
 
 export default function ComplaintList({ isWidget = false, searchTerm = "", urgencyFilter = "ALL" }: ComplaintListProps) {
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(12);
   const { items, isLoading, mutate } = useComplaints(isWidget, isWidget ? undefined : limit);
   const [upvoting, setUpvoting] = useState<string | null>(null);
+  const [selectedComplaint, setSelectedComplaint] = useState<any | null>(null);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   const handleLoadMore = () => {
-    setLimit(prev => prev + 10);
+    setLimit(prev => prev + 12);
   };
 
   const displayItems = useMemo(() => {
@@ -126,12 +129,20 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
           {displayItems.map((c) => (
             <MotionItem
               key={c.id}
-              className={isWidget ? 'p-4 border border-border rounded-xl bg-surface-hover/60 hover:bg-surface-hover transition-colors' : 'p-5 sm:p-6 border border-border rounded-lg'}>
+              onClick={() => setSelectedComplaint(c)}
+              className={isWidget ? 'cursor-pointer p-4 border border-border rounded-xl bg-surface-hover/60 hover:bg-surface-hover transition-colors' : 'cursor-pointer p-5 sm:p-6 border border-border rounded-lg hover:bg-surface-hover/40 transition-colors'}>
               <div className="flex flex-col gap-3">
                 <div className="flex-1">
-                  <p className={`text-text-primary font-medium leading-relaxed ${isWidget ? 'text-sm line-clamp-2' : 'text-lg'}`}>
-                    {c.complaint}
-                  </p>
+                  <div className="flex flex-col w-full">
+                    <p className={`text-text-primary font-medium leading-relaxed ${isWidget ? 'text-sm line-clamp-2' : 'text-lg line-clamp-3'}`}>
+                      {c.complaint}
+                    </p>
+                    {c.complaint && c.complaint.length > (isWidget ? 100 : 150) && (
+                      <span className="text-primary text-xs font-medium mt-1 ml-auto hover:underline">
+                        Read more...
+                      </span>
+                    )}
+                  </div>
                   <div className="flex items-center gap-1.5 mt-2 text-xs font-medium text-text-muted">
                     {c.category && (
                       <>
@@ -163,7 +174,10 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
                   </div>
 
                   <button
-                    onClick={() => upvote(c.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      upvote(c.id);
+                    }}
                     disabled={upvoting === c.id}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50 group ${c.current_user_has_upvoted
                       ? "bg-primary/10 text-primary"
@@ -190,6 +204,69 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
           </button>
         </div>
       )}
+
+      {/* Modal for viewing full details */}
+      <Modal
+        isOpen={!!selectedComplaint}
+        onClose={() => setSelectedComplaint(null)}
+        title="Complaint Details"
+      >
+        {selectedComplaint && (
+          <div className="flex flex-col gap-4">
+            <div className="flex justify-between items-center text-sm text-text-secondary border-b border-border/50 pb-3">
+              <div className="flex flex-wrap items-center gap-2">
+                {selectedComplaint.category && (
+                  <span className="bg-surface-hover px-2.5 py-1 rounded-md text-xs font-semibold text-text-primary">
+                    {selectedComplaint.category}
+                  </span>
+                )}
+                <span className="text-xs font-medium text-text-muted">{formatDate(selectedComplaint.created_at)}</span>
+              </div>
+              
+              <div className="flex items-center">
+                {selectedComplaint.urgency === 'HIGH' && (
+                  <span className="text-sm font-semibold flex items-center gap-1.5 text-red-500">
+                    🔥 High
+                  </span>
+                )}
+                {selectedComplaint.urgency === 'MEDIUM' && (
+                  <span className="text-sm font-semibold flex items-center gap-1.5 text-orange-500">
+                    ⚡ Medium
+                  </span>
+                )}
+                {selectedComplaint.urgency === 'LOW' && (
+                  <span className="text-sm font-semibold flex items-center gap-1.5 text-blue-500">
+                    💤 Low
+                  </span>
+                )}
+              </div>
+            </div>
+            
+            <p className="text-sm md:text-base text-text-primary whitespace-pre-wrap leading-relaxed">
+              {selectedComplaint.complaint}
+            </p>
+            
+            <div className="mt-4 pt-4 border-t border-border/50 flex justify-end">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  upvote(selectedComplaint.id);
+                }}
+                disabled={upvoting === selectedComplaint.id}
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-lg transition-colors disabled:opacity-50 group ${selectedComplaint.current_user_has_upvoted
+                  ? "bg-primary/10 text-primary"
+                  : "bg-surface-hover text-text-secondary hover:bg-surface-hover/80 hover:text-text-primary"
+                  }`}
+              >
+                <ThumbsUp className={`w-4 h-4 ${selectedComplaint.current_user_has_upvoted ? "text-primary" : "text-text-muted group-hover:text-text-primary"} ${upvoting === selectedComplaint.id ? 'text-primary' : ''}`} />
+                <span className={`text-sm font-bold ${upvoting === selectedComplaint.id ? 'animate-pulse' : ''}`}>
+                  {selectedComplaint.upvotes}
+                </span>
+              </button>
+            </div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

@@ -74,7 +74,7 @@
 - **File:** `src/components/complaints/ComplaintList.tsx`
 - **Technical Detail:** UI highlights high urgency and displays the AI-generated category.
 
-### ❌ 2.5 Admin Summarization Widget
+### ✅ 2.5 Admin Summarization Widget
 - **Technical Detail:** Add an AI summary widget to the Faculty dashboard: *"This week, 60% of complaints are about Library WiFi. Trend is increasing."*
 
 ---
