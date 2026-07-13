@@ -1,8 +1,9 @@
-import Navbar from "@/components/Navbar/NavbarStudent";
-import BottomNavStudent from "@/components/Navbar/BottomNavStudent";
-import { StudentLayoutWrapper } from "./StudentLayoutWrapper";
+import AppNavbar from "@/components/Navbar/AppNavbar";
+import AppBottomNav from "@/components/Navbar/AppBottomNav";
+import { MainLayoutWrapper } from "@/components/shared/MainLayoutWrapper";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
+import { ROUTES } from "@/lib/routes";
 
 export default async function MainLayout({
   children,
@@ -16,23 +17,28 @@ export default async function MainLayout({
     redirect("/auth/login");
   }
 
+  // Get role from metadata; if missing, query it once
   let role = user.user_metadata?.role;
   if (!role) {
     const { data } = await supabase.from("users").select("role").eq("id", user.id).single();
     role = data?.role;
   }
 
-  if (role === "faculty" || role === "admin") {
-    redirect("/main/faculty/dashboard");
+  if (role !== "student") {
+    if (role === "faculty" || role === "admin") {
+      redirect(ROUTES.FACULTY.DASHBOARD);
+    } else {
+      redirect(ROUTES.AUTH.LOGIN);
+    }
   }
 
   return (
     <div className="flex min-h-dvh flex-col bg-background pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0">
-      <Navbar />
-      <StudentLayoutWrapper>
+      <AppNavbar role={role as "student" | "faculty" | "admin"} />
+      <MainLayoutWrapper role={role as "student" | "faculty" | "admin"}>
         {children}
-      </StudentLayoutWrapper>
-      <BottomNavStudent />
+      </MainLayoutWrapper>
+      <AppBottomNav role={role as "student" | "faculty" | "admin"} />
     </div>
   );
 }

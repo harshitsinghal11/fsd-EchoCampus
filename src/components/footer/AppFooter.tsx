@@ -3,7 +3,9 @@ import Link from 'next/link';
 import { Mail, Linkedin, Instagram, Heart } from 'lucide-react';
 import { ROUTES } from "@/lib/routes";
 
-export default function FooterFaculty() {
+export default function AppFooter({ role }: { role: "student" | "faculty" | "admin" }) {
+  const isFacultyLike = role === "faculty" || role === "admin";
+
   return (
     <footer className="bg-background border-t border-border/50 mt-auto relative overflow-hidden">
       {/* Decorative gradient overlay */}
@@ -18,8 +20,9 @@ export default function FooterFaculty() {
               Echo<span className="text-primary">Campus</span>
             </span>
             <p className="text-text-muted text-sm leading-relaxed max-w-sm">
-              Empowering faculty with seamless campus connectivity,
-              efficient directory access, and streamlined issue management.
+              {isFacultyLike 
+                ? "Empowering faculty with seamless campus connectivity, efficient directory access, and streamlined issue management."
+                : "Empowering student life with seamless campus connectivity, anonymous discussions, and instant marketplace access."}
             </p>
             <div className="flex space-x-4 pt-2">
               <a
@@ -46,20 +49,27 @@ export default function FooterFaculty() {
             <h3 className="text-text-primary font-semibold text-sm tracking-wider uppercase">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <Link href={ROUTES.FACULTY.ANNOUNCEMENTS} className="text-text-muted hover:text-primary transition-colors duration-200 text-sm inline-flex items-center group">
+                <Link href={isFacultyLike ? ROUTES.FACULTY.ANNOUNCEMENTS : ROUTES.STUDENT.ANNOUNCEMENTS} className="text-text-muted hover:text-primary transition-colors duration-200 text-sm inline-flex items-center group">
                   Announcements
                 </Link>
               </li>
               <li>
-                <Link href={ROUTES.FACULTY.DIRECTORY} className="text-text-muted hover:text-primary transition-colors duration-200 text-sm inline-flex items-center group">
+                <Link href={isFacultyLike ? ROUTES.FACULTY.DIRECTORY : ROUTES.STUDENT.DIRECTORY} className="text-text-muted hover:text-primary transition-colors duration-200 text-sm inline-flex items-center group">
                   Directory
                 </Link>
               </li>
               <li>
-                <Link href={ROUTES.FACULTY.LOST_FOUND} className="text-text-muted hover:text-primary transition-colors duration-200 text-sm inline-flex items-center group">
+                <Link href={isFacultyLike ? ROUTES.FACULTY.LOST_FOUND : ROUTES.STUDENT.LOST_FOUND} className="text-text-muted hover:text-primary transition-colors duration-200 text-sm inline-flex items-center group">
                   Lost & Found
                 </Link>
               </li>
+              {!isFacultyLike && (
+                <li>
+                  <Link href={ROUTES.STUDENT.MARKETPLACE} className="text-text-muted hover:text-primary transition-colors duration-200 text-sm inline-flex items-center group">
+                    Marketplace
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
 
@@ -68,7 +78,7 @@ export default function FooterFaculty() {
             <h3 className="text-text-primary font-semibold text-sm tracking-wider uppercase">Support</h3>
             <ul className="space-y-4">
               <li>
-                <a href="mailto:faculty-support@campus.edu" className="group flex items-center text-text-muted hover:text-primary transition-colors duration-200 text-sm">
+                <a href={`mailto:${isFacultyLike ? 'faculty-support@campus.edu' : 'echo@campus.edu'}`} className="group flex items-center text-text-muted hover:text-primary transition-colors duration-200 text-sm">
                   <div className="w-8 h-8 rounded-full bg-surface-hover border border-border flex items-center justify-center mr-3 group-hover:border-primary/50 group-hover:bg-success/10 transition-colors">
                     <Mail className="h-4 w-4" />
                   </div>
@@ -88,7 +98,7 @@ export default function FooterFaculty() {
               <span>for Students by Student</span>
             </div>
             <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-6 text-text-disabled text-sm">
-              <span>&copy; {new Date().getFullYear()} EchoCampus Admin. All rights reserved.</span>
+              <span>&copy; {new Date().getFullYear()} EchoCampus{isFacultyLike ? " Admin" : ""}. All rights reserved.</span>
               <div className="flex space-x-4">
                 <Link href={ROUTES.LEGAL.PRIVACY} className="hover:text-primary transition-colors duration-200">
                   Privacy Policy

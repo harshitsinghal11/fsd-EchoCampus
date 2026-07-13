@@ -1,8 +1,5 @@
-import Link from "next/link";
-import {
-  ArrowRight, Store, BellRing, MessageSquare, Mic, BookUser, ShieldAlert
-} from "lucide-react";
-import Footer from "@/components/footer/FooterStudent";
+import { ArrowRight, Store, BellRing, MessageSquare, Mic, BookUser, ShieldAlert } from "lucide-react";
+import AppFooter from "@/components/footer/AppFooter";
 import { ROUTES } from "@/lib/routes";
 import CheckAuthRedirect from "@/components/auth/CheckAuthRedirect";
 import { Button } from "@/components/ui/Button";
@@ -94,7 +91,7 @@ export default function Home() {
       </section>
 
       {/* 4. FOOTER */}
-      <Footer />
+      <AppFooter role="student" />
     </div>
   );
 }

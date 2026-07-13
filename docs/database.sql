@@ -145,16 +145,22 @@ CREATE POLICY "student_update" ON public.student_profiles FOR UPDATE TO authenti
 -- 3.3 Faculty Profiles
 CREATE POLICY "faculty_profiles_select" ON public.faculty_profiles FOR SELECT TO authenticated USING (true);
 CREATE POLICY "admin_insert_faculty_profile" ON public.faculty_profiles FOR INSERT TO authenticated WITH CHECK (
-  auth.uid() = user_id AND EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
+  EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
 );
-CREATE POLICY "admin_update_faculty_profile" ON public.faculty_profiles FOR UPDATE TO authenticated USING (
-  auth.uid() = user_id AND EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
+CREATE POLICY "faculty_and_admin_update_profile" ON public.faculty_profiles FOR UPDATE TO authenticated USING (
+  user_id = auth.uid() OR EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
 );
 
 -- 3.4 Announcements
 CREATE POLICY "announcements_select" ON public.announcements FOR SELECT TO authenticated USING (true);
 CREATE POLICY "announcements_insert" ON public.announcements FOR INSERT TO authenticated WITH CHECK (
-  EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
+  author_id = auth.uid() AND EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role IN ('faculty', 'admin'))
+);
+CREATE POLICY "announcements_update" ON public.announcements FOR UPDATE TO authenticated USING (
+  author_id = auth.uid() OR EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
+);
+CREATE POLICY "announcements_delete" ON public.announcements FOR DELETE TO authenticated USING (
+  author_id = auth.uid() OR EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'admin')
 );
 
 -- 3.5 Complaint Box
@@ -185,8 +191,12 @@ CREATE POLICY "lost_found_insert" ON public.lost_found FOR INSERT TO authenticat
 CREATE POLICY "lost_found_delete" ON public.lost_found FOR DELETE TO authenticated USING (auth.uid() = user_id);
 
 -- 3.9 Chat Messages
-CREATE POLICY "chat_select" ON public.chat_messages FOR SELECT USING (true);
-CREATE POLICY "chat_insert" ON public.chat_messages FOR INSERT TO authenticated WITH CHECK (true);
+CREATE POLICY "chat_select" ON public.chat_messages FOR SELECT TO authenticated USING (
+  EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'student')
+);
+CREATE POLICY "chat_insert" ON public.chat_messages FOR INSERT TO authenticated WITH CHECK (
+  EXISTS (SELECT 1 FROM public.users WHERE id = auth.uid() AND role = 'student')
+);
 
 -- ==========================================
 -- 4. TRIGGERS & FUNCTIONS

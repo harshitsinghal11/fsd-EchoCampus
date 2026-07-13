@@ -69,7 +69,7 @@ export default function Login() {
       // 2. Ensure the companion public.users row exists, then read role
       await ensureOwnUserRow(authData.user);
       const role = await fetchUserRole(authData.user.id);
-      console.log(`[auth] Logged in as: ${role.toUpperCase()}`);
+
 
       // 3. Routing Logic
       if (role === "faculty" || role === "admin") {

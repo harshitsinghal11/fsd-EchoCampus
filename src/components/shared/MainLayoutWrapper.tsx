@@ -1,9 +1,15 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Footer from "@/components/footer/FooterStudent";
+import AppFooter from "@/components/footer/AppFooter";
 
-export function StudentLayoutWrapper({ children }: { children: React.ReactNode }) {
+export function MainLayoutWrapper({ 
+  children, 
+  role 
+}: { 
+  children: React.ReactNode;
+  role: "student" | "faculty" | "admin";
+}) {
   const pathname = usePathname();
   const isChatRoute = pathname === "/main/student/chat";
 
@@ -13,12 +19,12 @@ export function StudentLayoutWrapper({ children }: { children: React.ReactNode }
         className={
           isChatRoute 
             ? "relative flex-1 flex flex-col min-h-0" 
-            : "flex-1"
+            : "flex-1 min-h-0"
         }
       >
         {children}
       </main>
-      {!isChatRoute && <Footer />}
+      {!isChatRoute && <AppFooter role={role} />}
     </>
   );
 }
