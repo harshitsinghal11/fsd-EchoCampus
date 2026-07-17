@@ -3,6 +3,7 @@
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
 import { sendPushNotificationBroadcast } from "@/utils/pushUtility";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 const marketplaceSchema = z.object({
   product_title: z.string().min(3, "Title must be at least 3 characters").max(100, "Title is too long"),
@@ -92,6 +93,8 @@ export async function addMarketplaceItem(formData: {
       body: parsed.data.product_title,
       url: "/main/student/marketplace"
     }).catch(console.error);
+
+    revalidatePath("/main/student/marketplace");
 
     return { success: true };
 

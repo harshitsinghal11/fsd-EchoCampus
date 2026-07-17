@@ -15,6 +15,7 @@ import { MagicButton } from "@/components/ui/MagicButton";
 export default function ComplaintForm() {
   const router = useRouter();
   const [complaint, setComplaint] = useState("");
+  const [isAnonymous, setIsAnonymous] = useState(true);
   const { loading, execute } = useFormSubmit();
   const [isEnhancing, setIsEnhancing] = useState(false);
 
@@ -49,10 +50,11 @@ export default function ComplaintForm() {
     await execute(
       () => submitComplaint({
         complaint: complaint.trim(),
-        isAnonymous: true,
+        isAnonymous,
       }),
       () => {
         setComplaint("");
+        setIsAnonymous(true);
         router.refresh();
       },
       "Thank you! Your complaint has been submitted successfully."
@@ -75,9 +77,15 @@ export default function ComplaintForm() {
           rows={6}
         />
         <div className="flex justify-between items-center mt-2">
-          <span className="text-xs text-text-muted mr-1">
-            Be as specific as possible to help us address your concern
-          </span>
+          <label className="flex items-center gap-2 text-sm text-text-primary cursor-pointer">
+            <input
+              type="checkbox"
+              checked={isAnonymous}
+              onChange={(e) => setIsAnonymous(e.target.checked)}
+              className="rounded border-border text-primary focus:ring-primary bg-surface-hover w-4 h-4 select-none"
+            />
+            Submit Anonymously
+          </label>
           <span className={`text-xs font-medium text-right tabular-nums min-w-[4.5rem] ${charCount > maxChars * 0.9 ? "text-primary" : "text-text-muted"}`}>
             {charCount} / {maxChars}
           </span>
@@ -98,7 +106,7 @@ export default function ComplaintForm() {
             disabled={loading || !complaint.trim()}
             isSubmitting={loading}
             label="Submit Complaint"
-            submittingLabel="Analyzing with AI..."
+            submittingLabel="Submitting Complaint..."
           />
         </div>
       </div>

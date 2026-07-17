@@ -83,178 +83,193 @@ export default function LostFoundList({
     const confirm = window.confirm("Has this item been returned/resolved?");
     if (!confirm) return;
 
+    // Optimistic UI update
+    mutate(
+      (currentData) => {
+        if (!currentData) return currentData;
+        return currentData.map(item =>
+          item.id === id ? { ...item, is_resolved: true } : item
+        );
+      },
+      { revalidate: false }
+    );
+
     const result = await resolveLostFoundItem(id);
-    if (result.error) toast.error("Error: " + result.error);
-    else {
+    if (result.error) {
+      toast.error("Error: " + result.error);
+      mutate(); // rollback
+    } else {
       toast.success("Item marked as resolved!");
       mutate();
     }
   };
 
   return (
-    <div className={`space-y-6 ${!showSearch ? 'h-full flex flex-col' : ''}`}>
+    <>
+      <div className={`space-y-6 ${!showSearch ? 'h-full flex flex-col' : ''}`}>
 
-      {/* --- SEARCH BAR --- */}
-      {showSearch && (
-        <SearchBar
-          value={searchTerm}
-          onChange={setSearchTerm}
-          placeholder="Search lost items..."
-          className="w-full"
-        />
-      )}
+        {/* --- SEARCH BAR --- */}
+        {showSearch && (
+          <SearchBar
+            value={searchTerm}
+            onChange={setSearchTerm}
+            placeholder="Search lost items..."
+            className="w-full"
+          />
+        )}
 
-      {/* --- LOADING STATE --- */}
-      {isLoading && (
-        <LostFoundSkeleton isWidget={!showSearch} />
-      )}
+        {/* --- LOADING STATE --- */}
+        {isLoading && (
+          <LostFoundSkeleton isWidget={!showSearch} />
+        )}
 
-      {/* --- EMPTY STATE (no data) --- */}
-      {!isLoading && items.length === 0 && (
-        <EmptyLostFound isWidget={!showSearch} />
-      )}
+        {/* --- EMPTY STATE (no data) --- */}
+        {!isLoading && items.length === 0 && (
+          <EmptyLostFound isWidget={!showSearch} />
+        )}
 
-      {/* --- NO SEARCH MATCHES --- */}
-      {!isLoading && showSearch && items.length > 0 && displayItems.length === 0 && (
-        <EmptySearch searchTerm={searchTerm} />
-      )}
+        {/* --- NO SEARCH MATCHES --- */}
+        {!isLoading && showSearch && items.length > 0 && displayItems.length === 0 && (
+          <EmptySearch searchTerm={searchTerm} />
+        )}
 
-      {/* --- LIST LAYOUT --- */}
-      {displayItems.length > 0 && (
-        <MotionList className={!showSearch ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5" : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 pr-1 sm:pr-2 custom-scrollbar w-full"}>
-          {displayItems.map((item) => (
-            <MotionItem
-              key={item.id}
-              onClick={() => setSelectedItem(item)}
-              className={`
+        {/* --- LIST LAYOUT --- */}
+        {displayItems.length > 0 && (
+          <MotionList className={!showSearch ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5" : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 pr-1 sm:pr-2 custom-scrollbar w-full"}>
+            {displayItems.map((item) => (
+              <MotionItem
+                key={item.id}
+                onClick={() => setSelectedItem(item)}
+                className={`
               group overflow-hidden transition-all duration-300 w-full relative
               ${!showSearch
-                  ? 'bg-surface hover:bg-surface-hover/80 rounded-xl p-3 flex items-center gap-3 border border-transparent cursor-pointer'
-                  : 'bg-surface border-border shadow-sm rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 flex flex-col h-full border'
-                }
+                    ? 'bg-surface hover:bg-surface-hover/80 rounded-xl p-3 flex items-center gap-3 border border-transparent cursor-pointer'
+                    : 'bg-surface border-border shadow-sm rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 flex flex-col h-full border'
+                  }
             `}
-            >
-              {/* RESOLVED BADGE */}
-              {item.is_resolved && (
-                <div className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-primary/20 backdrop-blur-md text-primary px-2.5 py-1 rounded-full border border-primary/30 shadow-lg">
-                  <CheckCircle className="w-3.5 h-3.5" />
-                  <span className="text-[11px] font-bold uppercase tracking-wider">Resolved</span>
-                </div>
-              )}
+              >
+                {/* RESOLVED BADGE */}
+                {item.is_resolved && (
+                  <div className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-primary/20 backdrop-blur-md text-primary px-2.5 py-1 rounded-full border border-primary/30 shadow-lg">
+                    <CheckCircle className="w-3.5 h-3.5" />
+                    <span className="text-[11px] font-bold uppercase tracking-wider">Resolved</span>
+                  </div>
+                )}
 
-              {/* 1. IMAGE THUMBNAIL */}
-              <div className={`
+                {/* 1. IMAGE THUMBNAIL */}
+                <div className={`
               bg-surface-hover shrink-0 overflow-hidden border border-border flex items-center justify-center relative
               ${!showSearch ? 'rounded-lg w-16 h-16' : 'rounded-lg sm:rounded-xl w-full aspect-[4/3] sm:aspect-video mb-3 sm:mb-4'}
             `}>
-                {item.image_url ? (
-                  <Image
-                    src={item.image_url}
-                    alt="Item"
-                    fill
-                    unoptimized
-                    sizes={!showSearch ? "64px" : "(max-width: 768px) 50vw, 33vw"}
-                    className="object-contain transition-duration-500 p-1"
-                  />
-                ) : (
-                  <Camera className={`text-text-disabled ${!showSearch ? 'w-6 h-6' : 'w-8 h-8'}`} />
-                )}
-              </div>
-
-              {/* 2. CONTENT */}
-              <div className="flex-1 min-w-0 flex flex-col grow justify-between">
-                <div>
-                  {/* Header: Title + Date + Delete */}
-                  <div className="flex justify-between items-start gap-2 sm:gap-3">
-                    <h2 className={`font-semibold line-clamp-2 ${!showSearch ? 'text-sm' : 'text-base md:text-lg'} text-text-primary`}>
-                      {item.title}
-                    </h2>
-
-                    <div className="flex items-center gap-2 shrink-0">
-                      {/* Action Button */}
-                      {showSearch && currentUserId === item.user_id && !item.is_resolved && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleResolve(item.id);
-                          }}
-                          className="flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 bg-primary/10 hover:bg-primary/20 border border-primary/20 text-primary hover:text-primary text-[11px] font-bold rounded-md transition-all shrink-0"
-                          title="Mark as Resolved"
-                        >
-                          <CheckCircle className="w-3.5 h-3.5" />
-                          <span className="hidden sm:inline">Resolve</span>
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Location (Widget Only) */}
-                  {!showSearch && (
-                    <div className="flex items-center gap-1.5 text-xs text-text-muted mt-0.5">
-                      <MapPin className="w-3.5 h-3.5 text-primary/70 shrink-0" />
-                      <span className="truncate max-w-[120px]">{item.location_found}</span>
-                    </div>
-                  )}
-
-                  {/* Full Details */}
-                  {showSearch && (
-                    <div className="flex flex-col w-full mt-2">
-                      <p className={`text-text-muted leading-relaxed text-sm line-clamp-2 sm:line-clamp-3`}>
-                        {item.description || "No additional description."}
-                      </p>
-                      {item.description && item.description.length > 150 && (
-                        <span className="text-primary text-xs font-medium mt-1 ml-auto hover:underline">
-                          Read more...
-                        </span>
-                      )}
-                    </div>
+                  {item.image_url ? (
+                    <Image
+                      src={item.image_url}
+                      alt="Item"
+                      fill
+                      unoptimized
+                      sizes={!showSearch ? "64px" : "(max-width: 768px) 50vw, 33vw"}
+                      className="object-contain transition-duration-500 p-1"
+                    />
+                  ) : (
+                    <Camera className={`text-text-disabled ${!showSearch ? 'w-6 h-6' : 'w-8 h-8'}`} />
                   )}
                 </div>
 
-                {showSearch && (
-                  <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-4 border-t border-border/60 text-xs text-text-secondary flex flex-row justify-between items-center gap-1.5 sm:gap-2">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <MapPin className="w-4 h-4 text-text-disabled shrink-0" />
-                      <span className="truncate text-xs max-w-[100px] sm:max-w-[200px]">{item.location_found}</span>
+                {/* 2. CONTENT */}
+                <div className="flex-1 min-w-0 flex flex-col grow justify-between">
+                  <div>
+                    {/* Header: Title + Date + Delete */}
+                    <div className="flex justify-between items-start gap-2 sm:gap-3">
+                      <h2 className={`font-semibold line-clamp-2 ${!showSearch ? 'text-sm' : 'text-base md:text-lg'} text-text-primary`}>
+                        {item.title}
+                      </h2>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        {/* Action Button */}
+                        {showSearch && currentUserId === item.user_id && !item.is_resolved && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleResolve(item.id);
+                            }}
+                            className="flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 bg-primary/10 hover:bg-primary/20 border border-primary/20 text-primary hover:text-primary text-[11px] font-bold rounded-md transition-all shrink-0"
+                            title="Mark as Resolved"
+                          >
+                            <CheckCircle className="w-3.5 h-3.5" />
+                            <span className="hidden sm:inline">Resolve</span>
+                          </button>
+                        )}
+                      </div>
                     </div>
 
-                    {item.contact_info && (
-                      <div className="flex items-center gap-2 shrink-0">
-                        <Phone className="w-4 h-4 text-text-disabled shrink-0" />
-                        <span className="text-xs">{item.contact_info}</span>
+                    {/* Location (Widget Only) */}
+                    {!showSearch && (
+                      <div className="flex items-center gap-1.5 text-xs text-text-muted mt-0.5">
+                        <MapPin className="w-3.5 h-3.5 text-primary/70 shrink-0" />
+                        <span className="truncate max-w-[120px]">{item.location_found}</span>
+                      </div>
+                    )}
+
+                    {/* Full Details */}
+                    {showSearch && (
+                      <div className="flex flex-col w-full mt-2">
+                        <p className={`text-text-muted leading-relaxed text-sm line-clamp-2 sm:line-clamp-3`}>
+                          {item.description || "No additional description."}
+                        </p>
+                        {item.description && item.description.length > 150 && (
+                          <span className="text-primary text-xs font-medium mt-1 ml-auto hover:underline">
+                            Read more...
+                          </span>
+                        )}
                       </div>
                     )}
                   </div>
-                )}
-              </div>
 
-              {/* Widget Mode: Chevron for "Go" indication */}
-              {!showSearch && (
-                <ArrowRight className="shrink-0 w-4 h-4 text-text-disabled group-hover:text-primary transition-all mr-1" />
-              )}
+                  {showSearch && (
+                    <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-4 border-t border-border/60 text-xs text-text-secondary flex flex-row justify-between items-center gap-1.5 sm:gap-2">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <MapPin className="w-4 h-4 text-text-disabled shrink-0" />
+                        <span className="truncate text-xs max-w-[100px] sm:max-w-[200px]">{item.location_found}</span>
+                      </div>
 
-              {/* Simple Timestamp for Widget Mode */}
-              {!showSearch && (
-                <div className="absolute bottom-1.5 right-2 mt-1">
-                  <span className="text-xs text-text-disabled font-medium">
-                    {new Date(item.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                  </span>
+                      {item.contact_info && (
+                        <div className="flex items-center gap-2 shrink-0">
+                          <Phone className="w-4 h-4 text-text-disabled shrink-0" />
+                          <span className="text-xs">{item.contact_info}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
-              )}
 
-            </MotionItem>
-          ))}
-        </MotionList>
-      )}
+                {/* Widget Mode: Chevron for "Go" indication */}
+                {!showSearch && (
+                  <ArrowRight className="shrink-0 w-4 h-4 text-text-disabled group-hover:text-primary transition-all mr-1" />
+                )}
 
-      {/* --- LOAD MORE BUTTON --- */}
-      {showSearch && items.length === limit && displayItems.length > 0 && !searchTerm && (
-        <div className="flex justify-center mt-6 h-10 items-center">
-          <button onClick={loadMore} className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-            Load more items...
-          </button>
-        </div>
-      )}
+                {/* Simple Timestamp for Widget Mode */}
+                {!showSearch && (
+                  <div className="absolute bottom-1.5 right-2 mt-1">
+                    <span className="text-xs text-text-disabled font-medium">
+                      {new Date(item.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                    </span>
+                  </div>
+                )}
+
+              </MotionItem>
+            ))}
+          </MotionList>
+        )}
+
+        {/* --- LOAD MORE BUTTON --- */}
+        {showSearch && items.length === limit && displayItems.length > 0 && !searchTerm && (
+          <div className="flex justify-center mt-6 h-10 items-center">
+            <button onClick={loadMore} className="bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+              Load more items...
+            </button>
+          </div>
+        )}
+      </div>
 
       {/* Modal for viewing full details */}
       <Modal
@@ -302,6 +317,6 @@ export default function LostFoundList({
           </div>
         )}
       </Modal>
-    </div>
+    </>
   );
 }

@@ -131,7 +131,7 @@ EchoCampus has reached a stable production-ready phase with all core features fu
 - **AI Integration (Phase 1-3 Completed):** Successfully integrated Google Gemini AI into four major workflows: transforming casual faculty notes into professional announcements, intelligently analyzing student complaints for urgency (triggering push notifications for high urgency), generating AI-driven complaint summaries on the Faculty Dashboard, and using Multimodal Vision AI to automatically generate titles and descriptions for uploaded Lost & Found items.
 - **Progressive Web App:** Fully installable PWA with a custom Service Worker and asynchronous Native Push Notifications wired directly into Supabase.
 - **UI/UX:** A unified dark-mode design system (featuring glassmorphism, custom empty states, tabular-nums, expanded view modals, and responsive grids) is implemented across all Faculty and Student pages.
-- **Performance:** Implemented custom SWR hooks for all primary features, providing fast cached navigations and background revalidation synchronized with Supabase Realtime.
+- **Performance:** Implemented custom SWR hooks with **Optimistic UI** updates for all primary features, providing instant, highly responsive interactions synchronized with background revalidation. Additionally, strictly enforced **Client/Server Component boundaries** across all page layouts to dramatically reduce the JavaScript bundle size shipped to the client.
 - **Type Safety:** Strict TypeScript interfaces and Zod schemas align perfectly with the Supabase schema to reduce runtime errors.
 
 ## Contributing (Optional)

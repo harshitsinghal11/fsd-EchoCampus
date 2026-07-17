@@ -62,6 +62,23 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
   async function upvote(id: string) {
     setUpvoting(id);
 
+    // Optimistic UI update
+    mutate(
+      (currentData) => {
+        if (!currentData) return currentData;
+        return currentData.map(c =>
+          c.id === id
+            ? {
+                ...c,
+                upvotes: (c.upvotes || 0) + (c.current_user_has_upvoted ? -1 : 1),
+                current_user_has_upvoted: !c.current_user_has_upvoted
+              }
+            : c
+        );
+      },
+      { revalidate: false }
+    );
+
     try {
       const res = await fetch("/api/complaints/upvote", {
         method: "POST",
@@ -72,15 +89,17 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
       if (!res.ok) {
         if (res.status === 401) toast.error("Please login to vote.");
         if (res.status === 403) toast.error("Only students can upvote.");
+        mutate(); // rollback
         return;
       }
 
       await res.json();
-      mutate();
+      mutate(); // sync with server
 
     } catch (error) {
       toast.error("Failed to upvote");
       console.error("Failed to upvote:", error);
+      mutate(); // rollback
     } finally {
       setUpvoting(null);
     }
@@ -144,6 +163,7 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
                     )}
                   </div>
                   <div className="flex items-center gap-1.5 mt-2 text-xs font-medium text-text-muted">
+
                     {c.category && (
                       <>
                         <span>{c.category}</span>
@@ -171,6 +191,11 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
                         💤 Low
                       </span>
                     )}
+
+                    <div className="flex items-center gap-1.5 ml-3 text-sm font-medium text-text-muted bg-surface-hover px-2.5 py-1 rounded-md">
+                      <User className="w-3.5 h-3.5" />
+                      {c.session_code || "Anonymous"}
+                    </div>
                   </div>
 
                   <button
@@ -215,6 +240,10 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center text-sm text-text-secondary border-b border-border/50 pb-3">
               <div className="flex flex-wrap items-center gap-2">
+                <span className="flex items-center gap-1 bg-surface-hover px-2.5 py-1 rounded-md text-xs font-semibold text-text-primary">
+                  <User className="w-3 h-3" />
+                  {selectedComplaint.session_code || "Anonymous"}
+                </span>
                 {selectedComplaint.category && (
                   <span className="bg-surface-hover px-2.5 py-1 rounded-md text-xs font-semibold text-text-primary">
                     {selectedComplaint.category}
@@ -222,7 +251,7 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
                 )}
                 <span className="text-xs font-medium text-text-muted">{formatDate(selectedComplaint.created_at)}</span>
               </div>
-              
+
               <div className="flex items-center">
                 {selectedComplaint.urgency === 'HIGH' && (
                   <span className="text-sm font-semibold flex items-center gap-1.5 text-red-500">
@@ -241,11 +270,11 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
                 )}
               </div>
             </div>
-            
+
             <p className="text-sm md:text-base text-text-primary whitespace-pre-wrap leading-relaxed">
               {selectedComplaint.complaint}
             </p>
-            
+
             <div className="mt-4 pt-4 border-t border-border/50 flex justify-end">
               <button
                 onClick={(e) => {
