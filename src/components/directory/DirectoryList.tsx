@@ -67,7 +67,7 @@ export default function Directory() {
       ) : filteredFaculty.length === 0 ? (
         <EmptySearch searchTerm={searchTerm} />
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-3">
           {filteredFaculty.map((faculty) => (
             <div
               key={faculty.id}

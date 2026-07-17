@@ -62,6 +62,23 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
   async function upvote(id: string) {
     setUpvoting(id);
 
+    // Optimistic UI update
+    mutate(
+      (currentData) => {
+        if (!currentData) return currentData;
+        return currentData.map(c =>
+          c.id === id
+            ? {
+                ...c,
+                upvotes: (c.upvotes || 0) + (c.current_user_has_upvoted ? -1 : 1),
+                current_user_has_upvoted: !c.current_user_has_upvoted
+              }
+            : c
+        );
+      },
+      { revalidate: false }
+    );
+
     try {
       const res = await fetch("/api/complaints/upvote", {
         method: "POST",
@@ -72,15 +89,17 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
       if (!res.ok) {
         if (res.status === 401) toast.error("Please login to vote.");
         if (res.status === 403) toast.error("Only students can upvote.");
+        mutate(); // rollback
         return;
       }
 
       await res.json();
-      mutate();
+      mutate(); // sync with server
 
     } catch (error) {
       toast.error("Failed to upvote");
       console.error("Failed to upvote:", error);
+      mutate(); // rollback
     } finally {
       setUpvoting(null);
     }

@@ -90,7 +90,10 @@ export default function AppBottomNav({ role }: { role: "student" | "faculty" | "
       )}
 
       {/* Main Bottom Nav */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 w-full bg-[#18181b] border-t border-border pb-[env(safe-area-inset-bottom)] z-50 shadow-lg">
+      <div 
+        className="md:hidden fixed bottom-0 left-0 right-0 w-full bg-[#18181b] border-t border-border pb-[env(safe-area-inset-bottom)] z-50 shadow-lg"
+        style={{ paddingRight: 'var(--scrollbar-width, 0px)' }}
+      >
         <nav className="flex items-center justify-around h-16 px-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href;

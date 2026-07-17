@@ -14,12 +14,22 @@ interface ModalProps {
 export function Modal({ isOpen, onClose, title, children }: ModalProps) {
   useEffect(() => {
     if (isOpen) {
+      // Calculate scrollbar width to prevent UI shift
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = "hidden";
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+        document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
+      }
     } else {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+      document.documentElement.style.removeProperty('--scrollbar-width');
     }
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = "";
+      document.documentElement.style.removeProperty('--scrollbar-width');
     };
   }, [isOpen]);
 

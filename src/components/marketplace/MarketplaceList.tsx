@@ -48,6 +48,17 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
   async function markSold(id: string) {
     if (!confirm("Are you sure you want to mark this item as sold?")) return;
 
+    // Optimistic UI update
+    mutate(
+      (currentData) => {
+        if (!currentData) return currentData;
+        return currentData.map(item =>
+          item.id === id ? { ...item, is_sold: true } : item
+        );
+      },
+      { revalidate: false }
+    );
+
     try {
       const { error } = await supabase
         .from("marketplace")
@@ -59,9 +70,11 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
         mutate();
       } else {
         toast.error("Failed to update status: " + error.message);
+        mutate(); // rollback
       }
     } catch {
       toast.error("Network error.");
+      mutate(); // rollback
     }
   }
 
