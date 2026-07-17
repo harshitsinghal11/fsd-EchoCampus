@@ -32,14 +32,14 @@ export default function Page() {
             className="w-full max-w-md"
           />
         </div>
-        <div className="shrink-0 flex items-center bg-surface-hover/50 p-1 rounded-xl border border-border">
+        <div className="shrink-0 flex items-center bg-surface-hover/50 p-1 rounded-xl">
           {['ALL', 'HIGH', 'MEDIUM', 'LOW'].map((level) => (
             <button
               key={level}
               onClick={() => setUrgencyFilter(level)}
               className={`px-3 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all ${urgencyFilter === level
-                  ? 'bg-surface shadow-sm text-primary border border-border/50'
-                  : 'text-text-secondary hover:text-text-primary hover:bg-surface-hover'
+                ? 'bg-surface shadow-sm text-primary'
+                : 'text-text-secondary'
                 }`}
             >
               {level === 'ALL' ? 'All' : level.charAt(0) + level.slice(1).toLowerCase()}

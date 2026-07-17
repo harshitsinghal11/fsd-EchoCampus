@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
 
+export const dynamic = "force-dynamic";
+
 // GET: Fetch Complaints
 export async function GET(req: Request) {
   const url = new URL(req.url);

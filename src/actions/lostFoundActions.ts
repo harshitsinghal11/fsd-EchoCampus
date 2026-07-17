@@ -3,6 +3,7 @@
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
 import { sendPushNotificationBroadcast } from "@/utils/pushUtility";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 const lostFoundSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters").max(30, "Title is too long"),
@@ -55,6 +56,8 @@ export async function addLostFoundItem(formData: {
       url: "/main/student/lost-found"
     }).catch(console.error);
 
+    revalidatePath("/main/student/lost-found");
+
     return { success: true };
 
   } catch (error: unknown) {
@@ -92,6 +95,8 @@ export async function deleteLostFoundItem(id: string, imageUrl: string | null) {
       return { error: deleteError.message || "Failed to delete item" };
     }
 
+    revalidatePath("/main/student/lost-found");
+
     return { success: true };
 
   } catch (error: unknown) {
@@ -118,6 +123,8 @@ export async function resolveLostFoundItem(id: string) {
     if (updateError) {
       return { error: updateError.message || "Failed to resolve item" };
     }
+
+    revalidatePath("/main/student/lost-found");
 
     return { success: true };
 
