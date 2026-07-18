@@ -6,7 +6,6 @@ import { Users, ArrowLeft, Send, X } from 'lucide-react';
 import { useSessionCode } from '@/hooks/useSessionCode';
 import { supabase } from '@/lib/supabaseClient';
 import { toast } from 'sonner';
-import { broadcastChatMessageNotification } from '@/actions/chatActions';
 
 type Message = {
   id: string;
@@ -133,19 +132,18 @@ export default function AnonChat() {
     // Optimistic update
     setMessages((prev) => [...prev, optimisticMessage]);
 
-    const { data, error } = await supabase.from('chat_messages').insert([payload]).select().single();
+    // Use Server Action for AI Moderation + DB Insert
+    const { sendChatMessage } = await import('@/actions/chatActions');
+    const result = await sendChatMessage(sessionCode, newMessageText);
 
-    if (error) {
-      console.error('Failed to send message:', error);
-      toast.error(`Error sending message: ${error.message}`);
-      // Revert optimistic update
+    if (result.error) {
+      console.error('Failed to send message:', result.error);
+      toast.error(result.error);
+      // Revert optimistic update on failure (including toxicity block)
       setMessages((prev) => prev.filter((m) => m.id !== optimisticMessage.id));
-    } else if (data) {
-      // Ensure the optimistic message is updated with the real DB data in case the realtime event missed it
-      setMessages((prev) => prev.map((m) => m.id === optimisticMessage.id ? (data as Message) : m));
-
-      // Fire chat push notification (cooldown is handled by the server action)
-      await broadcastChatMessageNotification(newMessageText);
+    } else if (result.data) {
+      // Ensure the optimistic message is updated with the real DB data
+      setMessages((prev) => prev.map((m) => m.id === optimisticMessage.id ? (result.data as Message) : m));
     }
   }
 

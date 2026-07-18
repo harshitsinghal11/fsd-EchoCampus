@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, MessageSquare, BookUser, Store, MoreHorizontal, BellRing, Mic, ShieldAlert, User } from "lucide-react";
+import { Home, MessageSquare, BookUser, Store, MoreHorizontal, BellRing, Mic, ShieldAlert, User, Bot } from "lucide-react";
 import { ROUTES } from "@/lib/routes";
 
 export default function AppBottomNav({ role }: { role: "student" | "faculty" | "admin" }) {

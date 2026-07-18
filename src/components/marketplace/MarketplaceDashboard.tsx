@@ -45,7 +45,7 @@ export default function MarketplaceDashboard() {
       {/* Floating Action Button */}
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 bg-primary hover:bg-primary-hover text-white rounded-full shadow-lg shadow-primary/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-30"
+        className="fixed bottom-24 md:bottom-8 right-24 md:right-28 w-14 h-14 bg-primary hover:bg-primary-hover text-white rounded-full shadow-lg shadow-primary/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-30"
         style={{ marginRight: 'var(--scrollbar-width, 0px)' }}
       >
         <PenLine className="w-6 h-6" />

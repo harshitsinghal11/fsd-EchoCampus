@@ -135,7 +135,7 @@ export default function LostFoundList({
 
         {/* --- LIST LAYOUT --- */}
         {displayItems.length > 0 && (
-          <MotionList className={!showSearch ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5" : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 pr-1 sm:pr-2 custom-scrollbar w-full"}>
+          <MotionList className={!showSearch ? "flex-1 overflow-y-auto pr-2 custom-scrollbar space-y-2.5" : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 pr-1 sm:pr-2 custom-scrollbar w-full items-stretch"}>
             {displayItems.map((item) => (
               <MotionItem
                 key={item.id}
@@ -171,7 +171,7 @@ export default function LostFoundList({
                 {!showSearch ? (
                   // WIDGET MODE CONTENT
                   <div className="flex-1 min-w-0 flex flex-col grow justify-center">
-                    <h2 className="font-semibold line-clamp-2 text-sm text-text-primary">
+                    <h2 className="font-semibold line-clamp-1 text-sm text-text-primary">
                       {item.title}
                     </h2>
                     <div className="flex items-center gap-1.5 text-xs text-text-muted mt-0.5">
@@ -183,7 +183,7 @@ export default function LostFoundList({
                   // FULL MODE CONTENT (Matches Marketplace)
                   <>
                     <div className="flex justify-between items-start gap-2 sm:gap-3">
-                      <h2 className={`font-semibold line-clamp-2 text-base md:text-lg ${item.is_resolved ? 'text-text-muted' : 'text-text-primary'}`}>
+                      <h2 className={`font-semibold line-clamp-1 text-base md:text-lg ${item.is_resolved ? 'text-text-muted' : 'text-text-primary'}`}>
                         {item.title}
                       </h2>
 
@@ -200,7 +200,7 @@ export default function LostFoundList({
                     </div>
 
                     <div className="flex flex-col w-full">
-                      <p className={`text-text-muted mt-2 leading-relaxed text-sm line-clamp-2 sm:line-clamp-3`}>
+                      <p className={`text-text-muted mt-2 leading-relaxed text-sm line-clamp-1`}>
                         {item.description || "No additional description."}
                       </p>
                       {item.description && item.description.length > 150 && (
@@ -210,7 +210,7 @@ export default function LostFoundList({
                       )}
                     </div>
 
-                    <div className="mt-4 pt-4 border-t border-border/60 text-xs text-text-secondary flex flex-row justify-between items-center gap-2 grow">
+                    <div className="mt-auto pt-4 border-t border-border/60 text-xs text-text-secondary flex flex-row justify-between items-center gap-2 w-full">
                       <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4 text-text-disabled shrink-0" />
                         <span className="truncate">{item.location_found}</span>

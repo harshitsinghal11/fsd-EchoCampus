@@ -113,7 +113,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
       )}
 
       {displayItems.length > 0 && (
-        <MotionList className={`grid gap-3 sm:gap-4 md:gap-6 items-start ${isWidget
+        <MotionList className={`grid gap-3 sm:gap-4 md:gap-6 items-stretch ${isWidget
           ? "grid-cols-2"
           : "grid-cols-2 lg:grid-cols-3 xl:grid-cols-3"
           }`}>
@@ -175,7 +175,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
                 )}
               </div>
 
-              <div className="mt-4 pt-4 border-t border-border/60 text-xs text-text-secondary flex flex-row justify-between items-center gap-2 grow">
+              <div className="mt-auto pt-4 border-t border-border/60 text-xs text-text-secondary flex flex-row justify-between items-center gap-2 w-full">
                 <div className="flex items-center gap-2">
                   <User className="w-4 h-4 text-text-disabled shrink-0" />
                   <span className="truncate">{item.owner_name}</span>

@@ -1,5 +1,5 @@
 "use client";
-import { Home, User, BookUser, ShieldAlert, BellRing, MessageSquare, Mic, Store } from "lucide-react";
+import { Home, User, BookUser, ShieldAlert, BellRing, MessageSquare, Mic, Store, Bot } from "lucide-react";
 import BaseNavBar, { NavLink } from "@/components/shared/BaseNavBar";
 import { ROUTES } from "@/lib/routes";
 

@@ -4,6 +4,7 @@ import { MainLayoutWrapper } from "@/components/shared/MainLayoutWrapper";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/utils/supabaseServer";
 import { ROUTES } from "@/lib/routes";
+import { EchoWidget } from "@/components/chat/EchoWidget";
 
 export default async function MainLayout({
   children,
@@ -39,6 +40,7 @@ export default async function MainLayout({
         {children}
       </MainLayoutWrapper>
       <AppBottomNav role={role as "student" | "faculty" | "admin"} />
+      <EchoWidget />
     </div>
   );
 }

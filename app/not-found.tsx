@@ -43,23 +43,23 @@ export default function NotFound() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <button
-            onClick={() => router.back()}
+          <Link href={ROUTES.STUDENT.DASHBOARD}
             className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-surface-hover text-text-secondary font-medium hover:bg-surface-hover hover:text-text-primary transition-all border border-border shadow-sm"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Go Back
-          </button>
+          </Link>
+
 
           <Link
             href={ROUTES.HOME}
-            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-primary text-background font-semibold hover:bg-primary-light hover:scale-105 transition-all shadow-lg shadow-primary/20"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-primary text-background font-semibold hover:bg-primary-light"
           >
             <Home className="w-4 h-4 mr-2" />
             Return Home
           </Link>
         </div>
-      </motion.div>
-    </div>
+      </motion.div >
+    </div >
   );
 }
