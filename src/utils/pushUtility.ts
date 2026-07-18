@@ -29,8 +29,8 @@ export async function sendPushNotificationBroadcast(payloadObj: {
               auth: sub.auth
             }
           }, payload);
-        } catch (e: any) {
-          if (e.statusCode === 410 || e.statusCode === 404) {
+        } catch (e: unknown) {
+          if ((e as {statusCode?: number}).statusCode === 410 || (e as {statusCode?: number}).statusCode === 404) {
             // Delete stale subscriptions
             await supabaseAdmin.from("push_subscriptions").delete().eq("id", sub.id);
           }

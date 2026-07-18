@@ -8,7 +8,6 @@ import {
   Camera,
   X
 } from 'lucide-react';
-import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import { ImageUpload } from "@/components/ui/ImageUpload";
@@ -17,12 +16,10 @@ import React, { useState } from "react";
 import { useUserEmail } from "@/hooks/useUserEmail";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
 import { addMarketplaceItem } from "@/actions/marketplaceActions";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
 import { FormInput } from "@/components/ui/FormInput";
 import { FormTextarea } from "@/components/ui/FormTextarea";
-import { Button } from "@/components/ui/Button";
 
 export default function MarketCreateForm({ onSuccess }: { onSuccess?: () => void }) {
   const userEmail = useUserEmail();
@@ -193,4 +190,4 @@ export default function MarketCreateForm({ onSuccess }: { onSuccess?: () => void
         />
     </form>
   );
-}
+}

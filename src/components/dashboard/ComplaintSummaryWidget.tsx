@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, TrendingUp, AlertCircle } from "lucide-react";
+import { Sparkles, TrendingUp, } from "lucide-react";
 import { toast } from "sonner";
 import { getComplaintInsights } from "@/actions/aiActions";
 import { MagicButton } from "@/components/ui/MagicButton";
@@ -61,4 +61,4 @@ export function ComplaintSummaryWidget() {
       />
     </div>
   );
-}
+}

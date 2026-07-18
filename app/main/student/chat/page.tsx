@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Users, ArrowLeft, Send, MessageSquareText, X } from 'lucide-react';
+import { Users, ArrowLeft, Send, X } from 'lucide-react';
 import { useSessionCode } from '@/hooks/useSessionCode';
 import { supabase } from '@/lib/supabaseClient';
 import { toast } from 'sonner';
@@ -363,4 +363,4 @@ export default function AnonChat() {
       </div>
     </div>
   );
-}
+}

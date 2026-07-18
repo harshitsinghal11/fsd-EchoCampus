@@ -20,9 +20,9 @@ export async function enhanceAnnouncement(text: string) {
     
     const enhancedText = await generateAIResponse(systemPrompt, text);
     return { success: true, enhancedText: enhancedText.trim() };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Enhance Error:", error);
-    return { error: error.message || "Failed to enhance announcement." };
+    return { error: (error instanceof Error ? error.message : String(error)) || "Failed to enhance announcement." };
   }
 }
 
@@ -43,9 +43,9 @@ export async function enhanceComplaint(text: string) {
     
     const enhancedText = await generateAIResponse(systemPrompt, text);
     return { success: true, enhancedText: enhancedText.trim() };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Enhance Complaint Error:", error);
-    return { error: error.message || "Failed to enhance complaint." };
+    return { error: (error instanceof Error ? error.message : String(error)) || "Failed to enhance complaint." };
   }
 }
 
@@ -86,9 +86,9 @@ export async function analyzeLostItem(imageUrl: string) {
       title: parsedAi.title || "",
       description: parsedAi.description || ""
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Analyze Lost Item Error:", error);
-    return { error: error.message || "Failed to analyze image." };
+    return { error: (error instanceof Error ? error.message : String(error)) || "Failed to analyze image." };
   }
 }
 
@@ -126,8 +126,8 @@ export async function getComplaintInsights() {
     const summary = await generateAIResponse(systemPrompt, complaintsText);
     
     return { success: true, summary: summary.trim() };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Insights Error:", error);
-    return { error: error.message || "Failed to generate insights." };
+    return { error: (error instanceof Error ? error.message : String(error)) || "Failed to generate insights." };
   }
 }

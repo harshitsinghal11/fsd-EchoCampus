@@ -17,7 +17,7 @@ const fetcher = async ([_key, limit, searchTerm]: [string, number | undefined, s
 
   const { data, error } = await query;
   if (error) throw error;
-  
+
   // Format data correctly due to Supabase returning arrays for joins sometimes
   return (data || []).map((item) => ({
     ...item,

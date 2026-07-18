@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Bell, BellOff } from "lucide-react";
+import { Bell, } from "lucide-react";
 import { toast } from "sonner";
 import { savePushSubscription } from "@/actions/pushActions";
 
@@ -83,9 +83,9 @@ export function NotificationManager() {
         setIsSubscribed(true);
         toast.success("Push notifications enabled!");
       }
-    } catch (err: any) {
-      console.error("Failed to subscribe:", err);
-      toast.error(err.message || "Failed to subscribe to notifications");
+    } catch (error: unknown) {
+      console.error("Failed to subscribe:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to subscribe to notifications");
     } finally {
       setIsLoading(false);
     }
@@ -106,4 +106,4 @@ export function NotificationManager() {
       </button>
     </div>
   );
-}
+}

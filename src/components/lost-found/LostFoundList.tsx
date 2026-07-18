@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { MapPin, Phone, Calendar, Camera, Trash2, ArrowRight, Search, CheckCircle } from "lucide-react";
+import { MapPin, Phone, Camera, ArrowRight, CheckCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { LostFoundSkeleton } from "@/components/shared/Skeletons";
@@ -13,9 +13,7 @@ import { SearchBar } from "@/components/shared/SearchBar";
 import { resolveLostFoundItem, deleteLostFoundItem } from "@/actions/lostFoundActions";
 import { useDebounce } from "@/hooks/useDebounce";
 import { usePagination } from "@/hooks/usePagination";
-import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 import { Modal } from "@/components/ui/Modal";
-import { User } from "lucide-react";
 
 interface LostFoundListProps {
   refreshTrigger?: number;
@@ -67,39 +65,41 @@ export default function LostFoundList({
     }
   }, [refreshTrigger, mutate]);
 
-  const handleDelete = async (id: string, imageUrl: string | null) => {
-    const confirm = window.confirm("Are you sure you want to delete this post?");
-    if (!confirm) return;
 
-    const result = await deleteLostFoundItem(id, imageUrl);
-    if (result.error) toast.error("Error: " + result.error);
-    else {
-      toast.success("Item removed");
-      mutate();
-    }
-  };
-
-  const handleResolve = async (id: string) => {
-    const confirm = window.confirm("Has this item been returned/resolved?");
-    if (!confirm) return;
+  const toggleResolveStatus = async (id: string, currentStatus: boolean) => {
+    const newStatus = !currentStatus;
+    const actionName = newStatus ? "resolved" : "active";
+    if (!confirm(`Are you sure you want to mark this item as ${actionName}?`)) return;
 
     // Optimistic UI update
     mutate(
       (currentData) => {
         if (!currentData) return currentData;
         return currentData.map(item =>
-          item.id === id ? { ...item, is_resolved: true } : item
+          item.id === id ? { ...item, is_resolved: newStatus } : item
         );
       },
       { revalidate: false }
     );
 
-    const result = await resolveLostFoundItem(id);
+    const result = await resolveLostFoundItem(id, newStatus);
     if (result.error) {
       toast.error("Error: " + result.error);
       mutate(); // rollback
     } else {
-      toast.success("Item marked as resolved!");
+      toast.success(`Item marked as ${actionName}!`);
+      mutate();
+    }
+  };
+
+  const handleDelete = async (id: string, imageUrl: string | null) => {
+    if (!confirm("Are you sure you want to delete this report? This action cannot be undone.")) return;
+
+    const result = await deleteLostFoundItem(id, imageUrl);
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      toast.success("Report deleted successfully");
       mutate();
     }
   };
@@ -148,14 +148,6 @@ export default function LostFoundList({
                   }
             `}
               >
-                {/* RESOLVED BADGE */}
-                {item.is_resolved && (
-                  <div className="absolute top-3 right-3 z-10 flex items-center gap-1 bg-primary/20 backdrop-blur-md text-primary px-2.5 py-1 rounded-full border border-primary/30 shadow-lg">
-                    <CheckCircle className="w-3.5 h-3.5" />
-                    <span className="text-[11px] font-bold uppercase tracking-wider">Resolved</span>
-                  </div>
-                )}
-
                 {/* 1. IMAGE THUMBNAIL */}
                 <div className={`
               bg-surface-hover shrink-0 overflow-hidden border border-border flex items-center justify-center relative
@@ -176,84 +168,101 @@ export default function LostFoundList({
                 </div>
 
                 {/* 2. CONTENT */}
-                <div className="flex-1 min-w-0 flex flex-col grow justify-between">
-                  <div>
-                    {/* Header: Title + Date + Delete */}
+                {!showSearch ? (
+                  // WIDGET MODE CONTENT
+                  <div className="flex-1 min-w-0 flex flex-col grow justify-center">
+                    <h2 className="font-semibold line-clamp-2 text-sm text-text-primary">
+                      {item.title}
+                    </h2>
+                    <div className="flex items-center gap-1.5 text-xs text-text-muted mt-0.5">
+                      <MapPin className="w-3.5 h-3.5 text-primary/70 shrink-0" />
+                      <span className="truncate max-w-[120px]">{item.location_found}</span>
+                    </div>
+                  </div>
+                ) : (
+                  // FULL MODE CONTENT (Matches Marketplace)
+                  <>
                     <div className="flex justify-between items-start gap-2 sm:gap-3">
-                      <h2 className={`font-semibold line-clamp-2 ${!showSearch ? 'text-sm' : 'text-base md:text-lg'} text-text-primary`}>
+                      <h2 className={`font-semibold line-clamp-2 text-base md:text-lg ${item.is_resolved ? 'text-text-muted' : 'text-text-primary'}`}>
                         {item.title}
                       </h2>
 
-                      <div className="flex items-center gap-2 shrink-0">
-                        {/* Action Button */}
-                        {showSearch && currentUserId === item.user_id && !item.is_resolved && (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleResolve(item.id);
-                            }}
-                            className="flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 bg-primary/10 hover:bg-primary/20 border border-primary/20 text-primary hover:text-primary text-[11px] font-bold rounded-md transition-all shrink-0"
-                            title="Mark as Resolved"
-                          >
-                            <CheckCircle className="w-3.5 h-3.5" />
-                            <span className="hidden sm:inline">Resolve</span>
-                          </button>
-                        )}
-                      </div>
+                      {item.is_resolved ? (
+                        <span className="shrink-0 inline-flex items-center gap-1 bg-surface-hover/80 text-text-muted border border-border text-[11px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                          <CheckCircle className="w-3 h-3" />
+                          Resolved
+                        </span>
+                      ) : (
+                        <span className="shrink-0 bg-primary/10 text-primary border border-primary/20 text-[11px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                          Active
+                        </span>
+                      )}
                     </div>
 
-                    {/* Location (Widget Only) */}
-                    {!showSearch && (
-                      <div className="flex items-center gap-1.5 text-xs text-text-muted mt-0.5">
-                        <MapPin className="w-3.5 h-3.5 text-primary/70 shrink-0" />
-                        <span className="truncate max-w-[120px]">{item.location_found}</span>
-                      </div>
-                    )}
+                    <div className="flex flex-col w-full">
+                      <p className={`text-text-muted mt-2 leading-relaxed text-sm line-clamp-2 sm:line-clamp-3`}>
+                        {item.description || "No additional description."}
+                      </p>
+                      {item.description && item.description.length > 150 && (
+                        <span className="text-primary text-xs font-medium mt-1 ml-auto hover:underline">
+                          Read more...
+                        </span>
+                      )}
+                    </div>
 
-                    {/* Full Details */}
-                    {showSearch && (
-                      <div className="flex flex-col w-full mt-2">
-                        <p className={`text-text-muted leading-relaxed text-sm line-clamp-2 sm:line-clamp-3`}>
-                          {item.description || "No additional description."}
-                        </p>
-                        {item.description && item.description.length > 150 && (
-                          <span className="text-primary text-xs font-medium mt-1 ml-auto hover:underline">
-                            Read more...
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {showSearch && (
-                    <div className="mt-3 sm:mt-4 pt-2.5 sm:pt-4 border-t border-border/60 text-xs text-text-secondary flex flex-row justify-between items-center gap-1.5 sm:gap-2">
-                      <div className="flex items-center gap-2 min-w-0">
+                    <div className="mt-4 pt-4 border-t border-border/60 text-xs text-text-secondary flex flex-row justify-between items-center gap-2 grow">
+                      <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4 text-text-disabled shrink-0" />
-                        <span className="truncate text-xs max-w-[100px] sm:max-w-[200px]">{item.location_found}</span>
+                        <span className="truncate">{item.location_found}</span>
                       </div>
 
                       {item.contact_info && (
-                        <div className="flex items-center gap-2 shrink-0">
+                        <div className="flex items-center gap-2">
                           <Phone className="w-4 h-4 text-text-disabled shrink-0" />
-                          <span className="text-xs">{item.contact_info}</span>
+                          <span>{item.contact_info}</span>
                         </div>
                       )}
                     </div>
-                  )}
-                </div>
 
-                {/* Widget Mode: Chevron for "Go" indication */}
-                {!showSearch && (
-                  <ArrowRight className="shrink-0 w-4 h-4 text-text-disabled group-hover:text-primary transition-all mr-1" />
+                    {currentUserId === item.user_id && (
+                      <div className="mt-4 flex items-center gap-2 w-full">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleResolveStatus(item.id, item.is_resolved);
+                          }}
+                          className={`flex-1 font-medium px-4 py-2 rounded-xl transition-all duration-200 text-sm hover:shadow-lg ${item.is_resolved
+                            ? ""
+                            : "bg-surface-hover hover:bg-surface-hover/80 text-text-primary border border-border"
+                            }`}
+                        >
+                          {item.is_resolved ? "Mark as Active" : "Mark as Resolved"}
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(item.id, item.image_url);
+                          }}
+                          className="p-2 rounded-xl text-red-500 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 transition-all"
+                          title="Delete Report"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      </div>
+                    )}
+                  </>
                 )}
 
-                {/* Simple Timestamp for Widget Mode */}
+                {/* Widget Mode Indicators */}
                 {!showSearch && (
-                  <div className="absolute bottom-1.5 right-2 mt-1">
-                    <span className="text-xs text-text-disabled font-medium">
-                      {new Date(item.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </span>
-                  </div>
+                  <>
+                    <ArrowRight className="shrink-0 w-4 h-4 text-text-disabled group-hover:text-primary transition-all mr-1" />
+                    <div className="absolute bottom-1.5 right-2 mt-1">
+                      <span className="text-xs text-text-disabled font-medium">
+                        {new Date(item.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </span>
+                    </div>
+                  </>
                 )}
 
               </MotionItem>

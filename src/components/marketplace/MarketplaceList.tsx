@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from 'react';
 import Image from "next/image";
-import { User, Phone, CheckCircle } from 'lucide-react';
+import { User, Phone, CheckCircle, Trash2 } from 'lucide-react';
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from 'sonner';
 import { MarketplaceSkeleton } from "@/components/shared/Skeletons";
@@ -12,9 +12,8 @@ import { EmptyMarketplace, EmptySearch } from "@/components/shared/EmptyStates";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { useDebounce } from "@/hooks/useDebounce";
 import { usePagination } from "@/hooks/usePagination";
-import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
-import { useEffect } from "react";
 import { Modal } from "@/components/ui/Modal";
+import { deleteMarketplaceItem } from "@/actions/marketplaceActions";
 
 interface MarketListProps {
   currentUserEmail?: string;
@@ -45,15 +44,17 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
     });
   }, [items, debouncedSearchTerm, isWidget]);
 
-  async function markSold(id: string) {
-    if (!confirm("Are you sure you want to mark this item as sold?")) return;
+  async function toggleSoldStatus(id: string, currentStatus: boolean) {
+    const newStatus = !currentStatus;
+    const actionName = newStatus ? "sold" : "active";
+    if (!confirm(`Are you sure you want to mark this item as ${actionName}?`)) return;
 
     // Optimistic UI update
     mutate(
       (currentData) => {
         if (!currentData) return currentData;
         return currentData.map(item =>
-          item.id === id ? { ...item, is_sold: true } : item
+          item.id === id ? { ...item, is_sold: newStatus } : item
         );
       },
       { revalidate: false }
@@ -62,19 +63,31 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
     try {
       const { error } = await supabase
         .from("marketplace")
-        .update({ is_sold: true })
+        .update({ is_sold: newStatus })
         .eq("id", id);
 
       if (!error) {
-        toast.success("Item marked as sold");
+        toast.success(`Item marked as ${actionName}`);
         mutate();
       } else {
-        toast.error("Failed to update status: " + error.message);
+        toast.error("Failed to update status: " + (error instanceof Error ? error.message : String(error)));
         mutate(); // rollback
       }
-    } catch {
+    } catch (error: unknown) {
       toast.error("Network error.");
       mutate(); // rollback
+    }
+  }
+
+  async function handleDelete(id: string, imageUrl: string | null) {
+    if (!confirm("Are you sure you want to delete this listing? This action cannot be undone.")) return;
+
+    const result = await deleteMarketplaceItem(id, imageUrl);
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      toast.success("Listing deleted successfully");
+      mutate();
     }
   }
 
@@ -176,16 +189,31 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
                 )}
               </div>
 
-              {!item.is_sold && currentUserEmail && item.owner_email === currentUserEmail && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    markSold(item.id);
-                  }}
-                  className="mt-4 w-full bg-primary/10 hover:bg-primary/10 text-primary border border-primary/30 font-medium px-4 py-2 rounded-xl transition-all duration-200 text-sm hover:shadow-lg hover:shadow-primary/20 "
-                >
-                  Mark as Sold
-                </button>
+              {currentUserEmail && item.owner_email === currentUserEmail && (
+                <div className="mt-4 flex items-center gap-2 w-full">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleSoldStatus(item.id, item.is_sold);
+                    }}
+                    className={`flex-1 font-medium px-4 py-2 rounded-xl transition-all duration-200 text-sm hover:shadow-lg ${item.is_sold
+                      ? "bg-surface-hover hover:bg-surface-hover/80 text-text-primary border border-border"
+                      : "bg-surface-hover text-text-primary border border-border "
+                      }`}
+                  >
+                    {item.is_sold ? "Mark as Active" : "Mark as Sold"}
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(item.id, item.image_url ?? null);
+                    }}
+                    className="p-2 rounded-xl text-red-500 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 transition-all"
+                    title="Delete Listing"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                </div>
               )}
             </MotionItem>
           ))}

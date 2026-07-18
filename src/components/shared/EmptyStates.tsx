@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { ShoppingBag, MessageSquare, Megaphone, Camera, Users, Search } from "lucide-react";
 
 import Link from "next/link";
-import { ROUTES } from "@/lib/routes";
 
 interface EmptyStateProps {
   title: string;
@@ -168,4 +167,4 @@ export function EmptySearch({ searchTerm }: { searchTerm: string }) {
       iconColor="text-text-secondary"
     />
   );
-}
+}

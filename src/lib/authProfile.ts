@@ -10,7 +10,7 @@ type AuthUserLike = Pick<User, "id" | "email" | "user_metadata">;
 export async function ensureOwnUserRow(user: AuthUserLike) {
   // The PostgreSQL trigger 'handle_new_auth_user' automatically inserts the user row
   // This function just serves as a verification that the row exists
-  const { data: existingRow, error: fetchError } = await supabase
+  const { error: fetchError } = await supabase
     .from("users")
     .select("id, role")
     .eq("id", user.id)

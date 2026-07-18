@@ -75,7 +75,7 @@ public.complaint_box
 - `announcements`: authenticated users can read all rows; only users with role `admin` can insert
 - `complaint_box`: authenticated users can read all complaints; only students can insert their own complaints
 - `complaint_upvotes`: authenticated users can read all votes; only students can insert their own votes and any authenticated user can delete only their own vote row
-- `marketplace`: only students can read and insert marketplace rows; only the owner can update a row
+- `marketplace`: only students can read and insert marketplace rows; only the owner can update and delete a row
 - `lost_found`: authenticated users can read all rows, insert only their own rows, and delete only their own rows
 - `chat_messages`: anyone can select, but only authenticated users can insert (anonymous inserts rely on session_code instead of user_id linking)
 
@@ -104,6 +104,7 @@ The repository implements Supabase Storage for object storage workflows. Lost an
 # Server Actions
 - `submitComplaint(formData: { complaint: string, isAnonymous: boolean })`
 - `addMarketplaceItem(formData: { product_title, description, price, contact_info, image_url? })`
+- `deleteMarketplaceItem(id, imageUrl)`
 - `addAnnouncement(formData: { title, content, link? })`
 - `addLostFoundItem(formData: { title, description, location, contact_info, image_url, type })`
 

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, } from "react";
 import { User, ExternalLink } from "lucide-react";
 import { MotionList } from "@/components/shared/MotionList";
 import { MotionItem } from "@/components/shared/MotionItem";
@@ -153,4 +153,4 @@ export default function AnnouncementList({ isWidget = false, widgetLimit }: Anno
       </Modal>
     </div>
   );
-}
+}

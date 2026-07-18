@@ -12,12 +12,7 @@ export const metadata = {
 };
 export default async function StudentDashboard() {
   const supabase = await createSupabaseServerClient();
-  const [announcementsCount, marketplaceCount, complaintsCount, lostFoundCount] = await Promise.all([
-    supabase.from("announcements").select("*", { count: "exact", head: true }).then(res => res.count || 0),
-    supabase.from("marketplace").select("*", { count: "exact", head: true }).then(res => res.count || 0),
-    supabase.from("complaint_box").select("*", { count: "exact", head: true }).then(res => res.count || 0),
-    supabase.from("lost_found").select("*", { count: "exact", head: true }).then(res => res.count || 0)
-  ]);
+
 
   return (
     <div className="w-full max-w-7xl mx-auto min-h-screen p-4 md:p-6 lg:p-8 space-y-6 md:space-y-8 text-text-primary">

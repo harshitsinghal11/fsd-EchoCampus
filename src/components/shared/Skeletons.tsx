@@ -105,7 +105,6 @@ export function ComplaintSkeleton({ isWidget = false }: { isWidget?: boolean }) 
 
 // Lost & Found Skeleton
 export function LostFoundSkeleton({ isWidget = false }: { isWidget?: boolean }) {
-  const showSearch = isWidget; // Note: In the component !showSearch corresponds to widget mode (confusing prop naming in original)
   // Let's align with the component's logic: if isWidget is true, it behaves like !showSearch
 
   return (
