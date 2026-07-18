@@ -37,7 +37,7 @@ export default function AnnouncementList({ isWidget = false, widgetLimit }: Anno
   }
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className={`flex flex-col w-full ${isWidget ? '' : 'h-full'}`}>
       {!isWidget && (
         <div className="mb-6">
           <SearchBar
@@ -49,7 +49,7 @@ export default function AnnouncementList({ isWidget = false, widgetLimit }: Anno
         </div>
       )}
 
-      <MotionList className={isWidget ? "space-y-4 pr-2 custom-scrollbar h-full overflow-y-auto w-full" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full h-full overflow-y-auto custom-scrollbar pr-2"}>
+      <MotionList className={isWidget ? "space-y-4 pr-2 w-full" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full h-full overflow-y-auto custom-scrollbar pr-2"}>
         {items.length === 0 && <EmptyAnnouncements isWidget={isWidget} />}
         {items.length > 0 && displayItems.length === 0 && <EmptySearch searchTerm={searchTerm} />}
 
@@ -153,4 +153,4 @@ export default function AnnouncementList({ isWidget = false, widgetLimit }: Anno
       </Modal>
     </div>
   );
-}
+}

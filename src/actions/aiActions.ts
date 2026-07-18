@@ -17,7 +17,7 @@ export async function enhanceAnnouncement(text: string) {
     }
 
     const systemPrompt = "You are a professional university secretary. Rewrite the following brief note into a formal, polite campus announcement suitable for students. Do not add made up facts, just rewrite the tone. Do not output anything else but the rewritten text.";
-    
+
     const enhancedText = await generateAIResponse(systemPrompt, text);
     return { success: true, enhancedText: enhancedText.trim() };
   } catch (error: unknown) {
@@ -40,7 +40,7 @@ export async function enhanceComplaint(text: string) {
     }
 
     const systemPrompt = "You are a professional campus counselor. Rewrite the following student complaint to be constructive, clear, and professional, removing offensive language but keeping the core issue intact. Do not output anything else but the rewritten text.";
-    
+
     const enhancedText = await generateAIResponse(systemPrompt, text);
     return { success: true, enhancedText: enhancedText.trim() };
   } catch (error: unknown) {
@@ -67,22 +67,22 @@ export async function analyzeLostItem(imageUrl: string) {
     if (!response.ok) {
       return { error: "Failed to fetch image." };
     }
-    
+
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     const base64Image = buffer.toString('base64');
     const mimeType = response.headers.get('content-type') || 'image/jpeg';
 
     const systemPrompt = "Identify the main object in this image. Return ONLY a valid JSON object with exactly two keys: 'title' (a short, clear name like 'Blue Milton Water Bottle', STRICTLY under 30 characters) and 'description' (a visual description focusing on brand, color, and defining marks, STRICTLY under 50 characters). Return ONLY JSON, no markdown formatting.";
-    
+
     const { generateAIVisionResponse } = await import("@/utils/ai");
     const aiResult = await generateAIVisionResponse(systemPrompt, base64Image, mimeType);
-    
+
     const cleanedResult = aiResult.replace(/```json/g, '').replace(/```/g, '').trim();
     const parsedAi = JSON.parse(cleanedResult);
-    
-    return { 
-      success: true, 
+
+    return {
+      success: true,
       title: parsedAi.title || "",
       description: parsedAi.description || ""
     };
@@ -101,7 +101,7 @@ export async function getComplaintInsights() {
       return { error: "Unauthorized" };
     }
 
-    // Fetch the latest 50 complaints to analyze trends
+    // Fetch the latest 10 complaints to analyze trends
     const { data: complaints, error: fetchError } = await supabase
       .from("complaint_box")
       .select("content, urgency, category, created_at")
@@ -117,14 +117,14 @@ export async function getComplaintInsights() {
     }
 
     // Prepare data for the prompt
-    const complaintsText = complaints.map(c => 
+    const complaintsText = complaints.map(c =>
       `[${c.urgency}] [${c.category}] ${c.content}`
     ).join("\n");
 
-    const systemPrompt = "You are a data analyst for a university administration. Review the following list of recent student complaints. Provide a highly scannable, bulleted summary (max 3-4 bullets) highlighting the most prominent trends or urgent matters. Keep it very simple and easy to read at a glance on a dashboard. Use short phrases. Use emojis like 🚨 for urgent issues, 🔧 for maintenance, or 📊 for general trends. Do not use filler words like 'Here is the summary'.";
-    
+    const systemPrompt = "You are a data analyst for a university administration. Review the following list of the top 50 recent student complaints. Provide a highly scannable, bulleted summary of trends or urgent matters in 3-4 short points. Keep it very simple and easy to read at a glance on a dashboard. Use standard Markdown for bullet points and bolding key terms. Do not use filler words like 'Here is the summary'.";
+
     const summary = await generateAIResponse(systemPrompt, complaintsText);
-    
+
     return { success: true, summary: summary.trim() };
   } catch (error: unknown) {
     console.error("Insights Error:", error);

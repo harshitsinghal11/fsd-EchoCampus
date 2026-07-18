@@ -81,7 +81,7 @@ export async function generateEmbedding(text: string): Promise<number[]> {
   }
 
   const model = genAI.getGenerativeModel({
-    model: "text-embedding-004",
+    model: "gemini-embedding-2",
   });
 
   let lastError;

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, TrendingUp, } from "lucide-react";
+import { Sparkles, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
 import { getComplaintInsights } from "@/actions/aiActions";
 import { MagicButton } from "@/components/ui/MagicButton";
 
@@ -41,9 +42,19 @@ export function ComplaintSummaryWidget() {
               AI Insights
               <Sparkles size={14} className="animate-pulse" />
             </h3>
-            <p className="text-sm text-text-primary leading-relaxed font-medium whitespace-pre-line">
-              {summary}
-            </p>
+            <div className="text-sm text-text-primary leading-relaxed font-medium">
+              <ReactMarkdown
+                components={{
+                  p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                  strong: ({node, ...props}) => <strong className="font-bold text-text-primary" {...props} />,
+                  ul: ({node, ...props}) => <ul className="list-disc pl-4 mb-2 space-y-1" {...props} />,
+                  ol: ({node, ...props}) => <ol className="list-decimal pl-4 mb-2 space-y-1" {...props} />,
+                  li: ({node, ...props}) => <li className="" {...props} />,
+                }}
+              >
+                {summary}
+              </ReactMarkdown>
+            </div>
           </div>
         </div>
       </div>

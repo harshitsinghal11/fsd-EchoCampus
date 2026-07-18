@@ -5,8 +5,8 @@ import { Toaster } from "sonner";
 import { NotificationManager } from "@/components/shared/NotificationManager";
 export const metadata: Metadata = {
   title: {
-    template: "%s | EchoCampus", 
-    default: "EchoCampus",      
+    template: "%s",
+    default: "EchoCampus",
   },
   description: "Campus Marketplace and Complaints",
   manifest: "/manifest.json",

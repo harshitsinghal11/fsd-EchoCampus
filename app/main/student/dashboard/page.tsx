@@ -35,7 +35,7 @@ export default async function StudentDashboard() {
             href={ROUTES.STUDENT.CHAT}
             className="flex items-center gap-2 px-4 py-2.5 bg-surface-hover/80 hover:bg-surface-hover text-text-primary rounded-xl font-medium border border-border/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-transparent"
           >
-            Global Chat
+            Anonymous Chat
           </Link>
           <Link
             href={ROUTES.STUDENT.DIRECTORY}

@@ -19,13 +19,14 @@ type UpvoteApiResponse = {
 
 interface ComplaintListProps {
   isWidget?: boolean;
+  widgetLimit?: number;
   searchTerm?: string;
   urgencyFilter?: string;
 }
 
-export default function ComplaintList({ isWidget = false, searchTerm = "", urgencyFilter = "ALL" }: ComplaintListProps) {
+export default function ComplaintList({ isWidget = false, widgetLimit = 4, searchTerm = "", urgencyFilter = "ALL" }: ComplaintListProps) {
   const [limit, setLimit] = useState(12);
-  const { items, isLoading, mutate } = useComplaints(isWidget, isWidget ? undefined : limit);
+  const { items, isLoading, mutate } = useComplaints(isWidget, isWidget ? widgetLimit : limit);
   const [upvoting, setUpvoting] = useState<string | null>(null);
   const [selectedComplaint, setSelectedComplaint] = useState<any | null>(null);
 
@@ -67,10 +68,10 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
         return currentData.map(c =>
           c.id === id
             ? {
-                ...c,
-                upvotes: (c.upvotes || 0) + (c.current_user_has_upvoted ? -1 : 1),
-                current_user_has_upvoted: !c.current_user_has_upvoted
-              }
+              ...c,
+              upvotes: (c.upvotes || 0) + (c.current_user_has_upvoted ? -1 : 1),
+              current_user_has_upvoted: !c.current_user_has_upvoted
+            }
             : c
         );
       },
@@ -119,7 +120,7 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
 
   if (isLoading) {
     return (
-      <div className={`flex-1 flex flex-col w-full h-full overflow-y-auto ${isWidget ? '' : 'bg-surface border border-border rounded-2xl p-5 sm:p-6 shadow-sm'}`}>
+      <div className={`flex flex-col w-full ${isWidget ? '' : 'flex-1 h-full overflow-y-auto bg-surface border border-border rounded-2xl p-5 sm:p-6 shadow-sm'}`}>
         {!isWidget && (
           <div className="mb-4">
             <h1 className="text-2xl font-bold text-text-primary flex items-center gap-3">
@@ -134,7 +135,7 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
   }
 
   return (
-    <div className={`flex-1 flex flex-col w-full h-full overflow-y-auto ${isWidget ? '' : 'bg-surface border border-border rounded-2xl p-5 sm:p-6 shadow-sm'}`}>
+    <div className={`flex flex-col w-full ${isWidget ? '' : 'flex-1 h-full overflow-y-auto bg-surface border border-border rounded-2xl p-5 sm:p-6 shadow-sm'}`}>
       {!isLoading && !isWidget && items.length > 0 && displayItems.length === 0 && (
         <EmptySearch searchTerm={searchTerm} />
       )}
@@ -296,4 +297,4 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
       </Modal>
     </div>
   );
-}
+}

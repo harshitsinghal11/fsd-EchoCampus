@@ -32,10 +32,72 @@ export async function POST(req: NextRequest) {
       console.error("Vector search error:", error);
     }
 
+    // 2b. Fetch Live Application Data (Top 50 most recent from each to provide extensive memory without crashing)
+    const { data: marketItems } = await supabase
+      .from('marketplace')
+      .select('product_title, description, price, is_sold')
+      .eq('is_sold', false)
+      .order('created_at', { ascending: false })
+      .limit(50);
+      
+    const { data: lostFoundItems } = await supabase
+      .from('lost_found')
+      .select('item_name, description, status, location, type')
+      .order('created_at', { ascending: false })
+      .limit(50);
+      
+    const { data: announcements } = await supabase
+      .from('announcements')
+      .select('title, content')
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    const { data: complaints } = await supabase
+      .from('complaint_box')
+      .select('content, urgency, category')
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    const { data: directory } = await supabase
+      .from('users')
+      .select(`
+        full_name,
+        email,
+        faculty_profiles (
+          department,
+          phone_no,
+          cabin_no
+        )
+      `)
+      .eq('role', 'admin')
+      .limit(50);
+
+    let liveDataText = "";
+    if (marketItems && marketItems.length > 0) {
+      liveDataText += "\nCURRENT MARKETPLACE ITEMS:\n" + marketItems.map(i => `- ${i.product_title} (Price: ${i.price}): ${i.description}`).join("\n") + "\n";
+    }
+    if (lostFoundItems && lostFoundItems.length > 0) {
+      liveDataText += "\nCURRENT LOST & FOUND ITEMS:\n" + lostFoundItems.map(i => `- [${i.type?.toUpperCase()}] ${i.item_name} at ${i.location} (Status: ${i.status}): ${i.description}`).join("\n") + "\n";
+    }
+    if (announcements && announcements.length > 0) {
+      liveDataText += "\nRECENT ANNOUNCEMENTS:\n" + announcements.map(i => `- ${i.title}: ${i.content}`).join("\n") + "\n";
+    }
+    if (complaints && complaints.length > 0) {
+      liveDataText += "\nRECENT COMPLAINTS:\n" + complaints.map(i => `- [${i.urgency}] ${i.category}: ${i.content}`).join("\n") + "\n";
+    }
+    if (directory && directory.length > 0) {
+      liveDataText += "\nFACULTY DIRECTORY:\n" + directory.map(i => {
+        const profile = Array.isArray(i.faculty_profiles) ? i.faculty_profiles[0] : i.faculty_profiles;
+        return `- ${i.full_name} (${profile?.department || 'General'}): Email: ${i.email}, Phone: ${profile?.phone_no || 'N/A'}, Cabin: ${profile?.cabin_no || 'N/A'}`;
+      }).join("\n") + "\n";
+    }
+
     // 3. Construct System Prompt with Context
-    const contextText = documents && documents.length > 0
+    const baseContext = documents && documents.length > 0
       ? documents.map((doc: any) => doc.content).join("\n\n---\n\n")
-      : "No specific campus information found in the database for this query.";
+      : "No static campus documentation found.";
+
+    const contextText = baseContext + "\n\n" + liveDataText;
 
     const systemPrompt = `You are ECHO, the smart campus assistant for our university. 
 You are helpful, concise, and friendly. Answer the student's question based ONLY on the following context. 

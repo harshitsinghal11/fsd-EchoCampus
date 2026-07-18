@@ -40,7 +40,7 @@ export default function Home() {
             size="lg"
             className="group font-bold"
           >
-            Get Started <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            Get Started <ArrowRight className="w-5 h-5" />
           </Button>
         </div>
       </main>

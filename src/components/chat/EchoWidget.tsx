@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Send, X, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
 
 type Message = {
   id: string;
@@ -81,7 +82,7 @@ export function EchoWidget() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 bg-primary hover:bg-primary-hover text-white rounded-full shadow-lg shadow-primary/30 flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-50 ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
+        className={`fixed bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 bg-primary hover:bg-primary-hover text-white rounded-full flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-50 ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
         style={{ marginRight: 'var(--scrollbar-width, 0px)' }}
         aria-label="Open ECHO AI Chat"
       >
@@ -136,7 +137,22 @@ export function EchoWidget() {
                       ? 'bg-primary text-white rounded-tr-sm'
                       : 'bg-surface-hover border border-border text-text-primary rounded-tl-sm'
                       }`}>
-                      {msg.content}
+                      {msg.role === 'assistant' ? (
+                        <ReactMarkdown
+                          components={{
+                            p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
+                            strong: ({ node, ...props }) => <strong className="font-bold text-text-primary" {...props} />,
+                            ul: ({ node, ...props }) => <ul className="list-disc pl-4 mb-2" {...props} />,
+                            ol: ({ node, ...props }) => <ol className="list-decimal pl-4 mb-2" {...props} />,
+                            li: ({ node, ...props }) => <li className="mb-1" {...props} />,
+                            a: ({ node, ...props }) => <a className="text-primary hover:underline" {...props} />,
+                          }}
+                        >
+                          {msg.content}
+                        </ReactMarkdown>
+                      ) : (
+                        msg.content
+                      )}
                       {msg.role === 'assistant' && msg.content === '' && (
                         <span className="flex space-x-1 h-3 items-center opacity-50">
                           <span className="w-1.5 h-1.5 bg-text-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
