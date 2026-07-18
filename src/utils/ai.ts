@@ -23,9 +23,9 @@ export async function generateAIResponse(systemPrompt: string, userText: string)
     try {
       const result = await model.generateContent(userText);
       return result.response.text();
-    } catch (error: any) {
+    } catch (error: unknown) {
       lastError = error;
-      if (error?.status === 503) {
+      if ((error as {status?: number})?.status === 503) {
         console.warn(`503 Server Busy on Text Generation, retrying in 1s... (${i + 1}/3)`);
         await new Promise(res => setTimeout(res, 1000));
         continue;
@@ -35,7 +35,7 @@ export async function generateAIResponse(systemPrompt: string, userText: string)
   }
   
   console.error("AI Generation Error:", lastError);
-  throw new Error(`Failed to generate AI response: ${lastError?.message || "Unknown error"}`);
+  throw new Error(`Failed to generate AI response: ${(lastError as Error)?.message || "Unknown error"}`);
 }
 export async function generateAIVisionResponse(systemPrompt: string, base64Image: string, mimeType: string): Promise<string> {
   if (!genAI) {
@@ -60,9 +60,9 @@ export async function generateAIVisionResponse(systemPrompt: string, base64Image
     try {
       const result = await model.generateContent([systemPrompt, ...imageParts]);
       return result.response.text();
-    } catch (error: any) {
+    } catch (error: unknown) {
       lastError = error;
-      if (error?.status === 503 || error?.message?.includes("503")) {
+      if ((error as {status?: number})?.status === 503 || (error as {message?: string})?.message?.includes("503")) {
         console.warn(`503 Server Busy on Vision Generation, retrying in 1s... (${i + 1}/3)`);
         await new Promise(res => setTimeout(res, 1000));
         continue;
@@ -72,5 +72,5 @@ export async function generateAIVisionResponse(systemPrompt: string, base64Image
   }
 
   console.error("AI Vision Generation Error:", lastError);
-  throw new Error(`Failed to generate AI vision response: ${lastError?.message || "Unknown error"}`);
+  throw new Error(`Failed to generate AI vision response: ${(lastError as Error)?.message || "Unknown error"}`);
 }

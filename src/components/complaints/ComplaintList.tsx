@@ -1,6 +1,6 @@
 'use client';
 import { useState, useMemo } from "react";
-import { ThumbsUp, MessageSquare, Clock } from "lucide-react";
+import { ThumbsUp, } from "lucide-react";
 import { toast } from "sonner";
 import { ComplaintSkeleton } from "@/components/shared/Skeletons";
 import { MotionList } from "@/components/shared/MotionList";
@@ -8,8 +8,6 @@ import { MotionItem } from "@/components/shared/MotionItem";
 import { useComplaints } from "@/hooks/data/useComplaints";
 import { EmptyComplaints, EmptySearch } from "@/components/shared/EmptyStates";
 import { useDebounce } from "@/hooks/useDebounce";
-import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
-import { useEffect } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { User } from "lucide-react"; // Assuming we might want to display user/author, although complaints might be anonymous. Let's see what's in Complaint.
 
@@ -96,7 +94,7 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
       await res.json();
       mutate(); // sync with server
 
-    } catch (error) {
+    } catch (error: unknown) {
       toast.error("Failed to upvote");
       console.error("Failed to upvote:", error);
       mutate(); // rollback
@@ -178,17 +176,17 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
                   <div className="flex items-center">
                     {c.urgency === 'HIGH' && (
                       <span className="text-sm font-semibold flex items-center gap-1.5 text-red-500">
-                        🔥 High
+                        High
                       </span>
                     )}
                     {c.urgency === 'MEDIUM' && (
                       <span className="text-sm font-semibold flex items-center gap-1.5 text-orange-500">
-                        ⚡ Medium
+                        Medium
                       </span>
                     )}
                     {c.urgency === 'LOW' && (
                       <span className="text-sm font-semibold flex items-center gap-1.5 text-blue-500">
-                        💤 Low
+                        Low
                       </span>
                     )}
 
@@ -240,10 +238,6 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center text-sm text-text-secondary border-b border-border/50 pb-3">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="flex items-center gap-1 bg-surface-hover px-2.5 py-1 rounded-md text-xs font-semibold text-text-primary">
-                  <User className="w-3 h-3" />
-                  {selectedComplaint.session_code || "Anonymous"}
-                </span>
                 {selectedComplaint.category && (
                   <span className="bg-surface-hover px-2.5 py-1 rounded-md text-xs font-semibold text-text-primary">
                     {selectedComplaint.category}
@@ -255,17 +249,17 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
               <div className="flex items-center">
                 {selectedComplaint.urgency === 'HIGH' && (
                   <span className="text-sm font-semibold flex items-center gap-1.5 text-red-500">
-                    🔥 High
+                    High
                   </span>
                 )}
                 {selectedComplaint.urgency === 'MEDIUM' && (
                   <span className="text-sm font-semibold flex items-center gap-1.5 text-orange-500">
-                    ⚡ Medium
+                    Medium
                   </span>
                 )}
                 {selectedComplaint.urgency === 'LOW' && (
                   <span className="text-sm font-semibold flex items-center gap-1.5 text-blue-500">
-                    💤 Low
+                    Low
                   </span>
                 )}
               </div>
@@ -275,7 +269,11 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
               {selectedComplaint.complaint}
             </p>
 
-            <div className="mt-4 pt-4 border-t border-border/50 flex justify-end">
+            <div className="mt-4 pt-4 border-t border-border/50 flex justify-between items-center">
+              <span className="flex items-center gap-1 bg-surface-hover px-2.5 py-1 rounded-md text-xs font-semibold text-text-primary">
+                <User className="w-3 h-3" />
+                {selectedComplaint.session_code || "Anonymous"}
+              </span>
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -298,4 +296,4 @@ export default function ComplaintList({ isWidget = false, searchTerm = "", urgen
       </Modal>
     </div>
   );
-}
+}

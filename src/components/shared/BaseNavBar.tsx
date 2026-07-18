@@ -1,10 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabaseClient';
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Menu, X, LogOut } from "lucide-react";
+import { Menu, X, } from "lucide-react";
 import React from "react";
 import { ROUTES } from "@/lib/routes";
 
@@ -21,7 +20,6 @@ interface BaseNavBarProps {
 export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
 
   useEffect(() => {
     if (isMenuOpen) {
@@ -149,4 +147,4 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
       </div>
     </>
   );
-}
+}

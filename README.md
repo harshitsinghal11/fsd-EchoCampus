@@ -40,34 +40,23 @@ No screenshots are included in the repository yet.
 ```text
 app/
   api/
-    auth/
-      faculty-status/
     complaints/
-    marketplace/
   auth/
-    login/
-    signup/
   main/
-    student/
     faculty/
+    student/
   privacy/
   terms/
+public/
+scripts/
 src/
+  actions/
   components/
-    announcements/
-    complaints/
-    marketplace/
-    NavBar/
-    Footer/
-    shared/
   hooks/
   lib/
   types/
   utils/
-assets/
-  sql/
-docs/
-public/
+  middleware.ts
 README.md
 ```
 
@@ -78,7 +67,9 @@ README.md
 - [04_UI_UX.md](docs/04_UI_UX.md)
 - [05_BackendSchema.md](docs/05_BackendSchema.md)
 - [06_Auth.md](docs/06_Auth.md)
-- [colors.md](docs/new_color.md)
+- [colors.md](docs/color.md)
+- [text.md](docs/text.md)
+- [database.sql](docs/database.sql)
 
 ## Getting Started
 

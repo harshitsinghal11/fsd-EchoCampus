@@ -105,7 +105,7 @@ export async function deleteLostFoundItem(id: string, imageUrl: string | null) {
   }
 }
 
-export async function resolveLostFoundItem(id: string) {
+export async function resolveLostFoundItem(id: string, resolveState: boolean) {
   try {
     const supabase = await createSupabaseServerClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -116,7 +116,7 @@ export async function resolveLostFoundItem(id: string) {
 
     const { error: updateError } = await supabase
       .from("lost_found")
-      .update({ is_resolved: true })
+      .update({ is_resolved: resolveState })
       .eq("id", id)
       .eq("user_id", user.id);
 

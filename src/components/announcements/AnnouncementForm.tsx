@@ -2,17 +2,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 // import { supabase } from "@/lib/supabaseClient";
-import { Link as LinkIcon, Type, AlignLeft, Sparkles } from "lucide-react";
+import { Link as LinkIcon, Type, AlignLeft, } from "lucide-react";
 import { toast } from "sonner";
 import { addAnnouncement } from "@/actions/announcementActions";
 import { enhanceAnnouncement } from "@/actions/aiActions";
 import { SubmitBtn } from "@/components/shared/SubmitBtn";
 import { MagicButton } from "@/components/ui/MagicButton";
-import { GlassCard } from "@/components/ui/GlassCard";
 import { FormInput } from "@/components/ui/FormInput";
 import { FormTextarea } from "@/components/ui/FormTextarea";
 import { useFormSubmit } from "@/hooks/useFormSubmit";
-import { Button } from "@/components/ui/Button";
 
 export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void }) {
   const router = useRouter();
@@ -114,4 +112,4 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
       </div>
     </form>
   );
-}
+}

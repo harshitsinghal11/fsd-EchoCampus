@@ -90,13 +90,13 @@
 - **File:** `src/components/lost-found/LostFoundForm.tsx`
 - **Technical Detail:** "✨ Auto-Fill Details from Image" button populates the input fields automatically.
 
-### ❌ 3.3 Auto-Matching System
+### ⏭️ 3.3 Auto-Matching System (SKIPPED)
 - **Technical Detail:** AI analyzes the description and proactively notifies students who recently reported losing a similar item.
 
 ---
 
-## ❌ Phase 4: HUGO - Highly Utility Generative Oracle (Campus RAG)
-**Goal:** A smart chatbot (HUGO) that answers student questions based on actual campus data.
+## ❌ Phase 4: E.C.H.O - Every Command Has Outcomes (Campus RAG)
+**Goal:** A smart chatbot (ECHO) that answers student questions based on actual campus data.
 
 ### ❌ 4.1 Database Vector Setup (pgvector)
 - **Supabase SQL:** Run `CREATE EXTENSION vector;`. Create table `campus_knowledge`.
@@ -105,8 +105,8 @@
 - **File:** `scripts/embedData.ts`
 - **Technical Detail:** Fetch all Faculty Profiles and recent Announcements to generate vectors and store them in `campus_knowledge`.
 
-### ❌ 4.3 HUGO Dedicated Page & API
-- **File:** `app/main/student/hugo/page.tsx` & `app/api/chat/route.ts`
+### ❌ 4.3 ECHO Dedicated Page & API
+- **File:** `app/main/student/echo/page.tsx` & `app/api/chat/route.ts`
 - **Technical Detail:** Student asks a question -> API generates embedding -> queries `campus_knowledge` -> sends to Gemini -> streams response.
 
 ### ❌ 4.4 AI Chat Moderator

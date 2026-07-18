@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { Search, MapPin, Phone, AlignLeft, Sparkles } from "lucide-react";
+import { Search, MapPin, Phone, AlignLeft, } from "lucide-react";
 import { toast } from "sonner";
 import { addLostFoundItem } from "@/actions/lostFoundActions";
 import { analyzeLostItem } from "@/actions/aiActions";
@@ -47,7 +47,6 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
         }
 
         const fileExt = fileToUpload.name.split('.').pop();
-        const fileName = `${user.id}-temp-${Date.now()}.${fileExt}`;
 
         // Uses standard upload for temp images as it might not be tied to an item yet, 
         // but we can still use the utility if we want. Wait, the utility adds the prefix anyway.
@@ -223,4 +222,4 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
       </div>
     </form>
   );
-}
+}

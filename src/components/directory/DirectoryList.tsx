@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { Mail, Phone, BookOpen, Briefcase, ChevronRight, BookUser, ChevronDown } from 'lucide-react';
+import { Mail, Phone, BookUser, ChevronDown } from 'lucide-react';
 import { useDirectory } from '@/hooks/data/useDirectory';
 import { useDebounce } from '@/hooks/useDebounce';
 import { EmptyDirectory, EmptySearch } from '@/components/shared/EmptyStates';
@@ -127,4 +127,4 @@ export default function Directory() {
       )}
     </div>
   );
-}
+}
