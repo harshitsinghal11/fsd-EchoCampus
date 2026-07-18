@@ -74,3 +74,32 @@ export async function generateAIVisionResponse(systemPrompt: string, base64Image
   console.error("AI Vision Generation Error:", lastError);
   throw new Error(`Failed to generate AI vision response: ${(lastError as Error)?.message || "Unknown error"}`);
 }
+
+export async function generateEmbedding(text: string): Promise<number[]> {
+  if (!genAI) {
+    throw new Error("GEMINI_API_KEY is not configured in environment variables.");
+  }
+
+  const model = genAI.getGenerativeModel({
+    model: "text-embedding-004",
+  });
+
+  let lastError;
+  for (let i = 0; i < 3; i++) {
+    try {
+      const result = await model.embedContent(text);
+      return result.embedding.values;
+    } catch (error: unknown) {
+      lastError = error;
+      if ((error as {status?: number})?.status === 503 || (error as {message?: string})?.message?.includes("503")) {
+        console.warn(`503 Server Busy on Embedding Generation, retrying in 1s... (${i + 1}/3)`);
+        await new Promise(res => setTimeout(res, 1000));
+        continue;
+      }
+      break; 
+    }
+  }
+
+  console.error("AI Embedding Generation Error:", lastError);
+  throw new Error(`Failed to generate embedding: ${(lastError as Error)?.message || "Unknown error"}`);
+}
