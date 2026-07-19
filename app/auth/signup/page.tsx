@@ -172,7 +172,7 @@ export default function SignUpPage() {
   return (
     <div className="min-h-[100dvh] w-full bg-background flex items-center justify-center p-4 sm:p-6 md:p-8">
       <div className="relative w-full max-w-md">
-        <div className="bg-surface backdrop-blur-xl rounded-2xl shadow-xl border border-border p-6 sm:p-8">
+        <div className="bg-surface rounded-2xl shadow-xl border border-border p-6 sm:p-8">
           <div className="text-center mb-8">
             <h3 className="text-3xl md:text-4xl font-extrabold text-text-primary mb-2 tracking-tight">
               Join <span className="text-primary">EchoCampus</span>

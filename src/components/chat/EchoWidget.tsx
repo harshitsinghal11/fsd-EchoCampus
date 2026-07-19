@@ -88,7 +88,7 @@ export function EchoWidget() {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 bg-primary hover:bg-primary-hover text-white rounded-full flex items-center justify-center transition-transform hover:scale-105 active:scale-95 z-50 ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
+        className={`fixed bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 bg-primary hover:bg-primary-hover text-white rounded-full flex items-center justify-center transition-transform z-50 ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
         style={{ marginRight: 'var(--scrollbar-width, 0px)' }}
         aria-label="Open ECHO AI Chat"
       >

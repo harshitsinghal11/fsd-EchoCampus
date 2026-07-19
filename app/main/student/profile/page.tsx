@@ -87,13 +87,13 @@ export default function StudentProfilePage() {
       <div className="max-w-4xl mx-auto">
 
         {/* Main Card */}
-        <div className="bg-surface rounded-2xl overflow-hidden border border-border shadow-md relative">
+        <div className="bg-surface rounded-2xl overflow-hidden border border-border relative">
 
           {/* Header Section */}
           <div className="bg-surface border-b border-border px-8 py-6 relative overflow-hidden">
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
               {/* Avatar */}
-              <div className="w-28 h-28 rounded-full bg-linear-to-br from-primary-light to-primary p-1 shadow-lg shadow-primary/20 group cursor-default shrink-0">
+              <div className="w-28 h-28 rounded-full bg-linear-to-br from-primary-light to-primary p-1 group cursor-default shrink-0">
                 <div className="w-full h-full bg-surface-hover rounded-full flex items-center justify-center border-4 border-background transition-colors">
                   <User className="w-12 h-12 text-primary" />
                 </div>
@@ -114,75 +114,65 @@ export default function StudentProfilePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
               {/* Email */}
-              <div className="group relative p-6 rounded-2xl bg-surface border border-border hover:bg-surface-hover hover:border-primary/30 transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-xl bg-surface-hover text-primary border border-border shadow-sm">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div className="overflow-hidden">
-                    <label className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1 block">
-                      Email Address
-                    </label>
-                    <p className="text-text-primary font-medium truncate" title={student.email}>{student.email}</p>
-                  </div>
+              <div className="flex items-start gap-4 p-5 rounded-xl bg-surface-hover/50 hover:bg-surface-hover transition-colors">
+                <div className="p-3 rounded-xl bg-primary/10 text-primary">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <div className="overflow-hidden">
+                  <label className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1 block">
+                    Email Address
+                  </label>
+                  <p className="text-text-primary font-medium truncate" title={student.email}>{student.email}</p>
                 </div>
               </div>
 
               {/* Session Code (Anonymous ID) */}
-              <div className="group relative p-6 rounded-2xl bg-surface border border-border hover:bg-surface-hover hover:border-primary/30 transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-xl bg-surface-hover text-primary border border-border shadow-sm">
-                    <Shield className="w-6 h-6" />
-                  </div>
-                  <div className="flex-1 overflow-hidden">
-                    <label className="text-xs font-bold text-primary uppercase tracking-wider mb-2 flex items-center gap-2">
-                      Anonymous Username
-                    </label>
-                    <p className="text-text-primary font-mono text-lg font-bold tracking-widest truncate">
-                      {student.sessionCode}
-                    </p>
-                  </div>
+              <div className="flex items-start gap-4 p-5 rounded-xl bg-surface-hover/50 hover:bg-surface-hover transition-colors">
+                <div className="p-3 rounded-xl bg-primary/10 text-primary">
+                  <Shield className="w-6 h-6" />
+                </div>
+                <div className="flex-1 overflow-hidden">
+                  <label className="text-xs font-bold text-primary uppercase tracking-wider mb-2 flex items-center gap-2">
+                    Anonymous Username
+                  </label>
+                  <p className="text-text-primary font-mono text-lg font-bold tracking-widest truncate">
+                    {student.sessionCode}
+                  </p>
                 </div>
               </div>
 
               {/* Account Type */}
-              <div className="group relative p-6 rounded-2xl bg-surface border border-border hover:bg-surface-hover hover:border-primary/30 transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-xl bg-surface-hover text-primary border border-border shadow-sm">
-                    <User className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1 block">
-                      Account Type
-                    </label>
-                    <p className="text-text-primary font-medium">Verified Student</p>
-                  </div>
+              <div className="flex items-start gap-4 p-5 rounded-xl bg-surface-hover/50 hover:bg-surface-hover transition-colors">
+                <div className="p-3 rounded-xl bg-primary/10 text-primary">
+                  <User className="w-5 h-5" />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1 block">
+                    Account Type
+                  </label>
+                  <p className="text-text-primary font-medium">Verified Student</p>
                 </div>
               </div>
 
               {/* Joined Date */}
-              <div className="group relative p-6 rounded-2xl bg-surface border border-border hover:bg-surface-hover hover:border-primary/30 transition-all duration-300">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-xl bg-surface-hover text-primary border border-border shadow-sm">
-                    <Calendar className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <label className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1 block">
-                      Joined Date
-                    </label>
-                    <p className="text-text-primary font-medium">{student.joinedAt}</p>
-                  </div>
+              <div className="flex items-start gap-4 p-5 rounded-xl bg-surface-hover/50 hover:bg-surface-hover transition-colors">
+                <div className="p-3 rounded-xl bg-primary/10 text-primary">
+                  <Calendar className="w-5 h-5" />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-text-muted uppercase tracking-wider mb-1 block">
+                    Joined Date
+                  </label>
+                  <p className="text-text-primary font-medium">{student.joinedAt}</p>
                 </div>
               </div>
-
             </div>
-
-            {/* Action Buttons */}
-            <ProfileActions dashboardRoute="/main/student/dashboard" />
-
           </div>
         </div>
+
+        {/* Action Buttons */}
+        <ProfileActions dashboardRoute="/main/student/dashboard" />
       </div>
     </div>
   );
-}
+}

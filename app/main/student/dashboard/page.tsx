@@ -85,7 +85,7 @@ export default async function StudentDashboard() {
 
         {/* 3. RECENT COMPLAINTS (Right 1/3) */}
         <section className="relative bg-surface rounded-2xl p-5 sm:p-6 border border-border shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col min-h-[350px] md:min-h-[400px]">
-          <div className="flex justify-between items-center mb-5 md:mb-6">
+          <div className="flex justify-between items-center mb-5 md:mb-6 shrink-0">
             <div className="flex items-center gap-2 md:gap-3">
               <h2 className="text-lg md:text-xl font-semibold text-text-primary">
                 Recent Complaints
@@ -97,7 +97,11 @@ export default async function StudentDashboard() {
               View All
             </Link>
           </div>
-          <ComplaintList isWidget={true} />
+          <div className="relative flex-1">
+            <div className="absolute inset-0 overflow-y-auto pr-2 -mr-2">
+              <ComplaintList isWidget={true} widgetLimit={10} />
+            </div>
+          </div>
         </section>
 
         {/* 4. LOST & FOUND SECTION (Full Width at Bottom) */}

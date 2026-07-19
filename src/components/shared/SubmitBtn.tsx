@@ -23,7 +23,6 @@ export const SubmitBtn: React.FC<SubmitBtnProps> = ({
       variant="primary"
       disabled={disabled || isSubmitting}
       className={`
-        hover:shadow-md
         ${fullWidth ? 'w-full' : ''}
         ${className}
       `}

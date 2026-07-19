@@ -102,7 +102,7 @@ export default function Login() {
 
       <div className="relative w-full max-w-md">
         {/* Glassmorphism Card matching the Dashboard */}
-        <div className="bg-surface backdrop-blur-xl rounded-2xl shadow-xl border border-border p-6 sm:p-8">
+        <div className="bg-surface rounded-2xl shadow-xl border border-border p-6 sm:p-8">
 
           {/* Header */}
           <div className="text-center mb-8">

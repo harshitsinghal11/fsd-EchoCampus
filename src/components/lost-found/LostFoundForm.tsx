@@ -149,7 +149,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
           placeholder="e.g. Realme TWS Earbuds"
         />
         <div className="flex justify-end mt-1.5">
-          <span className={`text-[11px] font-medium transition-colors ${isTitleInvalid ? 'text-danger' : 'text-text-disabled'}`}>
+          <span className={`text-xs font-medium transition-colors ${isTitleInvalid ? 'text-danger' : 'text-text-disabled'}`}>
             {titleCharCount} / 30
           </span>
         </div>
@@ -198,7 +198,7 @@ export default function LostFoundForm({ onSuccess }: { onSuccess: () => void }) 
           placeholder="Provide details (color, brand, scratches, distinguishing marks)..."
         />
         <div className="flex justify-end mt-1.5">
-          <span className={`text-[11px] font-medium transition-colors ${isDescriptionInvalid ? 'text-danger' : 'text-text-disabled'}`}>
+          <span className={`text-xs font-medium transition-colors ${isDescriptionInvalid ? 'text-danger' : 'text-text-disabled'}`}>
             {descriptionCharCount} / 50
           </span>
         </div>

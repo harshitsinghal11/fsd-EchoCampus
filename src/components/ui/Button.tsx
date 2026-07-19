@@ -24,12 +24,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      "inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition-all duration-300 hover:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-70 disabled:cursor-not-allowed shadow-sm";
+      "inline-flex items-center justify-center gap-2 font-semibold rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:opacity-70 disabled:cursor-not-allowed shadow-sm";
 
     const variants = {
       primary: "bg-button-primary hover:bg-primary-hover text-text-primary shadow-primary/20",
-      secondary: "bg-surface-hover backdrop-blur text-text-secondary hover:text-text-primary",
-      danger: "bg-surface-hover backdrop-blur text-text-secondary hover:bg-danger/20 hover:text-danger",
+      secondary: "bg-surface-hover text-text-secondary hover:text-text-primary",
+      danger: "bg-surface-hover text-text-secondary hover:bg-danger/20 hover:text-danger",
       ghost: "bg-transparent shadow-none hover:bg-surface-hover text-text-secondary hover:text-text-primary",
     };
 

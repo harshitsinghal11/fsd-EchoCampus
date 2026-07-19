@@ -121,7 +121,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
             <MotionItem
               key={item.id}
               onClick={() => setSelectedItem(item)}
-              className={`relative overflow-hidden rounded-xl p-3 sm:p-5 md:p-6 border transition-all duration-300 flex flex-col h-full cursor-pointer ${item.is_sold
+              className={`relative overflow-hidden rounded-lg p-3 sm:p-5 md:p-6 border transition-all duration-300 flex flex-col h-full cursor-pointer ${item.is_sold
                 ? "bg-surface border-border opacity-75 grayscale-30"
                 : "bg-surface border-border"
                 }`}
@@ -130,7 +130,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
               {item.image_url && (
                 <div className={`
               bg-surface-hover shrink-0 overflow-hidden border border-border flex items-center justify-center relative mb-3 sm:mb-4
-              rounded-lg sm:rounded-xl w-full aspect-[4/3] sm:aspect-video
+              rounded-md w-full aspect-[4/3] sm:aspect-video
             `}>
                   <Image
                     src={item.image_url}
@@ -149,12 +149,12 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
                 </h2>
 
                 {item.is_sold ? (
-                  <span className="shrink-0 inline-flex items-center gap-1 bg-surface-hover/80 text-text-muted border border-border text-[11px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                  <span className="shrink-0 inline-flex items-center gap-1 bg-surface-hover/80 text-text-muted text-xs font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
                     <CheckCircle className="w-3 h-3" />
                     Sold
                   </span>
                 ) : (
-                  <span className="shrink-0 bg-primary/10 text-primary border border-primary/20 text-[11px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                  <span className="shrink-0 bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
                     Active
                   </span>
                 )}
@@ -213,7 +213,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
         {selectedItem && (
           <div className="flex flex-col gap-4">
             {selectedItem.image_url && (
-              <div className="w-full relative aspect-video bg-surface-hover border border-border rounded-xl overflow-hidden mb-2">
+              <div className="w-full relative aspect-video bg-surface-hover border border-border rounded-lg overflow-hidden mb-2">
                 <Image
                   src={selectedItem.image_url}
                   alt={selectedItem.product_title}

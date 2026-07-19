@@ -47,6 +47,12 @@ Stores faculty metadata for the directory and faculty profile page.
 - `event_start_date`
 - `event_end_date`
 
+### `public.starred_announcements`
+- `id`
+- `user_id`
+- `announcement_id`
+- `created_at`
+
 ### `public.complaint_box`
 - `id`
 - `user_id`
@@ -113,6 +119,7 @@ Used by the E.C.H.O assistant for vector-search retrieval.
 - `student_profiles.user_id -> users.id`
 - `faculty_profiles.user_id -> users.id`
 - `announcements.author_id -> users.id`
+- `announcement_id -> public.announcements.id`
 - `complaint_box.user_id -> users.id`
 - `complaint_upvotes.complaint_id -> complaint_box.id`
 - `complaint_upvotes.user_id -> users.id`

@@ -78,7 +78,7 @@ export default function Directory() {
                   <h3 className="text-lg font-semibold text-text-primary transition-colors truncate">
                     {faculty.name}
                   </h3>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 mt-1">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20 mt-1">
                     {faculty.department}
                   </span>
                 </div>
@@ -108,14 +108,14 @@ export default function Directory() {
                 <div className="flex items-center justify-between pt-3 mt-3 border-t border-border/60">
                   {faculty.cabin_no && (
                     <div className="flex flex-col">
-                      <span className="text-[11px] uppercase tracking-wider text-text-disabled font-bold">Room</span>
+                      <span className="text-xs uppercase tracking-wider text-text-disabled font-bold">Room</span>
                       <span className="text-sm text-text-secondary font-medium">{faculty.cabin_no}</span>
                     </div>
                   )}
 
                   {faculty.experience !== null && faculty.experience !== undefined && (
                     <div className="flex flex-col text-right">
-                      <span className="text-[11px] uppercase tracking-wider text-text-disabled font-bold">Experience</span>
+                      <span className="text-xs uppercase tracking-wider text-text-disabled font-bold">Experience</span>
                       <span className="text-sm text-text-secondary font-medium">{faculty.experience} Yrs</span>
                     </div>
                   )}
@@ -127,4 +127,4 @@ export default function Directory() {
       )}
     </div>
   );
-}
+}

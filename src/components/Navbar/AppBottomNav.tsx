@@ -54,7 +54,7 @@ export default function AppBottomNav({ role }: { role: "student" | "faculty" | "
           />
 
           {/* Sheet */}
-          <div className={`relative bg-[#18181b] border-t border-border rounded-t-3xl shadow-lg transition-transform duration-300 ease-out pb-[env(safe-area-inset-bottom)] ${showMore ? "translate-y-0" : "translate-y-full"
+          <div className={`relative bg-[#18181b] border-t border-border rounded-t-2xl shadow-sm transition-transform duration-300 ease-out pb-[env(safe-area-inset-bottom)] ${showMore ? "translate-y-0" : "translate-y-full"
             }`}>
             <div className="flex justify-center pt-3 pb-2">
               <div className="w-12 h-1.5 bg-border rounded-full" />
@@ -75,8 +75,8 @@ export default function AppBottomNav({ role }: { role: "student" | "faculty" | "
                       className="flex flex-col items-center gap-2 group w-full"
                     >
                       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-colors ${isActive
-                        ? "bg-primary/20 text-primary border border-primary/30"
-                        : "bg-surface-hover text-text-secondary border border-border group-hover:border-primary/50 group-hover:text-primary"
+                        ? "bg-primary/10 text-primary"
+                        : "bg-surface-hover text-text-secondary hover:text-text-primary"
                         }`}>
                         <Icon className="w-6 h-6" />
                       </div>
@@ -94,7 +94,7 @@ export default function AppBottomNav({ role }: { role: "student" | "faculty" | "
 
       {/* Main Bottom Nav */}
       <div 
-        className="md:hidden fixed bottom-0 left-0 right-0 w-full bg-[#18181b] border-t border-border pb-[env(safe-area-inset-bottom)] z-50 shadow-lg"
+        className="md:hidden fixed bottom-0 left-0 right-0 w-full bg-[#18181b] border-t border-border pb-[env(safe-area-inset-bottom)] z-50"
         style={{ paddingRight: 'var(--scrollbar-width, 0px)' }}
       >
         <nav className="flex items-center justify-around h-16 px-1">
