@@ -163,7 +163,7 @@ export default function AnnouncementList({ isWidget = false, widgetLimit }: Anno
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className={`shrink-0 inline-flex items-center gap-1.5 font-medium text-primary ${isWidget ? "text-[10px] md:text-xs" : "text-xs font-semibold bg-primary/10 px-3 py-1.5 rounded-lg"
+                    className={`shrink-0 inline-flex items-center gap-1.5 font-medium text-primary ${isWidget ? "text-xs md:text-xs" : "text-xs font-semibold bg-primary/10 px-3 py-1.5 rounded-lg"
                       }`}
                   >
                     <ExternalLink className={isWidget ? "w-3 h-3" : "w-3.5 h-3.5"} />

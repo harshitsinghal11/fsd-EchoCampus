@@ -121,7 +121,7 @@ export default function BaseNavBar({ navLinks }: BaseNavBarProps) {
                     onClick={toggleMenu}
                     className={`group flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 
                       ${isActive
-                        ? "bg-primary/20 text-primary border border-primary/30 shadow-inner"
+                        ? "bg-primary/10 text-primary"
                         : "text-text-secondary hover:bg-surface-hover hover:text-text-primary border border-transparent"
                       }
                     `}

@@ -75,8 +75,8 @@ export default function AppBottomNav({ role }: { role: "student" | "faculty" | "
                       className="flex flex-col items-center gap-2 group w-full"
                     >
                       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-colors ${isActive
-                        ? "bg-primary/20 text-primary border border-primary/30"
-                        : "bg-surface-hover text-text-secondary border border-border group-hover:border-primary/50 group-hover:text-primary"
+                        ? "bg-primary/10 text-primary"
+                        : "bg-surface-hover text-text-secondary hover:text-text-primary"
                         }`}>
                         <Icon className="w-6 h-6" />
                       </div>
