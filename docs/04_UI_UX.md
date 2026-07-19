@@ -1,127 +1,130 @@
-# Design Principles
-- Separate the student and faculty experiences visually so the role context is obvious.
-- Use dashboard cards and feature-colored accents to make feature entry points easy to scan.
-- Keep forms close to their related feed or list so users can act without leaving the page.
-- Favor simple, direct interaction patterns over deep navigation.
+# UI / UX Reference
 
-# Brand Guidelines
-- Brand name: EchoCampus
-- Wordmark pattern: `Echo` in neutral text and `Campus` in blue accent
-- Student-side visual language: dark glassmorphism surfaces with vivid feature accents
-- Faculty-side visual language: light administrative surfaces with neutral cards and blue action accents
+## Current Visual Direction
+EchoCampus currently ships as a dark, high-contrast interface shared by both student and faculty areas. The design language is built around neutral zinc surfaces, an emerald primary accent, dense card-based layouts, modal-heavy actions, and motion-enhanced list rendering.
 
-# Color System
-- Student base background: slate and black gradients
-- Student text: white and light slate
-- Announcements accent: blue
-- Marketplace accent: purple
-- Complaints accent: orange
-- Primary Brand / Lost and found accent: teal/emerald (used for primary CTAs like Login/Signup)
-- Faculty base surfaces: white, gray, and soft blue
-- Destructive action accent: red
-- Success or active state accents: teal and yellow depending on feature
+This means the earlier "student dark / faculty light" split no longer reflects the codebase. Both role experiences now live inside the same dark shell.
 
-# Typography
-- Global font stack: `Arial, Helvetica, sans-serif`
-- Headings use bold or extra-bold weights
-- Supporting copy uses regular to medium weight text
-- Monospace styling appears for student anonymous session code and chat identity labels
+## Design Principles Visible in the Current Build
+- One shared app shell across roles
+- Card-first feature presentation
+- Mobile-first layouts that expand to multi-column sections on larger screens
+- Floating action buttons for create/report flows
+- Inline search and quick filtering on list-heavy screens
+- Modal expansion for viewing full content without route changes
+- Realtime-feeling feedback through optimistic updates, toasts, and animated entrances
 
-# Spacing & Layout
-- Main application pages commonly use `p-4`, `p-6`, or `p-8`
-- Content widths commonly cap at `max-w-4xl` or `max-w-7xl`
-- Auth pages dynamically use `min-h-[100dvh]` to perfectly fit the exact viewport without unwanted scrolling on mobile.
-- Dashboard and feature screens use 1-column mobile layouts that expand into 2-column or 3-column grids on larger screens
-- Form panels become sticky on large screens for marketplace, lost and found, and faculty announcements
-- Rounded cards and panels rely heavily on `rounded-xl`, `rounded-2xl`, and `rounded-3xl`
+## Theme Tokens in `app/globals.css`
+### Foundation
+- `--background: #09090b`
+- `--foreground: #fafafa`
+- `--color-surface: #18181b`
+- `--color-surface-hover: #27272a`
+- `--color-border: #27272a`
 
-# Design Tokens
-- Implemented tokens in `app/globals.css`: `--background` and `--foreground`
-- Formal shared design tokens for color scale, spacing scale, radius scale, shadows, or typography are not implemented. 
+### Typography
+- `--color-text-primary: #fafafa`
+- `--color-text-secondary: #d4d4d8`
+- `--color-text-muted: #a1a1aa`
+- `--color-text-disabled: #71717a`
 
-# Component Library
-- `ProtectedRoute`
-- `BaseNavBar` (Shared component used by both Student and Admin NavBars)
-- `NavBarStudent` (Wrapper defining student links)
-- `NavBarAdmin` (Wrapper defining admin links)
-- `FooterStudent`
-- `FooterAdmin`
-- `AnnouncementList`
-- `AnnouncementForm`
-- `ComplaintList`
-- `ComplaintForm`
-- `MarketplaceList`
-- `MarketplaceForm`
-- `LostFoundList`
-- `LostFoundForm`
-- `DirectoryPage`
+### Brand / Semantic
+- `--color-primary: #10b981`
+- `--color-primary-hover: #059669`
+- `--color-primary-light: #34d399`
+- `--color-success: #10b981`
+- `--color-warning: #f59e0b`
+- `--color-danger: #ef4444`
+- `--color-info: #0ea5e9`
 
-# Page Inventory
-- Public pages: landing, privacy policy, terms of service
-- Auth pages: login, signup
-- Student pages: dashboard, announcements, anonymous chat, complaints, directory, lost and found, marketplace, profile
-- Faculty/admin pages: dashboard, announcements, complaints, directory, lost and found, profile
+### Buttons / Inputs
+- `--color-button-primary: #10b981`
+- `--color-button-secondary: #27272a`
+- `--color-button-ghost: transparent`
+- `--color-input-background: #18181b`
+- `--color-input-border: #27272a`
+- `--color-input-focus: #10b981`
 
-# Page Specifications
-- Landing page: hero section, login CTA, feature cards, student footer
-- Login page: email/password form with password visibility toggle
-- Signup page: full name, email, password, faculty checkbox, inline success/error messaging
-- Student dashboard: announcement widget, marketplace widget, complaint widget, quick actions, lost and found widget
-- Student announcements page: full announcement feed with search input UI
-- Student chat page: full-height anonymous message feed with sticky mobile header (live presence counter and back navigation) and send bar
-- Student complaint page: complaint list and complaint submission form side by side on larger screens
-- Student directory page: searchable and filterable faculty directory
-- Student lost and found page: searchable feed using glassmorphism cards (timestamp positioned top-right above images) plus sticky report form
-- Student marketplace page: marketplace feed using structured glassmorphism cards (Indian currency formatting) plus sticky create form
-- Student profile page: email, anonymous code, role label, joined date
-- Faculty dashboard: complaints widget, announcements widget, lost items widget, quick navigation
-- Faculty announcements page: live feed plus sticky publish form
-- Faculty complaints page: complaint feed only
-- Faculty directory page: same directory component as student side
-- Faculty lost and found page: feed plus report form
-- Faculty profile page: name, department, email, phone, cabin, experience
+## PWA Color Metadata
+The web app manifest currently uses:
+- `background_color: #020617`
+- `theme_color: #0d9488`
 
-# Responsive Design Rules
-- Major content grids collapse to a single column on small screens.
-- Side forms become sticky only on large screens.
-- The student and faculty navigation systems use slide-out side panels from a top bar.
-- Student chat uses a dedicated full-height layout and hides the footer on that route.
-- Widget versions of list components use reduced item counts and tighter card layouts.
+Those values are close to the main UI palette but are not identical to the primary accent token in `globals.css`.
 
-# Loading States
-- Protected routes show a full-screen access verification spinner.
-- Directory shows a full-page loading spinner before data is available.
-- Announcement, complaint, marketplace, and lost and found lists use `Skeleton Loaders` matching their actual card layout, wrapped in React `<Suspense>` boundaries to prevent cumulative layout shift (CLS).
-- Submit buttons switch into loading states (spinners) during form actions.
+## Typography System
+- Headings primarily use `text-3xl md:text-4xl font-extrabold tracking-tight`
+- Card titles are mostly `text-base` or `text-lg` with `font-semibold`
+- Body copy is generally `text-sm` or `text-base`
+- Metadata and badges often use uppercase micro text such as `text-[11px]`
+- Student anonymous IDs and some chat labels use mono styling
 
-# Animations & Transitions
-- **Page Transitions:** All pages gently fade and slide up on enter via `framer-motion` integrated into `app/template.tsx`.
-- **List Cascades:** Items in the Announcements, Marketplace, Complaints, and Lost & Found feeds load sequentially (staggered animation) to create a dynamic cascading effect.
-- **Micro-Interactions:** Action buttons (e.g., Submit) slightly scale up on hover and scale down on tap to provide tactile feedback.
+### Current Font Wiring Note
+`app/globals.css` defines `--font-sans` and `--font-mono` as custom-property wrappers around Geist variables, but the root layout does not import or inject Next font variables. In practice, the UI currently depends on browser fallback fonts unless those variables are defined elsewhere.
 
-# Empty States
-- Announcements: `No announcements yet.`
-- Complaints: `No active complaints.`
-- Marketplace: `No items found.`
-- Lost and found: empty feed and no-search-match cards
-- Directory: `No faculty members found`
-- Chat: `No messages yet`
+## Layout Patterns
+- App pages commonly use `max-w-7xl mx-auto`
+- Public legal pages use `max-w-4xl`
+- Main content padding usually falls in the `p-4 / md:p-6 / lg:p-8` range
+- Dashboard cards use responsive grid compositions
+- Chat uses a full-height split layout with a participant sidebar on large screens
+- Bottom navigation is mobile-only
+- Footer is hidden on the student chat route
 
-# Error States
-- Login failures use toast notification popups.
-- Signup failures use inline error cards and toast notifications.
-- Marketplace form uses inline error messaging.
-- Complaint form uses inline success and error messaging.
-- Data fetching failures (e.g. lists, profiles, directory, chat) use global toast notification popups from the `sonner` library.
-- Directory fetch errors additionally render a retry card.
-- Unauthorized route access redirects instead of rendering an error page.
-- **Global Error Boundary (`error.tsx`)**: Gracefully catches React runtime errors with a stylized glassmorphism fallback UI.
-- **Global 404 Page (`not-found.tsx`)**: Catch-all for missing routes featuring dynamic Framer Motion animations.
+## Interaction Patterns
+- Announcements, marketplace, complaints, and lost-and-found items open inside shared modal shells
+- Search bars are reused across announcements, complaints, directory, marketplace, and lost and found
+- Floating action buttons open compose/report modals for announcements, marketplace, and lost and found
+- Complaint votes use optimistic UI updates
+- Chat messages use optimistic UI updates plus realtime reconciliation
+- Push opt-in appears as a floating bell button when the browser supports it
 
-# Accessibility Guidelines
-- Most form fields include visible labels.
-- Action buttons generally have clear text labels and visible focus styles.
-- Chat input and send button include explicit `aria-label` attributes.
-- Social icon links in footers include `aria-label` attributes.
-- A formal accessibility audit, keyboard interaction spec, contrast audit, and screen-reader validation process are not implemented. 
+## Motion Patterns
+- Student and faculty route templates fade and slide in
+- Shared list wrappers (`MotionList`, `MotionItem`) stagger item entrances
+- FABs and buttons use hover/tap scaling
+- Empty states, not-found, error, chat overlays, and assistant UI also add motion on mount/open
 
+## Major Screens
+- Public landing page
+- Login and signup
+- Student dashboard
+- Faculty dashboard
+- Announcements center
+- Complaints
+- Anonymous global chat
+- Directory
+- Lost and found
+- Marketplace
+- Student profile
+- Faculty profile
+- Privacy policy
+- Terms of service
+- Error and 404 states
+
+## Shared Components That Shape the Experience
+- `Button`
+- `FormInput`
+- `FormTextarea`
+- `ImageUpload`
+- `Modal`
+- `MagicButton`
+- `GlassCard`
+- `SearchBar`
+- `EmptyStates`
+- `Skeletons`
+- `AppNavbar`
+- `AppBottomNav`
+- `AppFooter`
+- `EchoWidget`
+
+## Current UX Characteristics
+- High action density, especially on dashboards and list screens
+- Frequent card reuse with minor per-feature variations
+- Strong reliance on iconography for feature framing
+- Consistent toast-based feedback through Sonner
+- Realtime freshness across most list surfaces
+- Modal-driven detail views rather than detail pages
+
+## Known Documentation Boundary
+This file reflects the UI that is implemented today. A deeper quality critique and polish backlog now lives in the root-level `polish.md`.

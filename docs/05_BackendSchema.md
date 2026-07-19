@@ -1,113 +1,192 @@
-# Database Overview
-- Primary relational backend: Supabase Postgres
-- Authentication source: Supabase Auth
-- Realtime chat backend: Supabase Realtime
-- Supabase stores user identity, profiles, faculty records, announcements, complaints, marketplace data, lost and found data, and anonymous chat messages.
+# Backend Schema and Data Model
 
-# ER Diagram
-```text
-auth.users
-  -> public.users
-       -> public.student_profiles
-       -> public.faculty_profiles
-       -> public.complaint_box
-       -> public.complaint_upvotes
-       -> public.marketplace
-       -> public.lost_found
-       -> public.announcements
-       -> public.chat_messages
+## Backend Overview
+EchoCampus uses Supabase as the primary backend platform:
+- Supabase Auth for identity
+- Supabase Postgres for product data
+- Supabase Realtime for chat presence and list invalidation
+- Supabase Storage for uploaded marketplace and lost-and-found images
 
-public.complaint_box
-  -> public.complaint_upvotes
-```
+## Role Storage Model
+- Persisted roles in the current signup flow: `student`, `admin`
+- `admin` currently represents the faculty-style user role
+- Some frontend code still accepts `faculty` as a compatibility alias, but the database-facing role written by signup is `admin`
 
-# Tables
-- `public.users`: public application user record with `id`, `email`, `full_name`, `role`, and `created_at`
-- `public.student_profiles`: student-only profile record keyed by `user_id`, storing `session_code`
-- `public.faculty_profiles`: faculty-only profile record keyed by `user_id`, storing department, phone, cabin, and experience
-- `public.announcements`: faculty-authored announcements linked to `users.id` through `author_id`
-- `public.complaint_box`: complaint records with `user_id`, `content`, `is_anonymous`, `urgency`, `category`, and `created_at`
-- `public.complaint_upvotes`: one-row-per-user-per-complaint vote table
-- `public.marketplace`: student marketplace listings with owner data, price, contact info, sold state, and timestamps
-- `public.lost_found`: lost and found records with owner, title, description, location, contact info, image data, resolve flag, and timestamp
-- `public.chat_messages`: Supabase table with `id`, `random_code`, `message`, and `created_at`
+## Core Tables
+### `public.users`
+- `id`
+- `email`
+- `full_name`
+- `role`
+- `created_at`
 
-# Relationships
-- `users.id` references `auth.users.id`
-- `student_profiles.user_id` references `users.id`
-- `faculty_profiles.user_id` references `users.id`
-- `announcements.author_id` references `users.id`
-- `complaint_box.user_id` references `users.id`
-- `complaint_upvotes.complaint_id` references `complaint_box.id`
-- `complaint_upvotes.user_id` references `users.id`
-- `marketplace.owner_id` references `users.id`
-- `lost_found.user_id` references `users.id`
+This table mirrors Supabase auth users into app-readable profile data.
 
-# Constraints
-- `users.role` must be `student` or `admin`
-- `users.email` is unique and required
+### `public.student_profiles`
+- `user_id`
+- `session_code`
+
+Stores the anonymous student identifier used in chat and complaint display.
+
+### `public.faculty_profiles`
+- `user_id`
+- `department`
+- `phone_no`
+- `cabin_no`
+- `experience_years`
+
+Stores faculty metadata for the directory and faculty profile page.
+
+### `public.announcements`
+- `id`
+- `title`
+- `content`
+- `link`
+- `author_id`
+- `created_at`
+
+### `public.complaint_box`
+- `id`
+- `user_id`
+- `content`
+- `is_anonymous`
+- `urgency`
+- `category`
+- `created_at`
+
+Implementation note:
+- complaints are inserted immediately and then enriched asynchronously
+- a transitional state such as `PENDING` can exist before AI classification settles
+
+### `public.complaint_upvotes`
+- `id`
+- `complaint_id`
+- `user_id`
+
+### `public.marketplace`
+- `id`
+- `owner_id`
+- `owner_name`
+- `owner_email`
+- `product_title`
+- `description`
+- `price`
+- `contact_info`
+- `image_url`
+- `is_sold`
+- `created_at`
+
+### `public.lost_found`
+- `id`
+- `user_id`
+- `title`
+- `description`
+- `location_found`
+- `contact_info`
+- `image_url`
+- `is_resolved`
+- `created_at`
+
+### `public.chat_messages`
+- `id`
+- `random_code`
+- `message`
+- `created_at`
+
+### `public.push_subscriptions`
+- `id`
+- `user_id`
+- `endpoint`
+- `p256dh`
+- `auth`
+- `created_at`
+
+### `public.campus_knowledge`
+Defined in `docs/06_VectorMigration.sql`.
+
+Used by the E.C.H.O assistant for vector-search retrieval.
+
+## Relationships
+- `users.id -> auth.users.id`
+- `student_profiles.user_id -> users.id`
+- `faculty_profiles.user_id -> users.id`
+- `announcements.author_id -> users.id`
+- `complaint_box.user_id -> users.id`
+- `complaint_upvotes.complaint_id -> complaint_box.id`
+- `complaint_upvotes.user_id -> users.id`
+- `marketplace.owner_id -> users.id`
+- `lost_found.user_id -> users.id`
+- `push_subscriptions.user_id -> users.id`
+
+## Storage Buckets
+- `marketplace_images`
+- `lost_found_images`
+
+The application stores the final public URL on the owning row and attempts file cleanup during owner-driven deletion flows.
+
+## Realtime Usage
+- `announcements`
+- `complaint_box`
+- `complaint_upvotes`
+- `marketplace`
+- `lost_found`
+- `chat_messages` plus presence state
+
+## RLS Intent
+- `users`: users can read their own row, and directory-safe faculty/admin rows are exposed for discovery
+- `student_profiles`: students can read and manage their own anonymous code row
+- `faculty_profiles`: authenticated users can read directory data; faculty/admin profile writes are owner-scoped
+- `announcements`: authenticated users can read; faculty-style users can write
+- `complaint_box`: authenticated users can read; students can create
+- `complaint_upvotes`: students can create/delete their own votes
+- `marketplace`: student-only read/write surface with owner update/delete
+- `lost_found`: authenticated read/write surface with owner update/delete
+- `chat_messages`: student-only chat read/write surface
+- `push_subscriptions`: authenticated users can store their own push subscription
+
+## Constraints and Limits
+- `users.role` is constrained to the active stored role set
 - `student_profiles.session_code` is unique
-- `faculty_profiles.experience_years` must be `>= 0`
-- `complaint_upvotes` enforces `unique (complaint_id, user_id)`
-- `marketplace.price` must be greater than `0` and less than or equal to `99999`
-- `marketplace.contact_info` must match a 10-digit numeric format
+- `marketplace.price` is positive and bounded
+- `marketplace.contact_info` is a 10-digit string
+- `complaint_upvotes` is unique per `(complaint_id, user_id)`
+- faculty experience is non-negative
 
-# Indexes
-- `idx_users_role`
-- `idx_student_profiles_session_code`
-- `idx_faculty_profiles_department`
-- `idx_announcements_created_at`
-- `idx_announcements_author`
-- `idx_complaint_box_created_at`
-- `idx_complaint_box_user`
-- `idx_complaint_upvotes_complaint`
-- `idx_complaint_upvotes_user`
-- `idx_marketplace_created_at`
-- `idx_marketplace_owner`
-- `idx_marketplace_is_sold`
-- `idx_lost_found_created_at`
-- `idx_lost_found_user`
+Posting limits enforced in the database:
+- complaints: 1 every 7 days
+- marketplace listings: 1 every 3 days
+- lost-and-found reports: 2 every 24 hours
 
-# RLS Policies
-- `users`: authenticated users can select their own row AND any row where `role = 'admin'` (for the directory); authenticated users can insert only their own row with matching auth email and valid role rules; no direct client update policy exists
-- `student_profiles`: authenticated users can read profiles, insert their own row, and update their own row
-- `faculty_profiles`: authenticated users can select all rows (for the directory); admin users can insert, and update only their own row
-- `announcements`: authenticated users can read all rows; only users with role `admin` can insert
-- `complaint_box`: authenticated users can read all complaints; only students can insert their own complaints
-- `complaint_upvotes`: authenticated users can read all votes; only students can insert their own votes and any authenticated user can delete only their own vote row
-- `marketplace`: only students can read and insert marketplace rows; only the owner can update and delete a row
-- `lost_found`: authenticated users can read all rows, insert only their own rows, and delete only their own rows
-- `chat_messages`: anyone can select, but only authenticated users can insert (anonymous inserts rely on session_code instead of user_id linking)
+## Auth-Driven Database Functions
+- `handle_new_auth_user()`
+- `handle_auth_user_email_update()`
 
-# Triggers
-- `enforce_lost_found_limit`: blocks more than 2 lost and found posts per user in 24 hours
-- `enforce_complaint_limit`: blocks more than 1 complaint per user in 7 days
-- `enforce_marketplace_limit`: blocks more than 1 marketplace listing per user in 3 days
-- `on_auth_user_created`: copies auth user data and extracts `role` and faculty profile data from metadata into `public.users` and `public.faculty_profiles`
-- `on_auth_user_email_updated`: syncs updated auth email into `public.users`
+These functions mirror auth users into `public.users` and keep email synchronized.
 
-# Functions
-- `check_lost_found_limit()`: trigger function for lost and found rate limiting
-- `check_complaint_limit()`: trigger function for complaint rate limiting
-- `check_marketplace_limit()`: trigger function for marketplace rate limiting
-- `handle_new_auth_user()`: dynamically extracts `role` from signup metadata and inserts user into `public.users`. If role is `admin`, it automatically extracts profile metadata and inserts into `public.faculty_profiles`
-- `handle_auth_user_email_update()`: sync function for auth email changes
+## App-Level Server Actions Touching the Schema
+- `addAnnouncement`
+- `submitComplaint`
+- `addMarketplaceItem`
+- `deleteMarketplaceItem`
+- `addLostFoundItem`
+- `deleteLostFoundItem`
+- `resolveLostFoundItem`
+- `savePushSubscription`
+- `sendChatMessage`
 
-# Storage Structure
-The repository implements Supabase Storage for object storage workflows. Lost and found images are securely uploaded to the `lost_found_images` storage bucket, and their public URLs are stored in `public.lost_found.image_url`. Orphaned images are securely cleaned up via Server Actions upon row deletion.
+## API Routes Touching the Schema
+- `GET /api/complaints`
+- `POST /api/complaints/upvote`
+- `POST /api/chat`
 
-# API Models
-- `GET /api/complaints` -> `{ complaints: [{ id, complaint, created_at, session_code, author_id, upvotes, current_user_has_upvoted }] }`
-- `POST /api/complaints/upvote` body -> `{ complaintId: string }`
-- `POST /api/complaints/upvote` response -> `{ message, added, current_user_has_upvoted }`
+## AI/Data Integration Notes
+- complaint urgency/category is generated asynchronously after insert
+- announcement text can be AI-rewritten before publish
+- complaint text can be AI-rewritten before submit
+- lost-and-found title/description can be AI-suggested from an image
+- E.C.H.O uses vector retrieval plus live Supabase data reads
 
-# Server Actions
-- `submitComplaint(formData: { complaint: string, isAnonymous: boolean })`
-- `addMarketplaceItem(formData: { product_title, description, price, contact_info, image_url? })`
-- `deleteMarketplaceItem(id, imageUrl)`
-- `addAnnouncement(formData: { title, content, link? })`
-- `addLostFoundItem(formData: { title, description, location, contact_info, image_url, type })`
-
-# Audit Strategy
-The repository does not implement audit tables, change history, moderation logs, or actor-based event tracking.
-
+## Important Accuracy Notes
+- The active codebase uses `location_found` for lost-and-found records, not `location`
+- The marketplace implementation expects `image_url` on listing rows
+- The repo includes vector-search scaffolding, but that subsystem should still be treated as evolving compared with the rest of the CRUD feature set

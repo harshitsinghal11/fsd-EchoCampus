@@ -1,47 +1,126 @@
-# Authentication & Routing Flow
+# Authentication and Authorization
 
-This document details the EchoCampus authentication flow, explaining how identities, roles, and routing are managed. The entire system relies on **Supabase Auth** paired with automated Postgres Database Triggers.
+## Auth Stack
+- Provider: Supabase Auth
+- Method in current repo: email + password
+- App-side session helpers:
+  - browser client: `src/lib/supabaseClient.ts`
+  - server client: `src/utils/supabaseServer.ts`
+  - middleware server client: `src/middleware.ts`
 
-## 1. The Core: Supabase Auth & `public.users`
-When anyone (student or faculty) signs up via email and password, their identity is created in Supabase's hidden `auth.users` table. 
+## Identity Model
+Supabase owns the canonical identity in `auth.users`. EchoCampus mirrors that identity into `public.users` through a database trigger so the app can join user records with role data and profile tables.
 
-We have a Postgres Trigger (`on_auth_user_created` or similar) that instantly catches this signup and creates a mirrored record in our own **`public.users`** table. This is the central table for all users.
+## Persisted Role Model
+- `student`
+- `admin`
 
-**Fields in `public.users`:**
-- `id` (UUID - Exactly matches the Supabase Auth ID)
-- `email` (String)
-- `full_name` (String)
-- `role` (String: `'student'` or `'admin'`)
+Important note:
+- the current faculty signup flow stores faculty-style users as `admin`
+- some frontend helpers and route guards still accept `faculty` as a compatibility alias
 
-## 2. How the System Knows Who is Faculty
-Users can explicitly select their role during signup using the **"I am a Faculty Member"** checkbox on the registration page.
-- When checked, the frontend passes `role: 'admin'` securely inside the Supabase Auth metadata (`raw_user_meta_data`), along with their **Department**, **Cabin Number**, **Experience**, and **Phone**.
-- A Postgres trigger (`handle_new_auth_user`) dynamically extracts this role from the metadata and assigns it in the `public.users` table.
-- If the role is `admin`, the trigger *also* extracts the additional faculty fields from the metadata and securely inserts them into the `public.faculty_profiles` table automatically, bypassing the need for client-side queries and bypassing email-confirmation session blockages.
+## Signup Flow
+### Student Signup
+1. User enters name, email, and password
+2. `supabase.auth.signUp()` is called with metadata:
+   - `full_name`
+   - `role: "student"`
+3. `handle_new_auth_user()` inserts the mirrored `public.users` row
+4. If a session is returned immediately:
+   - role is resolved
+   - a `student_profiles.session_code` row is created or recovered
+   - the user is redirected to the student dashboard
 
-## 3. How the System Knows Who is a Student
-- By default, if the faculty checkbox is not checked, the system assigns the `'student'` role.
-- **Anonymous Identity (`student_profiles`):** Because students need to use the Anonymous Global Chat and Anonymous Complaints, they are assigned a `session_code` (a random 6-character string like `AX79B2`).
-- When a student logs in, the app checks the **`public.student_profiles`** table. If they don't have a session code yet, it generates one and saves it. This code is stored in the database and also in their browser's `sessionStorage`. When they send a chat message, the client sends the `session_code` instead of their `user.id`.
+### Faculty-Style Signup
+1. User enables the "I am a Faculty Member" option
+2. Additional metadata fields are collected:
+   - department
+   - cabin number
+   - phone number
+   - experience years
+   - faculty access code
+3. `verifyFacultyCode()` compares the entered code against `FACULTY_SECRET_CODE`
+4. On success, `supabase.auth.signUp()` is called with metadata:
+   - `role: "admin"`
+   - faculty profile metadata
+5. `handle_new_auth_user()` inserts:
+   - the `public.users` row
+   - the matching `faculty_profiles` row
+6. If a session is returned immediately, the user is redirected to the faculty dashboard
 
-## 4. The Login & Routing Flow
-When a user logs in (`app/auth/login/page.tsx`), the application performs the following steps:
-1. Authenticates them via Supabase Auth.
-2. Checks their `role` securely via the JWT session metadata.
-3. If they are `'admin'`, they are instantly routed to `/main/faculty/dashboard`.
-4. If they are `'student'`, their `session_code` is fetched, and they are routed to `/main/student/dashboard`.
+## Login Flow
+1. The login page first checks `sessionStorage` for `userRole`
+2. If that hint is missing, it checks for an active Supabase session
+3. On submit, the app calls `supabase.auth.signInWithPassword()`
+4. `ensureOwnUserRow()` verifies that the mirrored app row exists
+5. `fetchUserRole()` resolves the current app role from `public.users`
+6. Students get or restore their anonymous `session_code`
+7. The resolved role is stored in `sessionStorage`
+8. The user is redirected to the correct dashboard
 
-## 5. Client-Side Auth Protection (Login / Signup)
-To prevent authenticated users from repeatedly viewing the login and signup forms, a client-side `useEffect` hook checks for an active session upon mounting `app/auth/login/page.tsx` and `app/auth/signup/page.tsx`.
-1. It first checks `sessionStorage` for an existing `userRole`. If found, it routes them directly to their respective dashboard.
-2. As a fallback, it queries `supabase.auth.getSession()` natively in case `sessionStorage` was cleared but the browser cookie/local storage persists.
+## Session Persistence
+- Supabase manages the underlying authenticated session
+- EchoCampus stores lightweight client hints in `sessionStorage`:
+  - `userRole`
+  - `userSessionCode` for students
+- Those values are used only to speed up redirects and anonymous-chat identity reuse
 
-## 6. Route Protection (Middleware & Layouts)
-Once inside the `/main/*` area, route protection is strictly enforced via two un-bypassable server layers:
+## Student Anonymous Identity
+Students use a persistent anonymous code stored in `student_profiles.session_code`.
 
-1. **Next.js Edge Middleware:** Actively monitors the session on every request. It reads the user's role directly from their encrypted JWT `user_metadata` instead of querying the database on every page load.
-2. **Server-Component Layout Checks:** The root layout files (`app/main/faculty/layout.tsx` and `app/main/student/layout.tsx`) perform a strict Server-Side Role check during rendering. 
+Usage:
+- complaint author masking/display
+- anonymous global chat sender identity
+- marketplace owner alias generation for student listings
 
-**Why this structure?**
-By performing these checks entirely on the Node/Edge servers before any HTML is sent to the browser, we removed the need for client-side loading spinners (like a `ProtectedRoute.tsx` wrapper). This provides an instantaneous routing experience while ensuring role boundaries are strictly enforced.
+Current implementation detail:
+- `generateUniqueCode(7)` returns a stylized format such as `@ABCD_#`
+- the code is stored in the database and also cached in `sessionStorage`
 
+## Request-Time Protection
+`src/middleware.ts` protects `/main/*` routes.
+
+It performs:
+1. session lookup
+2. role resolution from metadata or `public.users`
+3. redirect of unauthenticated users to `/auth/login`
+4. redirect of students away from faculty routes
+5. redirect of faculty-style users away from student routes
+
+## Render-Time Protection
+The root layouts for each protected tree repeat role validation:
+- `app/main/student/layout.tsx`
+- `app/main/faculty/layout.tsx`
+
+This ensures that even after middleware routing, the wrong route tree does not render for an authenticated user with the wrong role.
+
+## Database Side Auth Support
+### Trigger Functions
+- `handle_new_auth_user()`
+- `handle_auth_user_email_update()`
+
+### Tables Involved
+- `auth.users`
+- `public.users`
+- `public.student_profiles`
+- `public.faculty_profiles`
+
+## Authorization Boundaries
+- Middleware: request-time route separation
+- Root layouts: render-time route separation
+- RLS policies: database authorization
+- Server Actions / API routes: mutation validation, user checks, and side effects
+
+## Logout Flow
+`ProfileActions` signs the user out through Supabase and clears cached local/session storage values before routing back to `/auth/login`.
+
+## Environment Variables Used by Auth
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- optional legacy fallback: `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `FACULTY_SECRET_CODE`
+
+## Practical Limitations
+- There is no dedicated password-reset flow implemented in the repository
+- There is no profile-edit UI for student or faculty details
+- There is no admin-only control panel beyond faculty-style access

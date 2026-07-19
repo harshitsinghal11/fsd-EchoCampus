@@ -1,81 +1,99 @@
-# Project Vision
-EchoCampus is a campus web platform that brings common student and faculty workflows into one authenticated system. The implemented product focuses on announcements, faculty discovery, anonymous student interaction, complaint submission, lost and found reporting, and a student marketplace.
+# Product Requirements Document
 
-# Problem Statement
-Campus communication and day-to-day utility workflows are often split across informal chats, notice boards, and personal contacts. The project solves that by giving students and faculty one shared platform for official updates, issue reporting, item exchange, and campus discovery.
+## Product Summary
+EchoCampus is a campus utility platform for students and faculty-style users. It centralizes communication, anonymous participation, lightweight commerce, item recovery, discovery of faculty details, and AI-assisted support inside one authenticated web app.
 
-# Goals & Objectives
-- Centralize campus utility features in one web application.
-- Give students a dashboard for announcements, complaints, chat, lost and found, marketplace, and directory access.
-- Give faculty a controlled space to publish announcements and review complaint activity.
-- Preserve student privacy through anonymous chat identities and anonymous complaint submission.
-- Enforce role-based route access between student and faculty areas.
+## Primary Product Goals
+- Reduce fragmentation between notices, complaints, peer communication, and campus utility workflows
+- Give students one place for announcements, complaints, anonymous chat, directory search, marketplace usage, and lost-and-found reporting
+- Give faculty-style users one place to publish updates, monitor complaints, and stay aware of campus activity
+- Preserve student identity where anonymity is intentional
+- Enforce route-level and database-level separation between student-only and faculty-style capabilities
 
-# Target Audience
+## User Segments
 - Students
 - Faculty members
-- Admin users who operate through the same access path as faculty
+- Admin users who currently share the same product path and permissions model as faculty
 
-# User Roles & Permissions
-- Student: can access student pages, read announcements, use anonymous chat, submit complaints, upvote complaints, browse faculty directory, create marketplace listings, mark own marketplace listings as sold, create lost and found posts, delete own lost and found posts, and view student profile details.
-- Admin (Faculty): can access faculty pages, post announcements, view complaints, browse directory, create lost and found posts, delete own lost and found posts, and view faculty profile details.
-- Admin: treated as faculty-like in middleware, protected routes, and profile/announcement permissions. A separate admin interface is not implemented.
+## Role Model
+- `student`
+  - Can access all student routes
+  - Can participate in anonymous chat
+  - Can submit and vote on complaints
+  - Can use the marketplace
+  - Can browse announcements, directory, and lost-and-found content
+- `admin`
+  - Represents the current faculty-style role written by signup
+  - Can access all faculty routes
+  - Can publish announcements
+  - Can review complaints
+  - Can use directory and lost-and-found features
+- `faculty`
+  - Treated as a legacy-compatible alias in some frontend guards
+  - Not created by the current signup flow, which provisions faculty as `admin`
 
-# Core Features
-- Role-based authentication with student and faculty/admin route separation
-- Faculty announcements feed and announcement publishing
-- Student complaint box with optional anonymous submission and upvoting
-- Student-only marketplace with owner-controlled sold status
-- Lost and found feed with posting and owner deletion
+## Core User-Facing Features
+- Role-based login and signup using Supabase Auth
+- Faculty access-code validation during signup
+- Student and faculty dashboards
+- Announcement publishing and browsing
+- Complaint submission with optional anonymity
+- Complaint voting
+- AI complaint enhancement and AI urgency/category analysis
+- Faculty AI complaint summary widget
+- Anonymous student global chat with live presence
+- Student marketplace with image uploads
+- Lost-and-found reporting with image uploads and AI autofill from image analysis
 - Searchable faculty directory
-- Anonymous student chat powered by Supabase Realtime
 - Student and faculty profile pages
+- Push notifications and PWA installability
+- Embedded E.C.H.O AI assistant widget
 
-# Functional Requirements
-- The application must allow users to sign up and log in with email and password through Supabase Auth.
-- Faculty signup requires explicitly checking the 'I am a Faculty Member' checkbox which dynamically prompts for faculty profile data and assigns the 'admin' role.
-- Student logins must generate or reuse a unique anonymous `session_code` stored in `student_profiles`.
-- Unauthenticated users attempting to access `/main/*` routes must be redirected to `/auth/login`.
-- Students must be blocked from faculty routes and faculty/admin users must be blocked from student routes.
-- Admin (Faculty) users must be able to post announcements tied to their user account.
-- Authenticated users must be able to read announcements and the faculty directory.
-- Students must be able to submit one complaint at a time, with optional anonymous mode, and other students must be able to upvote complaints.
-- Students must be able to create one marketplace listing within the configured posting window and mark their own listing as sold.
-- Authenticated users must be able to create lost and found posts, and only the owner of a post must be able to delete it.
-- Students must be able to access the anonymous chat room and send messages under their session code.
-- Users must be able to open a profile page that reflects their role-specific data.
+## Functional Requirements
+- Users must be able to sign up and log in with email/password through Supabase Auth
+- Faculty-style signup must require a valid `FACULTY_SECRET_CODE`
+- Faculty-style signup must collect department, cabin number, phone, and experience metadata
+- Student sessions must generate or recover a `session_code` in `student_profiles`
+- Unauthenticated users trying to access `/main/*` routes must be redirected to `/auth/login`
+- Student users must be blocked from faculty routes
+- Faculty-style users must be blocked from student routes
+- Faculty-style users must be able to publish announcements with optional external links
+- Students must be able to submit complaints with optional anonymity
+- Complaint records must be inserted immediately, then enriched asynchronously with AI urgency/category metadata
+- Students must be able to vote on complaints
+- Students must be able to create marketplace listings, upload optional images, mark their own items as sold, and delete their own items
+- Authenticated users must be able to create lost-and-found reports, upload optional images, mark their own reports as resolved, and delete their own reports
+- Students must be able to access the anonymous global chat and send messages under their anonymous session code
+- The product must provide an embedded AI assistant experience via the E.C.H.O widget
+- Authenticated users must be able to opt into push notifications from supported browsers
 
-# Non-Functional Requirements
-- Protected app areas rely on authenticated sessions and role validation.
-- The codebase uses TypeScript with strict mode enabled.
-- Core data integrity is enforced through database constraints, RLS policies, and triggers.
-- Major screens are responsive and switch between stacked and multi-column layouts.
-- Chat updates are delivered in real time through Supabase Realtime subscriptions.
-- Form submissions provide visible loading or error feedback through alerts, inline messages, or loading spinners.
+## Business Rules
+- Current persisted role values are `student` and `admin`
+- Only faculty-style users (`admin`, plus legacy `faculty` handling in route guards) can access faculty pages
+- Only students can access marketplace and anonymous chat
+- Only students can submit complaint votes
+- Complaint posting is limited to 1 complaint every 7 days per student
+- Marketplace posting is limited to 1 listing every 3 days per student
+- Lost-and-found posting is limited to 2 reports every 24 hours per user
+- Only the creator of a marketplace listing can mark it sold or delete it
+- Only the creator of a lost-and-found report can resolve or delete it
+- High-urgency complaints can trigger push notifications to subscribed users
 
-# Business Rules
-- Only users with role `faculty` or `admin` can use faculty routes.
-- Only users with role `student` can use student routes.
-- Faculty account recognition depends on users explicitly selecting 'I am a Faculty Member' during signup which provisions them as 'admin'.
-- Only mapped faculty records can create announcements.
-- Students can submit only 1 complaint every 7 days.
-- Students can create only 1 marketplace listing every 3 days.
-- Users can create only 2 lost and found posts in 24 hours.
-- Only students can create complaints and complaint upvotes.
-- Only students can read and create marketplace listings.
-- Only the listing owner can mark a marketplace item as sold.
-- Only the lost and found post owner can delete the post.
+## Non-Functional Requirements
+- The application must remain responsive across mobile and desktop layouts
+- Protected routes must be enforced on both request-time and render-time boundaries
+- Database integrity must rely on RLS, constraints, and triggers, not only client validation
+- Realtime feeds should update without full page reloads
+- AI-assisted workflows must fail gracefully when Gemini or network operations are unavailable
+- Browser push flows must degrade safely when service workers or PushManager are unsupported
 
-# Assumptions
+## Out of Scope / Current Constraints
+- There is no dedicated super-admin product surface
+- There is no automated moderation dashboard or audit-log UI
+- There is no formal payments flow for marketplace activity
+- There is no CI/CD pipeline or automated deployment workflow in the repository
+- There is no test suite in the repository at the moment
 
-- Supabase environment variables are configured correctly in the runtime environment.
-- Realtime environment variables are configured correctly for anonymous chat.
-- Supabase Auth email/password is the active authentication method.
-- Users access the application through a modern browser with JavaScript enabled.
-
-# Constraints
-- A separate admin dashboard is not implemented.
-- Marketplace is unavailable to faculty and admin users because both routing and RLS restrict it to students.
-- Lost and found image data is securely uploaded to a dedicated Supabase Storage bucket (`lost_found_images`), and its public URL is referenced in the database.
-- Logging, monitoring, analytics, and deployment automation are not implemented in the repository.
-- The chat feature is available only on the student side and depends on Supabase Realtime.
+## Product Status Notes
+- Announcements, complaints, marketplace, lost and found, directory, profiles, push notifications, and anonymous chat are active implementation areas
+- E.C.H.O is implemented as an embedded widget and streaming API path, but its vector-knowledge pipeline should still be treated as an evolving subsystem

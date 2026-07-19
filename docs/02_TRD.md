@@ -1,117 +1,130 @@
-# Tech Stack
-- Framework: Next.js 16 with App Router
-- UI: React 19
-- Language: TypeScript 5
-- Styling: Tailwind CSS 4
-- Auth and primary database: Supabase Auth and Supabase Postgres
-- Server-side Supabase session support: `@supabase/ssr`
-- Realtime anonymous chat: Supabase Realtime Channels (Phase 4)
-- Icons: `lucide-react`
+# Technical Requirements Document
 
-# Project Structure
+## Stack
+- Framework: Next.js 16 App Router
+- UI runtime: React 19
+- Language: TypeScript 5
+- Styling: Tailwind CSS 4 with CSS custom-property tokens in `app/globals.css`
+- Auth and relational data: Supabase Auth + Supabase Postgres
+- Realtime: Supabase Realtime Channels
+- Storage: Supabase Storage
+- AI: Google Gemini via `@google/generative-ai`
+- Client data caching: SWR
+- Motion: Framer Motion
+- Notifications/PWA: Serwist + Web Push
+
+## Repository Structure
 ```text
 app/
   api/
-    auth/
-      faculty-status/
+    chat/
     complaints/
-    marketplace/
+      upvote/
   auth/
     login/
     signup/
   main/
-    student/
     faculty/
+    student/
   privacy/
   terms/
+docs/
+public/
+scripts/
 src/
+  actions/
   components/
-    announcements/
-    complaints/
-    marketplace/
-    NavBar/
-    Footer/
-    shared/
   hooks/
+    data/
   lib/
   types/
   utils/
-assets/
-  sql/
-docs/
-public/
+  middleware.ts
 ```
 
-# System Architecture
-- The app uses a hybrid client-heavy Next.js architecture.
-- Page rendering and navigation live in the Next.js App Router under `app/`.
-- Supabase handles authentication, role data, profiles, announcements, complaints, marketplace records, lost and found records, and the directory (via faculty profiles).
-- Supabase Realtime handles the anonymous chat stream.
-- Middleware and protected client layouts enforce route access by role.
-- Database writes (mutations) for forms are routed through Next.js Server Actions, while reads mostly use the Supabase browser client directly.
+## Runtime Architecture
+- Public pages and route handlers live in `app/`
+- Student and faculty route trees are separated under `app/main/student` and `app/main/faculty`
+- Request-time auth gating is handled by `src/middleware.ts`
+- Render-time role validation is repeated in the student and faculty root layouts
+- Feature reads are mostly client-side through SWR hooks backed by Supabase or local API handlers
+- Feature writes are mostly handled through Server Actions in `src/actions/*`
+- Complaint voting and E.C.H.O streaming responses use route handlers under `app/api/*`
 
-# Frontend Architecture
-- Route groups are split into public pages, auth pages, student pages, and faculty pages.
-- Shared feature logic lives in reusable client components under `src/components`.
-- Layout files wrap student and faculty areas with role-protected navigation and footers.
-- Feature pages mostly compose list and form components rather than owning full business logic.
-- Local React state with `useState`, `useEffect`, `useCallback`, and `useMemo` manages UI interactions.
-- Session-specific client values such as the student anonymous code are read from `sessionStorage`.
+## Frontend Architecture
+- Shared UI primitives live in `src/components/ui/*`
+- Shared app shell pieces live in `src/components/shared/*`, `src/components/Navbar/*`, and `src/components/footer/*`
+- Each feature has a dedicated component area:
+  - `announcements/`
+  - `complaints/`
+  - `marketplace/`
+  - `lost-found/`
+  - `directory/`
+  - `chat/`
+- Mobile navigation uses a bottom nav plus an additional "More" sheet for students
+- Desktop navigation uses a top bar that opens a slide-out side panel
+- Full-page chat hides the footer and expands into a dedicated full-height layout
 
-# Backend Architecture
-- Supabase Postgres is the primary relational backend.
-- Supabase RLS policies are the main authorization layer for direct client database access.
-- Supabase triggers enforce posting limits and bootstrap public profile data from `auth.users`.
-- Next.js Server Actions under `src/actions/` securely handle write operations (e.g. creating announcements, marketplace items, complaints, lost and found). Route handlers under `app/api` are still used for some custom logic.
-- Supabase Realtime powers the student chat room, sharing the primary authentication state.
+## Data Access Model
+- Announcements: SWR + Supabase client queries, realtime invalidation
+- Complaints: SWR + `/api/complaints`, realtime invalidation, `/api/complaints/upvote` for vote toggling
+- Marketplace: SWR + Supabase client queries, realtime invalidation, Server Actions for create/delete
+- Lost and found: SWR + Supabase client queries, realtime invalidation, Server Actions for create/delete/resolve
+- Directory: SWR + Supabase client query over `users` + `faculty_profiles`
+- Chat: Supabase client reads + realtime presence/insert subscriptions, Server Action for moderated insert
+- Push subscriptions: Server Action persisting browser subscription data to Supabase
 
-# Authentication & Authorization
-- Authentication uses Supabase email/password sign-in and sign-up.
-- Faculty signup utilizes a dynamic form that passes metadata into Supabase Auth. A backend Postgres trigger handles row creation without RLS obstruction.
-- After login or signup, `ensureOwnUserRow` creates or restores the matching `public.users` record and fills faculty mapping data when applicable.
-- Students receive a generated `session_code` from `student_profiles` for anonymous identity usage.
-- `src/middleware.ts` blocks unauthenticated access to `/main/*` and redirects users away from the wrong role area.
-- `src/components/ProtectedRoute.tsx` repeats session and role validation on the client side.
-- Authorization inside the database is enforced through RLS policies per table.
+## Authentication and Authorization
+- Supabase Auth provides email/password authentication
+- Signup writes user metadata that is consumed by a Postgres trigger to populate `public.users`
+- Faculty signup is validated through the `verifyFacultyCode` server action before `supabase.auth.signUp`
+- Students receive a persisted anonymous `session_code` in `student_profiles`
+- Middleware protects `/main/*` routes and redirects users away from the wrong role tree
+- Layout-level role checks in `app/main/student/layout.tsx` and `app/main/faculty/layout.tsx` enforce the same separation at render time
+- Database RLS policies remain the final authorization boundary for reads and writes
 
-# API Design Standards
-- APIs are implemented as local Next.js route handlers under `app/api`.
-- Endpoints return JSON objects and use standard HTTP status codes such as `200`, `201`, `400`, `401`, `403`, `429`, and `500`.
-- Complaint endpoints own server-side aggregation and upvote toggle logic.
-- Marketplace creation and validation use Server Actions, while owner-based sold updates are handled via client-side Supabase calls.
-- Validation is split across route handlers, database constraints, RLS policies, and triggers.
-- API versioning, OpenAPI documentation, pagination contracts, and formal schema generation are not implemented. w
+## Database Responsibilities
+- `public.users` mirrors the canonical auth identity into app-readable profile data
+- `student_profiles` stores anonymous student identifiers
+- `faculty_profiles` stores faculty metadata shown in the directory and profile pages
+- `announcements`, `complaint_box`, `complaint_upvotes`, `marketplace`, `lost_found`, and `chat_messages` power the main user features
+- `push_subscriptions` stores browser push endpoints for notification delivery
+- `campus_knowledge` is introduced by the vector migration file for E.C.H.O knowledge retrieval
+- Triggers enforce posting limits and sync auth-driven user records
 
-# State Management
-- UI state is local to each page or component through React hooks.
-- Auth state is read from Supabase session helpers on demand.
-- Student anonymous identity is cached in `sessionStorage` as `userSessionCode`.
-- Server state and data fetching are globally managed and cached using `swr` via custom hooks in `src/hooks/data/`.
+## AI Architecture
+- `src/actions/aiActions.ts` contains:
+  - announcement enhancement
+  - complaint enhancement
+  - complaint summary generation
+  - lost-item image analysis
+- Complaint classification is performed asynchronously after the complaint row is inserted
+- Chat moderation uses Gemini in `src/actions/chatActions.ts` before writing a message
+- `/api/chat` streams assistant responses and combines vector-search context with live database reads
 
-# Caching Strategy
-- The application implements **SWR (stale-while-revalidate)** for aggressive client-side caching of data.
-- Supabase queries are wrapped in custom hooks (e.g. `useMarketplace`, `useComplaints`) powered by SWR. This ensures immediate cached responses while background re-validation occurs.
-- Cache invalidation is handled gracefully through Supabase Realtime subscriptions that call SWR's `mutate()` when underlying data changes.
+## Storage and Asset Handling
+- Lost-and-found uploads go to the `lost_found_images` bucket
+- Marketplace uploads go to the `marketplace_images` bucket
+- Uploaded image URLs are stored directly on the corresponding rows
+- Delete actions attempt to remove orphaned storage files when the owning row is removed
 
-# Security Considerations
-- Supabase public key validation rejects accidental service role usage in `supabaseConfig.ts`.
-- Middleware and protected routes prevent unauthorized page access.
-- RLS policies restrict reads and writes by role and record ownership.
-- Marketplace and complaint APIs check the authenticated user before writing data.
-- Database constraints validate values such as role, price, phone number format, and unique vote combinations.
-- Posting limits are enforced in the database through triggers rather than only in the client.
+## PWA and Notifications
+- Serwist is configured in `next.config.ts` and `app/sw.ts`
+- The service worker precaches app assets and handles push display/click behavior
+- `NotificationManager` registers the service worker, requests notification permission, subscribes the user, and stores the subscription through a Server Action
+- Broadcast notifications are sent through `web-push` using VAPID keys
 
-# Performance Strategy
-- Dashboard widgets fetch limited subsets of data instead of full collections.
-- SQL indexes are present on the main foreign keys and time-based sort columns.
-- Lists are ordered in the database before rendering.
-- Directory and lost and found search/filter behavior is handled on the client after fetch.
-- Chat reads are capped to the latest 500 ordered messages.
-- Pagination, background jobs, image optimization pipelines, and server caching are not implemented.
+## Environment Requirements
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` or legacy `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `GEMINI_API_KEY`
+- `FACULTY_SECRET_CODE`
+- `NEXT_PUBLIC_VAPID_PUBLIC_KEY`
+- `VAPID_PRIVATE_KEY`
 
-# Logging & Monitoring
-The codebase currently relies on `console.error`, `console.log`, alerts, and simple inline messages. There is no centralized logging, metrics, tracing, or monitoring integration.
-
-# Deployment Strategy
-The repository does not contain CI/CD workflows, container definitions, infrastructure-as-code, or platform-specific deployment configuration beyond standard Next.js project files and environment variable usage.
-
+## Operational Notes
+- `npm run dev` uses the Next.js webpack dev server
+- The service worker is disabled in development mode
+- Vercel Speed Insights is mounted globally in `app/layout.tsx`
+- The repository currently does not include tests, CI, infrastructure-as-code, or deployment workflows

@@ -1,52 +1,86 @@
 # EchoCampus
 
 ## Overview
-EchoCampus is a campus web platform that centralizes common student and faculty workflows into one authenticated system. The current implementation focuses on announcements, faculty discovery, anonymous student interaction, complaint submission, lost and found reporting, and a student-only marketplace.
+EchoCampus is a role-based campus utility platform built with Next.js, Supabase, and Gemini. It combines announcements, anonymous student complaints, anonymous global chat, lost and found reporting, a student marketplace, faculty discovery, profile pages, push notifications, and an embedded AI assistant into one authenticated product.
 
-## Key Features
-- Role-based authentication with student and faculty/admin route separation
-- Client-side auth redirection to prevent login screen loops for active sessions
-- Full-screen dynamic UI using 100dvh for optimal mobile viewport fitting
-- Faculty announcement publishing and announcement feed
-- Student complaint submission with anonymous mode and upvoting
-- Student-only marketplace with owner-controlled sold status
-- Lost and found posting, browsing, and owner deletion
-- AI-Powered Announcement Enhancement using Gemini (transforms quick notes into professional announcements)
-- AI-Powered Complaint Intelligence (auto-detects urgency and category, sending campus-wide alerts for HIGH urgency, plus AI Summarization Widget on Faculty Dashboard)
-- Smart Image Recognition for Lost & Found (auto-fills title and description via Gemini Vision)
-- Unified Expanded View Modals for seamless browsing of lengthy content
-- Searchable faculty directory
-- Anonymous student chat powered by Supabase Realtime
+## Current Feature Set
+- Role-based authentication with student and faculty-style access separation
+- Faculty onboarding gated by a server-validated faculty access code
+- Student dashboard with announcement, marketplace, complaint, and lost-and-found widgets
+- Faculty dashboard with complaint monitoring, announcement visibility, lost-and-found visibility, and AI complaint insights
+- Announcement publishing with optional link attachment and AI rewrite assistance
+- Complaint submission with optional anonymity, voting, AI enhancement, background urgency/category classification, and high-urgency push alerts
+- Anonymous student global chat with Supabase Realtime presence, optimistic messages, and AI toxicity moderation before insert
+- Student-only marketplace with image upload, posting limits, sold-state toggling, and owner deletion
+- Lost and found reporting with image upload, AI image-assisted autofill, resolved-state toggling, and owner deletion
+- Searchable faculty directory backed by `users` + `faculty_profiles`
 - Student and faculty profile pages
-- Installable Progressive Web App (PWA) functionality
-- Native Web Push Notifications (Desktop & Mobile)
+- Installable PWA setup via Serwist service worker
+- Browser push notification subscription and broadcast delivery
+- Embedded E.C.H.O AI widget with streamed responses from vector-search scaffolding plus live Supabase data
 
 ## Tech Stack
-- Next.js 16
+- Next.js 16 App Router
 - React 19
 - TypeScript 5
 - Tailwind CSS 4
 - Supabase Auth
 - Supabase Postgres
 - Supabase Realtime
-- Google Gemini AI SDK (@google/generative-ai)
-- Zod
-- Lucide React
+- Supabase Storage
+- SWR
+- Framer Motion
+- Google Gemini (`@google/generative-ai`)
+- Serwist
+- Sonner
+- Vercel Speed Insights
 
-## Screenshots (Optional)
-No screenshots are included in the repository yet.
+## Architecture Snapshot
+- Public pages live under `app/`
+- Protected student routes live under `app/main/student/*`
+- Protected faculty routes live under `app/main/faculty/*`
+- Most writes go through Next.js Server Actions in `src/actions/*`
+- Complaint voting and the E.C.H.O streaming assistant use route handlers in `app/api/*`
+- Reads are primarily client-side through SWR hooks in `src/hooks/data/*`
+- Route protection is enforced by both Next middleware and server layouts
+- Supabase Realtime updates announcements, complaints, marketplace, lost and found, and anonymous chat
+
+## Important Role Model Note
+The persisted database role model is currently `student` and `admin`. Faculty users are provisioned as `admin` during signup. Some frontend helpers still accept `faculty` as a legacy-compatible alias, but the active signup flow writes `admin`.
 
 ## Project Structure
 ```text
 app/
   api/
+    chat/
     complaints/
+      upvote/
   auth/
+    login/
+    signup/
   main/
     faculty/
+      announcements/
+      complaints/
+      dashboard/
+      directory/
+      lost-found/
+      profile/
     student/
+      announcements/
+      chat/
+      complaint/
+      dashboard/
+      directory/
+      lost-found/
+      marketplace/
+      profile/
   privacy/
   terms/
+  error.tsx
+  not-found.tsx
+  sw.ts
+docs/
 public/
 scripts/
 src/
@@ -58,7 +92,44 @@ src/
   utils/
   middleware.ts
 README.md
+polish.md
 ```
+
+## Environment Variables
+Create `.env.local` with the values required by the active code paths:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+# Optional legacy fallback used by some older code paths/scripts:
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+
+SUPABASE_SERVICE_ROLE_KEY=
+GEMINI_API_KEY=
+FACULTY_SECRET_CODE=
+
+NEXT_PUBLIC_VAPID_PUBLIC_KEY=
+VAPID_PRIVATE_KEY=
+```
+
+## Local Development
+```bash
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+Notes:
+- The service worker is disabled in development by `next.config.ts`.
+- Push notifications and some service-worker behavior are best validated from a production build.
+
+## Available Scripts
+- `npm run dev`
+- `npm run build`
+- `npm run start`
+- `npm run lint`
+- `npm run typecheck`
 
 ## Documentation
 - [01_PRD.md](docs/01_PRD.md)
@@ -67,76 +138,21 @@ README.md
 - [04_UI_UX.md](docs/04_UI_UX.md)
 - [05_BackendSchema.md](docs/05_BackendSchema.md)
 - [06_Auth.md](docs/06_Auth.md)
-- [colors.md](docs/color.md)
+- [07_VectorMigration.sql](docs/06_VectorMigration.sql)
+- [color.md](docs/color.md)
 - [text.md](docs/text.md)
 - [database.sql](docs/database.sql)
 
-## Getting Started
-
-### Prerequisites
-- Node.js 20 or later recommended
-- npm
-- A Supabase project with the required schema and policies
-
-### Installation
-```bash
-npm install
-```
-
-### Environment Variables
-Create a local environment file and configure these values:
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-
-# Faculty Secret Code
-FACULTY_SECRET_CODE=
-
-# VAPID Keys for Push Notifications
-NEXT_PUBLIC_VAPID_PUBLIC_KEY=
-VAPID_PRIVATE_KEY=
-```
-
-### Running Locally
-```bash
-npm run dev
-```
-*Note: To prevent infinite compilation loops, the Service Worker (PWA) is disabled in development mode. If you need to test Push Notifications locally, run `npm run build && npm start` instead.*
-
-Open `http://localhost:3000` in your browser.
-
-## Available Scripts
-- `npm run dev` - start the local Next.js development server
-- `npm run build` - create a production build
-- `npm run start` - run the production server
-- `npm run lint` - run ESLint
-- `npm run typecheck` - run TypeScript type checking
-
-## Deployment
-The repository does not currently include a defined deployment pipeline, CI/CD workflow, or platform-specific deployment configuration.
-
-## Project Status
-EchoCampus has reached a stable production-ready phase with all core features fully implemented. 
-- **Core Architecture:** Global Chat and Live Feeds are powered by Supabase Realtime. Form submissions strictly use Next.js Server Actions with hardened RLS security and strict **Zod** schema validation. Layouts use instantaneous Server-Component role verification.
-- **AI Integration (Phase 1-3 Completed):** Successfully integrated Google Gemini AI into four major workflows: transforming casual faculty notes into professional announcements, intelligently analyzing student complaints for urgency (triggering push notifications for high urgency), generating AI-driven complaint summaries on the Faculty Dashboard, and using Multimodal Vision AI to automatically generate titles and descriptions for uploaded Lost & Found items.
-- **Progressive Web App:** Fully installable PWA with a custom Service Worker and asynchronous Native Push Notifications wired directly into Supabase.
-- **UI/UX:** A unified dark-mode design system (featuring glassmorphism, custom empty states, tabular-nums, expanded view modals, and responsive grids) is implemented across all Faculty and Student pages.
-- **Performance:** Implemented custom SWR hooks with **Optimistic UI** updates for all primary features, providing instant, highly responsive interactions synchronized with background revalidation. Additionally, strictly enforced **Client/Server Component boundaries** across all page layouts to dramatically reduce the JavaScript bundle size shipped to the client.
-- **Type Safety:** Strict TypeScript interfaces and Zod schemas align perfectly with the Supabase schema to reduce runtime errors.
-
-## Contributing (Optional)
-No formal contributing guide is defined in the repository yet.
+## Current Implementation Notes
+- The app is broader than the root metadata description in `app/layout.tsx`; the real feature surface includes complaints, chat, announcements, marketplace, lost and found, directory, push notifications, and AI helpers.
+- The E.C.H.O assistant is present in the UI today, but its vector/knowledge tooling should be treated as an evolving area rather than the most mature part of the repo.
+- The repository does not currently include automated tests, CI workflows, or deployment automation.
 
 ## License
-MIT7
+MIT
 
 ## Contact
-
-Built by **Harshit Singhal** — B.Tech CSE, Manav Rachna University
+Built by Harshit Singhal.
 
 - [GitHub](https://github.com/harshitsinghal11)
 - [LinkedIn](https://linkedin.com/in/harshitsinghal11)
-
-> _Feel free to reach out if you're building something similar or have questions about the implementation._
-
