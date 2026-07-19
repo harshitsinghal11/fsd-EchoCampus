@@ -26,8 +26,11 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 z-[100] bg-black/60"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
+            className="fixed inset-0 z-[100] bg-black/60 pointer-events-auto"
           />
 
           {/* Modal Content */}
