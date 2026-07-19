@@ -7,7 +7,7 @@ export function AnnouncementSkeleton({ isWidget = false }: { isWidget?: boolean 
           key={i}
           className={`border w-full flex flex-col animate-pulse ${isWidget
             ? "bg-surface-hover/60 p-4 rounded-xl border-border"
-            : "relative overflow-hidden bg-surface p-5 sm:p-6 rounded-2xl border-border shadow-sm"
+            : "relative overflow-hidden bg-surface p-5 sm:p-6 rounded-2xl border-border"
             }`}
         >
           <div className="flex flex-col gap-1 w-full">
@@ -44,7 +44,7 @@ export function MarketplaceSkeleton({ isWidget = false }: { isWidget?: boolean }
       : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2"
       }`}>
       {[...Array(isWidget ? 4 : 6)].map((_, i) => (
-        <div key={i} className="relative overflow-hidden rounded-2xl p-5 sm:p-6 border transition-all duration-300 bg-surface border-border shadow-sm animate-pulse">
+        <div key={i} className="relative overflow-hidden rounded-lg p-5 sm:p-6 border transition-all duration-300 bg-surface border-border animate-pulse">
           {/* Header */}
           <div className="flex justify-between items-start gap-3">
             <div className="h-6 bg-surface-hover rounded-md w-3/4"></div>
@@ -208,7 +208,7 @@ export function ProfileSkeleton() {
   return (
     <div className="min-h-dvh bg-background py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-surface rounded-2xl overflow-hidden border border-border shadow-md relative animate-pulse">
+        <div className="bg-surface rounded-2xl overflow-hidden border border-border relative animate-pulse">
           {/* Skeleton Header */}
           <div className="bg-surface border-b border-border px-8 py-6 relative overflow-hidden">
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">

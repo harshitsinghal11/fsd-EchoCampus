@@ -58,7 +58,11 @@ export default function FacultyDashboard() {
           </div>
           <ComplaintSummaryWidget />
           {/* Reusable Component in Widget Mode */}
-          <ComplaintList isWidget={true} />
+          <div className="relative flex-1 mt-4">
+            <div className="absolute inset-0 overflow-y-auto pr-2 -mr-2">
+              <ComplaintList isWidget={true} widgetLimit={10} />
+            </div>
+          </div>
         </section>
 
         {/* 2. LATEST ANNOUNCEMENTS */}

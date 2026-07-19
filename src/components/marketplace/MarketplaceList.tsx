@@ -149,12 +149,12 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
                 </h2>
 
                 {item.is_sold ? (
-                  <span className="shrink-0 inline-flex items-center gap-1 bg-surface-hover/80 text-text-muted border border-border text-[11px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                  <span className="shrink-0 inline-flex items-center gap-1 bg-surface-hover/80 text-text-muted text-[11px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
                     <CheckCircle className="w-3 h-3" />
                     Sold
                   </span>
                 ) : (
-                  <span className="shrink-0 bg-primary/10 text-primary border border-primary/20 text-[11px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+                  <span className="shrink-0 bg-primary/10 text-primary text-[11px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
                     Active
                   </span>
                 )}

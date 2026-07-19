@@ -307,7 +307,7 @@ export default function AnonChat() {
                             </span>
                           </div>
 
-                          <div className={`relative rounded-2xl px-4 py-2.5 transition-colors sm:px-4 sm:py-3 min-w-[100px] ${isOwn
+                          <div className={`relative rounded-xl px-4 py-2.5 transition-colors sm:px-4 sm:py-3 min-w-[100px] ${isOwn
                             ? 'rounded-br-md bg-primary text-primary-foreground'
                             : 'rounded-bl-md bg-surface border border-border text-text-primary'
                             }`}

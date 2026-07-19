@@ -68,8 +68,8 @@ export function EmptyMarketplace({ isWidget = false }: { isWidget?: boolean }) {
       description="No items have been listed for sale yet. Be the first to post something!"
       isWidget={isWidget}
       icon={ShoppingBag}
-      blobColor="bg-primary"
-      iconColor="text-warning"
+      blobColor="bg-surface-hover"
+      iconColor="text-text-muted"
       actionLabel="List an Item"
       actionHref="#action-form"
     />
@@ -83,8 +83,8 @@ export function EmptyComplaints({ isWidget = false }: { isWidget?: boolean }) {
       description="It's quiet here. Everything seems to be running smoothly on campus!"
       isWidget={isWidget}
       icon={MessageSquare}
-      blobColor="bg-warning"
-      iconColor="text-warning"
+      blobColor="bg-surface-hover"
+      iconColor="text-text-muted"
       actionLabel="File a Complaint"
       actionHref="#action-form"
     />
@@ -98,8 +98,8 @@ export function EmptyAnnouncements({ isWidget = false }: { isWidget?: boolean })
       description="There are no official announcements from the faculty at this time."
       isWidget={isWidget}
       icon={Megaphone}
-      blobColor="bg-warning"
-      iconColor="text-warning"
+      blobColor="bg-surface-hover"
+      iconColor="text-text-muted"
     />
   );
 }
@@ -111,8 +111,8 @@ export function EmptyLostFound({ isWidget = false }: { isWidget?: boolean }) {
       description="No lost or found items have been reported recently."
       isWidget={isWidget}
       icon={Camera}
-      blobColor="bg-primary"
-      iconColor="text-warning"
+      blobColor="bg-surface-hover"
+      iconColor="text-text-muted"
       actionHref="#action-form"
     />
   );
