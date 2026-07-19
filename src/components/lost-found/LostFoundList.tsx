@@ -143,15 +143,15 @@ export default function LostFoundList({
                 className={`
               group overflow-hidden transition-all duration-300 w-full relative
               ${!showSearch
-                    ? 'bg-surface hover:bg-surface-hover/80 rounded-xl p-3 flex items-center gap-3 border border-transparent cursor-pointer'
-                    : 'bg-surface border-border shadow-sm rounded-xl sm:rounded-2xl p-3 sm:p-5 md:p-6 flex flex-col h-full border'
+                    ? 'bg-surface hover:bg-surface-hover/80 rounded-lg p-3 flex items-center gap-3 border border-transparent cursor-pointer'
+                    : 'bg-surface border-border rounded-lg p-3 sm:p-5 md:p-6 flex flex-col h-full border'
                   }
             `}
               >
                 {/* 1. IMAGE THUMBNAIL */}
                 <div className={`
               bg-surface-hover shrink-0 overflow-hidden border border-border flex items-center justify-center relative
-              ${!showSearch ? 'rounded-lg w-16 h-16' : 'rounded-lg sm:rounded-xl w-full aspect-[4/3] sm:aspect-video mb-3 sm:mb-4'}
+              ${!showSearch ? 'rounded-md w-16 h-16' : 'rounded-md w-full aspect-[4/3] sm:aspect-video mb-3 sm:mb-4'}
             `}>
                   {item.image_url ? (
                     <Image
@@ -264,7 +264,7 @@ export default function LostFoundList({
         {selectedItem && (
           <div className="flex flex-col gap-4">
             {selectedItem.image_url && (
-              <div className="w-full relative aspect-video bg-surface-hover border border-border rounded-xl overflow-hidden mb-2">
+              <div className="w-full relative aspect-video bg-surface-hover border border-border rounded-lg overflow-hidden mb-2">
                 <Image
                   src={selectedItem.image_url}
                   alt={selectedItem.title}

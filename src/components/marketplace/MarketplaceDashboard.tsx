@@ -45,7 +45,7 @@ export default function MarketplaceDashboard() {
       {/* Floating Action Button */}
       <button
         onClick={() => setIsModalOpen(true)}
-        className={`fixed bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 bg-primary hover:bg-primary-hover text-white rounded-full flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 z-30 ${isModalOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
+        className={`fixed bottom-24 md:bottom-8 right-6 md:right-8 w-14 h-14 bg-primary hover:bg-primary-hover text-white rounded-full shadow-sm flex items-center justify-center transition-all duration-200 z-30 ${isModalOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
       >
         <PenLine className="w-6 h-6" />
       </button>

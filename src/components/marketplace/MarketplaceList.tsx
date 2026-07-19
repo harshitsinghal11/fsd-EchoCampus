@@ -121,7 +121,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
             <MotionItem
               key={item.id}
               onClick={() => setSelectedItem(item)}
-              className={`relative overflow-hidden rounded-xl p-3 sm:p-5 md:p-6 border transition-all duration-300 flex flex-col h-full cursor-pointer ${item.is_sold
+              className={`relative overflow-hidden rounded-lg p-3 sm:p-5 md:p-6 border transition-all duration-300 flex flex-col h-full cursor-pointer ${item.is_sold
                 ? "bg-surface border-border opacity-75 grayscale-30"
                 : "bg-surface border-border"
                 }`}
@@ -130,7 +130,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
               {item.image_url && (
                 <div className={`
               bg-surface-hover shrink-0 overflow-hidden border border-border flex items-center justify-center relative mb-3 sm:mb-4
-              rounded-lg sm:rounded-xl w-full aspect-[4/3] sm:aspect-video
+              rounded-md w-full aspect-[4/3] sm:aspect-video
             `}>
                   <Image
                     src={item.image_url}
@@ -213,7 +213,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
         {selectedItem && (
           <div className="flex flex-col gap-4">
             {selectedItem.image_url && (
-              <div className="w-full relative aspect-video bg-surface-hover border border-border rounded-xl overflow-hidden mb-2">
+              <div className="w-full relative aspect-video bg-surface-hover border border-border rounded-lg overflow-hidden mb-2">
                 <Image
                   src={selectedItem.image_url}
                   alt={selectedItem.product_title}

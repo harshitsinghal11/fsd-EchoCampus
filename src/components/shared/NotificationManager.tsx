@@ -99,7 +99,7 @@ export function NotificationManager() {
     <div className="fixed bottom-20 left-4 md:bottom-8 md:left-8 z-50">
       <button
         onClick={subscribe}
-        className="px-3 py-3 bg-button-primary hover:bg-primary-hover text-text-primary rounded-xl shadow-lg shadow-primary/20 transition-all group"
+        className="px-3 py-3 bg-button-primary hover:bg-primary-hover text-text-primary rounded-xl shadow-sm transition-all group"
       >
         <Bell className="w-5 h-5" />
         <span className="text-sm font-bold"></span>

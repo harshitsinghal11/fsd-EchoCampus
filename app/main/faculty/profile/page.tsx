@@ -89,14 +89,14 @@ export default function ProfilePage() {
       <div className="max-w-4xl mx-auto">
           
         {/* Main Card */}
-        <div className="bg-surface backdrop-blur-xl rounded-3xl md:rounded-3xl overflow-hidden border border-border shadow-2xl relative">
+        <div className="bg-surface rounded-2xl overflow-hidden border border-border relative">
           
           {/* Header Section */}
           <div className="bg-surface border-b border-border px-8 py-12 relative overflow-hidden">
             
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
                {/* Avatar */}
-               <div className="w-28 h-28 rounded-full bg-linear-to-br from-primary-light to-primary p-1 shadow-lg shadow-primary/20 group cursor-default shrink-0">
+               <div className="w-28 h-28 rounded-full bg-linear-to-br from-primary-light to-primary p-1 group cursor-default shrink-0">
                  <div className="w-full h-full bg-surface-hover rounded-full flex items-center justify-center border-4 border-background transition-colors">
                    <span className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-br from-primary-light to-primary">
                      {profile.name.charAt(0).toUpperCase() || 'F'}
@@ -125,7 +125,7 @@ export default function ProfilePage() {
               {/* Email */}
               <div className="group relative p-6 rounded-2xl bg-surface border border-border hover:bg-surface-hover hover:border-primary/30 transition-all duration-300">
                  <div className="flex items-start gap-4">
-                   <div className="p-3 rounded-xl bg-surface-hover text-primary border border-border shadow-sm">
+                   <div className="p-3 rounded-xl bg-surface-hover text-primary border border-border">
                      <Mail className="w-5 h-5" />
                    </div>
                    <div className="overflow-hidden">
@@ -140,7 +140,7 @@ export default function ProfilePage() {
               {/* Phone */}
               <div className="group relative p-6 rounded-2xl bg-surface border border-border hover:bg-surface-hover hover:border-primary/30 transition-all duration-300">
                  <div className="flex items-start gap-4">
-                   <div className="p-3 rounded-xl bg-surface-hover text-primary border border-border shadow-sm">
+                   <div className="p-3 rounded-xl bg-surface-hover text-primary border border-border">
                      <Phone className="w-5 h-5" />
                    </div>
                    <div>
@@ -155,7 +155,7 @@ export default function ProfilePage() {
               {/* Cabin */}
               <div className="group relative p-6 rounded-2xl bg-surface border border-border hover:bg-surface-hover hover:border-primary/30 transition-all duration-300">
                  <div className="flex items-start gap-4">
-                   <div className="p-3 rounded-xl bg-surface-hover text-primary border border-border shadow-sm">
+                   <div className="p-3 rounded-xl bg-surface-hover text-primary border border-border">
                      <MapPin className="w-5 h-5" />
                    </div>
                    <div>
@@ -170,7 +170,7 @@ export default function ProfilePage() {
               {/* Experience */}
               <div className="group relative p-6 rounded-2xl bg-surface border border-border hover:bg-surface-hover hover:border-primary/30 transition-all duration-300">
                  <div className="flex items-start gap-4">
-                   <div className="p-3 rounded-xl bg-surface-hover text-primary border border-border shadow-sm">
+                   <div className="p-3 rounded-xl bg-surface-hover text-primary border border-border">
                      <Award className="w-5 h-5" />
                    </div>
                    <div>

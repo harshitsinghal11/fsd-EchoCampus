@@ -191,7 +191,7 @@ export default function AnonChat() {
 
         {/* Side Panel (Hidden on mobile, 25% width on large screens) - Moved to LEFT */}
         <div className="hidden lg:flex w-80 max-w-sm flex-col bg-surface-hover/30 h-full relative z-10 border-r border-border/50">
-          <div className="px-6 py-5 border-b border-border/50 bg-background/50 backdrop-blur-xl shrink-0 h-[73px]">
+          <div className="px-6 py-5 border-b border-border/50 bg-background shrink-0 h-[73px]">
             <h2 className="text-lg font-bold text-text-primary tracking-tight">Active Participants</h2>
             <p className="text-xs text-text-muted mt-1">Currently in the global chat</p>
           </div>
@@ -204,7 +204,7 @@ export default function AnonChat() {
         <div className="flex-1 relative h-full flex flex-col overflow-hidden bg-background text-text-primary">
 
           {/* Unified Header for both Mobile and Desktop */}
-          <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-border bg-background/90 backdrop-blur-xl shrink-0 z-20 relative shadow-sm h-[73px]">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-border bg-background shrink-0 z-20 relative h-[73px]">
             <div className="flex items-center gap-3">
               {/* Mobile Back Button */}
               <button
@@ -222,7 +222,7 @@ export default function AnonChat() {
 
             <button
               onClick={() => setShowMobileParticipants(true)}
-              className="lg:hidden p-2 rounded-full bg-surface border border-border hover:bg-surface-hover text-text-secondary transition-colors relative shadow-sm"
+              className="lg:hidden p-2 rounded-full bg-surface border border-border hover:bg-surface-hover text-text-secondary transition-colors relative"
               aria-label="Show Participants"
             >
               <Users className="w-5 h-5" />
@@ -236,7 +236,7 @@ export default function AnonChat() {
           {showMobileParticipants && (
             <div className="absolute inset-0 z-50 bg-background/80 backdrop-blur-sm lg:hidden flex flex-col animate-in fade-in">
               <div className="flex-1" onClick={() => setShowMobileParticipants(false)} />
-              <div className="bg-surface border-t border-border rounded-t-3xl max-h-[80%] flex flex-col shadow-2xl animate-in slide-in-from-bottom-8">
+              <div className="bg-surface border-t border-border rounded-t-2xl max-h-[80%] flex flex-col animate-in slide-in-from-bottom-8">
                 <div className="flex items-center justify-between px-6 py-5 border-b border-border/50 shrink-0">
                   <div>
                     <h2 className="text-lg font-bold text-text-primary tracking-tight">Active Participants</h2>
@@ -258,7 +258,7 @@ export default function AnonChat() {
             <div className="flex min-h-full flex-col gap-5">
               {messages.length === 0 ? (
                 <div className="flex flex-1 items-center justify-center py-10">
-                  <div className="mx-auto max-w-md rounded-3xl border border-border bg-surface px-8 py-10 text-center shadow-2xl shadow-black/20">
+                  <div className="mx-auto max-w-md rounded-2xl border border-border bg-surface px-8 py-10 text-center">
                     <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-surface-hover/80">
                       <Users className="h-8 w-8 text-text-muted" />
                     </div>
@@ -307,7 +307,7 @@ export default function AnonChat() {
                             </span>
                           </div>
 
-                          <div className={`relative rounded-3xl px-4 py-2.5 shadow-lg shadow-black/10 transition-colors sm:px-4 sm:py-3 min-w-[100px] ${isOwn
+                          <div className={`relative rounded-2xl px-4 py-2.5 transition-colors sm:px-4 sm:py-3 min-w-[100px] ${isOwn
                             ? 'rounded-br-md bg-primary text-primary-foreground'
                             : 'rounded-bl-md bg-surface border border-border text-text-primary'
                             }`}
@@ -337,7 +337,7 @@ export default function AnonChat() {
 
           <form
             onSubmit={handleSend}
-            className="shrink-0 border-t border-border bg-background/90 px-3 py-3 backdrop-blur-xl sm:px-5 sm:py-4 lg:px-8"
+            className="shrink-0 border-t border-border bg-background px-3 py-3 sm:px-5 sm:py-4 lg:px-8"
           >
             <div className="flex items-center gap-2 sm:gap-3">
               <input
@@ -351,7 +351,7 @@ export default function AnonChat() {
               <button
                 type="submit"
                 disabled={!text.trim()}
-                className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed group shadow-md hover:shadow-lg"
+                className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
                 aria-label="Send message"
               >
                 <Send className="w-5 h-5" />
