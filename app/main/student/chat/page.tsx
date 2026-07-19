@@ -45,6 +45,10 @@ export default function AnonChat() {
     };
 
     fetchMessages();
+  }, []);
+
+  useEffect(() => {
+    if (!sessionCode) return;
 
     // 2. Subscribe to realtime updates and presence
     const channel = supabase.channel('public:chat_messages');
@@ -88,7 +92,7 @@ export default function AnonChat() {
         }
       )
       .subscribe(async (status) => {
-        if (status === 'SUBSCRIBED') {
+        if (status === 'SUBSCRIBED' && sessionCode) {
           await channel.track({
             online_at: new Date().toISOString(),
             session_code: sessionCode
@@ -99,7 +103,7 @@ export default function AnonChat() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [sessionCode]);
 
   useEffect(() => {
     if (endRef.current) {
@@ -158,10 +162,8 @@ export default function AnonChat() {
           </div>
           <div className="flex-1 min-w-0">
             <span className="text-sm font-semibold text-text-primary block truncate">{sessionCode} (You)</span>
-            <span className="text-[11px] font-medium text-primary mt-0.5 block">Online now</span>
           </div>
           <span className="relative flex h-2.5 w-2.5 items-center justify-center shrink-0 mr-1">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
           </span>
         </div>
@@ -213,7 +215,7 @@ export default function AnonChat() {
               </button>
               <div className="flex items-center gap-3">
                 <div>
-                  <h1 className="text-lg sm:text-xl font-bold text-text-primary tracking-tight">Global Chat</h1>
+                  <h1 className="text-lg sm:text-xl font-bold text-text-primary tracking-tight">Anonymous Chat</h1>
                 </div>
               </div>
             </div>
@@ -352,7 +354,7 @@ export default function AnonChat() {
                 className="h-12 w-12 sm:h-14 sm:w-14 shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed group shadow-md hover:shadow-lg"
                 aria-label="Send message"
               >
-                <Send className="w-5 h-5 sm:w-6 sm:h-6 ml-0.5 group-hover:scale-110 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+                <Send className="w-5 h-5" />
               </button>
             </div>
           </form>
@@ -361,4 +363,4 @@ export default function AnonChat() {
       </div>
     </div>
   );
-}
+}

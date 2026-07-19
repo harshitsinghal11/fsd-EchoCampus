@@ -21,10 +21,6 @@ export function EchoWidget() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  if (pathname?.includes('/chat')) {
-    return null;
-  }
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -34,6 +30,10 @@ export function EchoWidget() {
       scrollToBottom();
     }
   }, [messages, isOpen]);
+
+  if (!pathname?.endsWith('/dashboard')) {
+    return null;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,8 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-// import { supabase } from "@/lib/supabaseClient";
-import { Link as LinkIcon, Type, AlignLeft, } from "lucide-react";
+import { Link as LinkIcon, Type, AlignLeft, Calendar } from "lucide-react";
 import { toast } from "sonner";
 import { addAnnouncement } from "@/actions/announcementActions";
 import { enhanceAnnouncement } from "@/actions/aiActions";
@@ -18,6 +17,8 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [link, setLink] = useState("");
+  const [eventStartDate, setEventStartDate] = useState("");
+  const [eventEndDate, setEventEndDate] = useState("");
   const [isEnhancing, setIsEnhancing] = useState(false);
 
   async function handleEnhance() {
@@ -33,7 +34,7 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
 
       if (result.enhancedText) {
         setContent(result.enhancedText);
-        toast.success("✨ AI Enhanced!");
+        toast.success(" AI Enhanced!");
       }
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Failed to enhance.");
@@ -45,12 +46,17 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    const cleanedTitle = title.trim();
+    const cleanedContent = content.trim().replace(/\n{3,}/g, '\n\n');
+
     await execute(
-      () => addAnnouncement({ title, content, link }),
+      () => addAnnouncement({ title: cleanedTitle, content: cleanedContent, link, eventStartDate: eventStartDate || null, eventEndDate: eventEndDate || null }),
       () => {
         setTitle("");
         setContent("");
         setLink("");
+        setEventStartDate("");
+        setEventEndDate("");
         if (onSuccess) onSuccess();
         router.refresh();
       },
@@ -79,6 +85,24 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
         onChange={(e) => setLink(e.target.value)}
         placeholder="https://www.example.com"
       />
+
+      {/* Date Inputs */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <FormInput
+          label="Event Start (optional)"
+          icon={Calendar}
+          type="date"
+          value={eventStartDate}
+          onChange={(e) => setEventStartDate(e.target.value)}
+        />
+        <FormInput
+          label="Event End (optional)"
+          icon={Calendar}
+          type="date"
+          value={eventEndDate}
+          onChange={(e) => setEventEndDate(e.target.value)}
+        />
+      </div>
 
       {/* 3. Content Textarea */}
       <FormTextarea
@@ -112,4 +136,4 @@ export default function AnnouncementForm({ onSuccess }: { onSuccess?: () => void
       </div>
     </form>
   );
-}
+}

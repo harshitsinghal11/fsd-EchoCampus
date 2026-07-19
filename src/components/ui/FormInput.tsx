@@ -25,6 +25,7 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
                 ? "border-danger/50 focus:ring-danger/50 focus:border-danger/50" 
                 : "border-border focus:ring-input-focus/50 focus:border-primary/50"
             } ${className}`}
+            style={{ colorScheme: 'dark' }}
             {...props}
           />
         </div>

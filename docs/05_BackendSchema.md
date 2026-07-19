@@ -44,6 +44,8 @@ Stores faculty metadata for the directory and faculty profile page.
 - `link`
 - `author_id`
 - `created_at`
+- `event_start_date`
+- `event_end_date`
 
 ### `public.complaint_box`
 - `id`

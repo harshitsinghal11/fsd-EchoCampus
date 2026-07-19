@@ -22,7 +22,7 @@ export default async function StudentDashboard() {
         <div className="flex flex-col gap-1 md:gap-2">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary capitalize flex items-center gap-3">
             <LayoutDashboard className="w-7 h-7 md:w-8 md:h-8 text-primary" />
-            Hey! Welcome To EchoCampus
+            Welcome To EchoCampus
           </h1>
           <p className="text-sm md:text-base text-text-muted font-medium">
             Here&apos;s what&apos;s happening around campus today.

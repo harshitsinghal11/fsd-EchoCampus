@@ -111,83 +111,83 @@ export default function MarketCreateForm({ onSuccess }: { onSuccess?: () => void
         }}
       />
 
-        {/* Title Input */}
+      {/* Title Input */}
+      <FormInput
+        label="Product Title"
+        icon={Tag}
+        required
+        placeholder="e.g., Engineering Graphics Textbook"
+        value={form.product_title}
+        onChange={(e) => setForm({ ...form, product_title: e.target.value })}
+      />
+
+      {/* Description Input */}
+      <FormTextarea
+        label="Description"
+        icon={AlignLeft}
+        placeholder="Condition, edition, features..."
+        value={form.description}
+        rows={3}
+        onChange={(e) => setForm({ ...form, description: e.target.value })}
+      />
+
+      {/* Grid for Price, Contact & Email */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {/* Price Input */}
         <FormInput
-          label="Product Title"
-          icon={Tag}
+          label="Price"
+          icon={IndianRupee}
+          type="text"
+          inputMode="numeric"
+          placeholder="Amount"
+          value={form.price}
+          onChange={(e) => {
+            const digitsOnly = e.target.value.replace(/\D/g, "");
+            if (digitsOnly.length <= 6) setForm({ ...form, price: digitsOnly });
+          }}
+        />
+
+        {/* Contact No Input */}
+        <FormInput
+          label="Contact Number"
+          icon={Phone}
           required
-          placeholder="e.g., Engineering Graphics Textbook"
-          value={form.product_title}
-          onChange={(e) => setForm({ ...form, product_title: e.target.value })}
+          type="tel"
+          inputMode="numeric"
+          placeholder="10-digit number"
+          value={form.contact_info}
+          error={isPhoneInvalid}
+          onChange={(e) => {
+            const val = e.target.value.replace(/\D/g, "");
+            if (val.length <= 10) {
+              setForm({ ...form, contact_info: val });
+            }
+          }}
         />
 
-        {/* Description Input */}
-        <FormTextarea
-          label="Description"
-          icon={AlignLeft}
-          placeholder="Condition, edition, features..."
-          value={form.description}
-          rows={3}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
-        />
-
-        {/* Grid for Price, Contact & Email */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {/* Price Input */}
+        {/* Email Input (Disabled) */}
+        <div className="md:col-span-2">
           <FormInput
-            label="Price"
-            icon={IndianRupee}
-            type="text"
-            inputMode="numeric"
-            placeholder="Amount"
-            value={form.price}
-            onChange={(e) => {
-              const digitsOnly = e.target.value.replace(/\D/g, "");
-              if (digitsOnly.length <= 6) setForm({ ...form, price: digitsOnly });
-            }}
+            label="Campus Email (Locked)"
+            icon={Mail}
+            value={userEmail || "Loading email..."}
+            disabled
+            className="text-text-disabled cursor-not-allowed select-none"
           />
-
-          {/* Contact No Input */}
-          <FormInput
-            label="Contact Number"
-            icon={Phone}
-            required
-            type="tel"
-            inputMode="numeric"
-            placeholder="10-digit number"
-            value={form.contact_info}
-            error={isPhoneInvalid}
-            onChange={(e) => {
-              const val = e.target.value.replace(/\D/g, "");
-              if (val.length <= 10) {
-                setForm({ ...form, contact_info: val });
-              }
-            }}
-          />
-
-          {/* Email Input (Disabled) */}
-          <div className="md:col-span-2">
-            <FormInput
-              label="Campus Email (Locked)"
-              icon={Mail}
-              value={userEmail || "Loading email..."}
-              disabled
-              className="text-text-disabled cursor-not-allowed select-none"
-            />
-          </div>
         </div>
+      </div>
 
-        {/* Submit Button */}
-        <SubmitBtn
-          disabled={
-            !form.product_title ||
-            !form.price ||
-            form.contact_info.length !== 10 ||
-            loading
-          }
-          isSubmitting={loading}
-          label="Post"
-        />
+      {/* Submit Button */}
+      <SubmitBtn
+        disabled={
+          !form.product_title ||
+          !form.price ||
+          form.contact_info.length !== 10 ||
+          loading
+        }
+        isSubmitting={loading}
+        label="Post"
+      />
     </form>
   );
-}
+}

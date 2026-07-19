@@ -7,7 +7,7 @@ import { Announcement } from '@/types/announcements';
 const fetcher = async ([_key, limit, searchTerm]: [string, number | undefined, string]) => {
   let query = supabase
     .from("announcements")
-    .select(`*, users ( full_name )`)
+    .select(`*, users ( full_name ), starred_announcements ( user_id )`)
     .order("created_at", { ascending: false });
 
   if (limit) query = query.limit(limit);
@@ -19,9 +19,10 @@ const fetcher = async ([_key, limit, searchTerm]: [string, number | undefined, s
   if (error) throw error;
 
   // Format data correctly due to Supabase returning arrays for joins sometimes
-  return (data || []).map((item) => ({
+  return (data || []).map((item: any) => ({
     ...item,
-    users: Array.isArray(item.users) ? item.users[0] : item.users
+    users: Array.isArray(item.users) ? item.users[0] : item.users,
+    is_starred: item.starred_announcements && item.starred_announcements.length > 0
   })) as Announcement[];
 };
 
