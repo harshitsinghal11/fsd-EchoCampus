@@ -45,9 +45,12 @@ export default function AppBottomNav({ role }: { role: "student" | "faculty" | "
         >
           {/* Backdrop */}
           <div
-            className={`absolute inset-0 bg-black/70 transition-opacity duration-300 ${showMore ? "opacity-100" : "opacity-0"
+            className={`absolute inset-0 bg-black/70 transition-opacity duration-300 pointer-events-auto ${showMore ? "opacity-100" : "opacity-0"
               }`}
-            onClick={() => setShowMore(false)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowMore(false);
+            }}
           />
 
           {/* Sheet */}

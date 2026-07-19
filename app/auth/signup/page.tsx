@@ -370,7 +370,7 @@ export default function SignUpPage() {
               size="lg"
             >
               Create Account
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-5 w-5" />
             </Button>
           </form>
 
@@ -384,4 +384,4 @@ export default function SignUpPage() {
       </div>
     </div>
   );
-}
+}

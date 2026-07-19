@@ -178,7 +178,7 @@ export default function Login() {
               size="lg"
             >
               Login Now
-              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="h-5 w-5" />
             </Button>
           </form>
 

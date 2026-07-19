@@ -189,32 +189,7 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
                 )}
               </div>
 
-              {currentUserEmail && item.owner_email === currentUserEmail && (
-                <div className="mt-4 flex items-center gap-2 w-full">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleSoldStatus(item.id, item.is_sold);
-                    }}
-                    className={`flex-1 font-medium px-4 py-2 rounded-xl transition-all duration-200 text-sm hover:shadow-lg ${item.is_sold
-                      ? "bg-surface-hover hover:bg-surface-hover/80 text-text-primary border border-border"
-                      : "bg-surface-hover text-text-primary border border-border "
-                      }`}
-                  >
-                    {item.is_sold ? "Mark as Active" : "Mark as Sold"}
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(item.id, item.image_url ?? null);
-                    }}
-                    className="p-2 rounded-xl text-red-500 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 transition-all"
-                    title="Delete Listing"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
-                </div>
-              )}
+
             </MotionItem>
           ))}
         </MotionList>
@@ -261,9 +236,30 @@ export default function MarketList({ currentUserEmail, isWidget = false }: Marke
             </p>
 
             {selectedItem.contact_info && (
-              <div className="mt-4 pt-4 border-t border-border/50 flex items-center gap-2 text-text-primary">
+              <div className="pt-4 border-t border-border/50 flex items-center gap-2 text-text-primary">
                 <Phone className="w-4 h-4 text-text-disabled" />
                 <span className="font-medium">Contact: {selectedItem.contact_info}</span>
+              </div>
+            )}
+
+            {currentUserEmail && selectedItem.owner_email === currentUserEmail && (
+              <div className="pt-4 border-t border-border/50 flex items-center gap-2 w-full">
+                <button
+                  onClick={() => toggleSoldStatus(selectedItem.id, selectedItem.is_sold)}
+                  className={`flex-1 font-medium px-4 py-2 rounded-xl transition-all duration-200 text-sm hover:shadow-lg bg-surface-hover hover:bg-surface-hover/80 text-text-primary border border-border`}
+                >
+                  {selectedItem.is_sold ? "Mark as Active" : "Mark as Sold"}
+                </button>
+                <button
+                  onClick={() => {
+                    handleDelete(selectedItem.id, selectedItem.image_url ?? null);
+                    setSelectedItem(null);
+                  }}
+                  className="p-2 rounded-xl text-red-500 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 transition-all"
+                  title="Delete Listing"
+                >
+                  <Trash2 className="w-5 h-5" />
+                </button>
               </div>
             )}
           </div>

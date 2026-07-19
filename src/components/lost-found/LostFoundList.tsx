@@ -224,32 +224,7 @@ export default function LostFoundList({
                       )}
                     </div>
 
-                    {currentUserId === item.user_id && (
-                      <div className="mt-4 flex items-center gap-2 w-full">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleResolveStatus(item.id, item.is_resolved);
-                          }}
-                          className={`flex-1 font-medium px-4 py-2 rounded-xl transition-all duration-200 text-sm hover:shadow-lg ${item.is_resolved
-                            ? ""
-                            : "bg-surface-hover hover:bg-surface-hover/80 text-text-primary border border-border"
-                            }`}
-                        >
-                          {item.is_resolved ? "Mark as Active" : "Mark as Resolved"}
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDelete(item.id, item.image_url);
-                          }}
-                          className="p-2 rounded-xl text-red-500 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 transition-all"
-                          title="Delete Report"
-                        >
-                          <Trash2 className="w-5 h-5" />
-                        </button>
-                      </div>
-                    )}
+
                   </>
                 )}
 
@@ -309,7 +284,7 @@ export default function LostFoundList({
               {selectedItem.description || "No description provided."}
             </p>
 
-            <div className="mt-4 pt-4 border-t border-border/50 flex flex-col gap-2">
+            <div className="pt-4 border-t border-border/50 flex flex-col gap-2">
               {selectedItem.contact_info && (
                 <div className="flex items-center gap-2 text-text-primary">
                   <Phone className="w-4 h-4 text-text-disabled" />
@@ -323,6 +298,27 @@ export default function LostFoundList({
                 </div>
               )}
             </div>
+
+            {currentUserId === selectedItem.user_id && (
+              <div className="pt-4 border-t border-border/50 flex items-center gap-2 w-full">
+                <button
+                  onClick={() => toggleResolveStatus(selectedItem.id, selectedItem.is_resolved)}
+                  className={`flex-1 font-medium px-4 py-2 rounded-xl transition-all duration-200 text-sm hover:shadow-lg bg-surface-hover hover:bg-surface-hover/80 text-text-primary border border-border`}
+                >
+                  {selectedItem.is_resolved ? "Mark as Active" : "Mark as Resolved"}
+                </button>
+                <button
+                  onClick={() => {
+                    handleDelete(selectedItem.id, selectedItem.image_url);
+                    setSelectedItem(null);
+                  }}
+                  className="p-2 rounded-xl text-red-500 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 transition-all"
+                  title="Delete Report"
+                >
+                  <Trash2 className="w-5 h-5" />
+                </button>
+              </div>
+            )}
           </div>
         )}
       </Modal>
