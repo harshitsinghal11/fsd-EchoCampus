@@ -103,5 +103,4 @@ MIT
 Built by Harshit Singhal.
 
 - [Portfolio](https://harshit-singhal.vercel.app)
-- [GitHub](https://github.com/harshitsinghal11)
 - [LinkedIn](https://linkedin.com/in/harshitsinghal11)
