@@ -48,53 +48,6 @@ EchoCampus is a role-based campus utility platform built with Next.js, Supabase,
 ## Important Role Model Note
 The persisted database role model is currently `student` and `admin`. Faculty users are provisioned as `admin` during signup. Some frontend helpers still accept `faculty` as a legacy-compatible alias, but the active signup flow writes `admin`.
 
-## Project Structure
-```text
-app/
-  api/
-    chat/
-    complaints/
-      upvote/
-  auth/
-    login/
-    signup/
-  main/
-    faculty/
-      announcements/
-      complaints/
-      dashboard/
-      directory/
-      lost-found/
-      profile/
-    student/
-      announcements/
-      chat/
-      complaint/
-      dashboard/
-      directory/
-      lost-found/
-      marketplace/
-      profile/
-  privacy/
-  terms/
-  error.tsx
-  not-found.tsx
-  sw.ts
-docs/
-public/
-scripts/
-src/
-  actions/
-  components/
-  hooks/
-  lib/
-  types/
-  utils/
-  middleware.ts
-README.md
-polish.md
-```
-
 ## Environment Variables
 Create `.env.local` with the values required by the active code paths:
 
@@ -143,16 +96,12 @@ Notes:
 - [text.md](docs/text.md)
 - [database.sql](docs/database.sql)
 
-## Current Implementation Notes
-- The app is broader than the root metadata description in `app/layout.tsx`; the real feature surface includes complaints, chat, announcements, marketplace, lost and found, directory, push notifications, and AI helpers.
-- The E.C.H.O assistant is present in the UI today, but its vector/knowledge tooling should be treated as an evolving area rather than the most mature part of the repo.
-- The repository does not currently include automated tests, CI workflows, or deployment automation.
-
 ## License
 MIT
 
-## Contact
+## Contact Owner
 Built by Harshit Singhal.
 
+- [Portfolio](https://harshit-singhal.vercel.app)
 - [GitHub](https://github.com/harshitsinghal11)
 - [LinkedIn](https://linkedin.com/in/harshitsinghal11)
