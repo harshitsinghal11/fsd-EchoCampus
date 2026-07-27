@@ -96,11 +96,23 @@ Notes:
 - [text.md](docs/text.md)
 - [database.sql](docs/database.sql)
 
+## 🤝 Contributing
+
+Contributions are always welcome!
+
+If you'd like to improve this project, please read our
+[Contributing Guide](./CONTRIBUTING.md) before submitting a Pull Request.
+
 ## License
-MIT
+
+This project is open source and available under the [MIT License](./LICENSE).
+
+---
 
 ## Contact Owner
-Built by Harshit Singhal.
+Built by **Harshit Singhal** | BTech CSE | Manav Rachna University
 
 - [Portfolio](https://harshit-singhal.vercel.app)
 - [LinkedIn](https://linkedin.com/in/harshitsinghal11)
+
+> _Feel free to reach out if you're building something similar or have questions about the implementation._
